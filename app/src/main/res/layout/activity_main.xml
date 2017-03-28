@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:ripple="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#f5f4f9"
+    tools:context=".activity.MainActivity">
+
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_main"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="0.5dp"
+        android:background="#c4c3c7" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <gianglong.app.chat.longchat.utils.RippleView
+            android:id="@+id/layout_chat"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            ripple:rv_rippleDuration="100"
+            ripple:rv_zoom="true">
+
+
+            <TextView
+                android:id="@+id/tv_chat"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="3dp"
+                android:fontFamily="sans-serif"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="Message"
+                android:textColor="@color/text_color_tab_selected"
+                android:textSize="12dp"
+                android:textStyle="bold" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+
+                android:layout_height="match_parent"
+                android:layout_above="@+id/tv_chat"
+                android:layout_centerHorizontal="true">
+
+                <ImageView
+                    android:id="@+id/img_chat"
+                    android:layout_width="35dp"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="2dp"
+                    android:padding="4dp"
+                    android:src="@drawable/ic_chat_selected" />
+
+                <TextView
+                    android:id="@+id/tv_noti_chat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignRight="@+id/img_chat"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="2dp"
+                    android:background="@drawable/bg_circle_red_with_border"
+                    android:fontFamily="sans-serif"
+                    android:gravity="center"
+
+
+                    android:text="10"
+                    android:textColor="@color/white"
+
+
+                    android:textSize="11dp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+        </gianglong.app.chat.longchat.utils.RippleView>
+
+        <gianglong.app.chat.longchat.utils.RippleView
+            android:id="@+id/layout_friend"
+            android:layout_width="match_parent"
+
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+
+            ripple:rv_rippleDuration="100"
+            ripple:rv_zoom="true">
+
+            <TextView
+                android:id="@+id/tv_friend"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="3dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="Friends"
+                android:textColor="@color/text_color_tab"
+                android:textSize="12dp" />
+
+            <ImageView
+                android:id="@+id/img_friend"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                android:layout_above="@+id/tv_friend"
+                android:layout_centerHorizontal="true"
+                android:padding="6dp"
+                android:src="@drawable/ic_friends" />
+        </gianglong.app.chat.longchat.utils.RippleView>
+
+        <gianglong.app.chat.longchat.utils.RippleView
+            android:id="@+id/layout_people"
+            android:layout_width="match_parent"
+
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+
+            ripple:rv_rippleDuration="100"
+            ripple:rv_zoom="true">
+
+            <TextView
+                android:id="@+id/tv_people"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="3dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="People"
+                android:textColor="@color/text_color_tab"
+                android:textSize="12dp"
+                />
+
+            <ImageView
+                android:id="@+id/img_people"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/tv_people"
+                android:layout_centerHorizontal="true"
+                android:padding="6dp"
+                android:src="@drawable/ic_people" />
+        </gianglong.app.chat.longchat.utils.RippleView>
+
+        <gianglong.app.chat.longchat.utils.RippleView
+            android:id="@+id/layout_account"
+            android:layout_width="match_parent"
+
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+
+            ripple:rv_rippleDuration="100"
+            ripple:rv_zoom="true">
+
+            <TextView
+                android:id="@+id/tv_account"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="3dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="Account"
+                android:textColor="@color/text_color_tab"
+                android:textSize="12dp"
+                />
+
+            <ImageView
+                android:id="@+id/img_account"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/tv_account"
+                android:layout_centerHorizontal="true"
+                android:padding="6dp"
+                android:src="@drawable/ic_account" />
+        </gianglong.app.chat.longchat.utils.RippleView>
+
+    </LinearLayout>
+</LinearLayout>

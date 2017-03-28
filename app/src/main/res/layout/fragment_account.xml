@@ -1,0 +1,409 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.AccountFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:paddingBottom="15dp">
+
+                <ImageView
+                    android:id="@+id/ivBackGround"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/img_bg_1" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/ivBackGround"
+                    android:layout_marginTop="-40dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="80dp"
+                        android:layout_height="80dp">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/ivAvatar"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:src="@drawable/avatar_default" />
+
+                        <ProgressBar
+                            android:id="@+id/progressBar"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_centerInParent="true" />
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/tv_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7.5dp"
+                        android:text="gianglong7695"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2.5dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="5dp"
+                            android:src="@drawable/ic_online" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Online" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:text="Let's chat to improve english skills! "/>
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.75dp"
+                android:background="#cccccc" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/custom_border">
+
+                <LinearLayout
+                    android:id="@+id/row_item1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:layout_marginBottom="0.75dp"
+                        android:layout_marginTop="0.75dp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="42.5dp"
+                                android:layout_height="42.5dp"
+                                android:layout_marginLeft="15dp"
+                                android:src="@drawable/ic_user2" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="15dp"
+                                android:text="@string/fragment_account_item1"
+                                android:textColor="#222222"
+                                android:textSize="16sp" />
+
+
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/ivMore"
+                            android:layout_width="22.5dp"
+                            android:layout_height="22.5dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="10dp"
+                            android:src="@drawable/ic_more_50px_gray" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="10dp"
+                            android:layout_toLeftOf="@id/ivMore"
+                            android:gravity="center"
+                            android:text="Update"
+                            android:textAllCaps="true"
+                            android:textColor="#e81d1d"
+                            android:textSize="15sp" />
+
+                        <gianglong.app.chat.longchat.utils.RippleViewLinear
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:id="@+id/rippleViewLinear1">
+
+                        </gianglong.app.chat.longchat.utils.RippleViewLinear>
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.75dp"
+                        android:layout_below="@id/row_item1"
+                        android:layout_marginLeft="80dp"
+                        android:background="#cccccc" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/row_item2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:layout_marginBottom="0.75dp"
+                        android:layout_marginTop="0.75dp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="42.5dp"
+                                android:layout_height="42.5dp"
+                                android:layout_marginLeft="15dp"
+                                android:src="@drawable/ic_message" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="15dp"
+                                android:text="@string/fragment_account_item2"
+                                android:textColor="#222222"
+                                android:textSize="16sp" />
+
+
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="22.5dp"
+                            android:layout_height="22.5dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="10dp"
+                            android:src="@drawable/ic_more_50px_gray" />
+
+                        <gianglong.app.chat.longchat.utils.RippleViewLinear
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:id="@+id/rippleViewLinear2">
+
+                        </gianglong.app.chat.longchat.utils.RippleViewLinear>
+
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_below="@id/row_item2"
+                        android:layout_marginLeft="80dp"
+                        android:background="#cccccc" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/row_item3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:layout_marginBottom="0.75dp"
+                        android:layout_marginTop="0.75dp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="42.5dp"
+                                android:layout_height="42.5dp"
+                                android:layout_marginLeft="15dp"
+                                android:src="@drawable/ic_private" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="15dp"
+                                android:text="@string/fragment_account_item3"
+                                android:textColor="#222222"
+                                android:textSize="16sp" />
+
+
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="22.5dp"
+                            android:layout_height="22.5dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="10dp"
+                            android:src="@drawable/ic_more_50px_gray" />
+
+
+                        <gianglong.app.chat.longchat.utils.RippleViewLinear
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:id="@+id/rippleViewLinear3">
+
+                        </gianglong.app.chat.longchat.utils.RippleViewLinear>
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.75dp"
+                        android:layout_below="@id/row_item3"
+                        android:layout_marginLeft="80dp"
+                        android:background="#cccccc" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/row_item4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:layout_marginBottom="0.75dp"
+                        android:layout_marginTop="0.75dp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="42.5dp"
+                                android:layout_height="42.5dp"
+                                android:layout_marginLeft="15dp"
+                                android:src="@drawable/ic_notification" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="15dp"
+                                android:text="@string/fragment_account_item4"
+                                android:textColor="#222222"
+                                android:textSize="16sp" />
+
+
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="22.5dp"
+                            android:layout_height="22.5dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="10dp"
+                            android:src="@drawable/ic_more_50px_gray" />
+
+                        <gianglong.app.chat.longchat.utils.RippleViewLinear
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:id="@+id/rippleViewLinear4">
+
+                        </gianglong.app.chat.longchat.utils.RippleViewLinear>
+
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.75dp"
+                        android:layout_below="@id/row_item4"
+                        android:background="#cccccc" />
+
+                </LinearLayout>
+
+               <LinearLayout
+                   android:layout_marginTop="25dp"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:orientation="vertical"
+                   android:layout_marginBottom="50dp"
+                   android:background="#efefef">
+                   <View
+                       android:layout_width="match_parent"
+                       android:layout_height="0.75dp"
+                       android:background="#cccccc" />
+                   <Button
+                       android:id="@+id/btSignOut"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:text="Sign out"
+                       android:background="@drawable/ripple_effect"
+                       android:textColor="#eb2f2f"
+                       android:textSize="17sp"/>
+                   <View
+                       android:layout_width="match_parent"
+                       android:layout_height="0.75dp"
+                       android:background="#cccccc" />
+               </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</FrameLayout>
