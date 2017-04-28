@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:htext="http://schemas.android.com/apk/res-auto"
     xmlns:ripple="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_sign_up"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@drawable/bg_signup"
+    android:orientation="vertical"
     android:padding="15dp"
     tools:context=".activity.SignUpActivity">
 
@@ -16,84 +16,85 @@
         android:id="@+id/text"
         android:layout_width="match_parent"
         android:layout_height="100dp"
+        android:layout_marginBottom="50dp"
+        android:layout_marginTop="50dp"
         android:gravity="center"
         android:textColor="#FFFFFF"
         android:textSize="60sp"
-        htext:animateType="line"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="50dp"
-        />
+        htext:animateType="line" />
 
     <com.rengwuxian.materialedittext.MaterialEditText
         android:id="@+id/etUser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Email"
-        android:inputType="textEmailAddress"
-        app:met_singleLineEllipsis="true"
         android:imeOptions="actionNext"
+        android:inputType="textEmailAddress"
         android:maxLines="1"
+        app:met_clearButton="true"
         app:met_floatingLabel="highlight"
-        app:met_textColor="@color/white"
         app:met_iconLeft="@drawable/ic_email_50px_black_p20"
         app:met_iconPadding="0dp"
-        app:met_clearButton="true"
-        app:met_minCharacters="5"
         app:met_maxCharacters="35"
-        app:met_primaryColor="@color/white"/>
+        app:met_minCharacters="5"
+        app:met_primaryColor="@color/white"
+        app:met_singleLineEllipsis="true"
+        app:met_textColor="@color/white" />
 
     <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/etPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Password"
-        android:maxLines="1"
-        app:met_singleLineEllipsis="true"
         android:imeOptions="actionNext"
         android:inputType="textPassword"
+        android:maxLines="1"
+        app:met_clearButton="true"
         app:met_floatingLabel="highlight"
-        app:met_textColor="@color/white"
         app:met_iconLeft="@drawable/ic_lock_50px_white"
         app:met_iconPadding="0dp"
-        app:met_minCharacters="5"
-        app:met_clearButton="true"
         app:met_maxCharacters="16"
+        app:met_minCharacters="5"
         app:met_primaryColor="@color/white"
-        android:id="@+id/etPassword" />
+        app:met_singleLineEllipsis="true"
+        app:met_textColor="@color/white" />
+
     <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/etRePassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Confirm password"
-        android:maxLines="1"
+        android:imeOptions="actionDone"
         android:inputType="textPassword"
+        android:maxLines="1"
+        app:met_clearButton="true"
         app:met_floatingLabel="highlight"
-        app:met_textColor="@color/white"
         app:met_iconLeft="@drawable/ic_lock_50px_white"
         app:met_iconPadding="0dp"
-        app:met_minCharacters="5"
-        app:met_singleLineEllipsis="true"
-        android:imeOptions="actionDone"
         app:met_maxCharacters="16"
-        app:met_clearButton="true"
+        app:met_minCharacters="5"
         app:met_primaryColor="@color/white"
-        android:id="@+id/etRePassword" />
+        app:met_singleLineEllipsis="true"
+        app:met_textColor="@color/white" />
 
     <gianglong.app.chat.longchat.utils.RippleView
         android:id="@+id/rippleBtnSignin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
+        android:layout_marginTop="20dp"
         ripple:rv_zoom="true">
+
         <Button
             android:id="@+id/btSignUp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/custom_border_button_transparent"
             android:text="Next"
-            android:textColor="@color/white"
             android:textAllCaps="false"
-            android:textSize="19sp"/>
+            android:textColor="@color/white"
+            android:textSize="19sp" />
     </gianglong.app.chat.longchat.utils.RippleView>
 
 

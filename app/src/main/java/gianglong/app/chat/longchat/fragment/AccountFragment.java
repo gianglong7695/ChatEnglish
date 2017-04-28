@@ -14,6 +14,7 @@ import gianglong.app.chat.longchat.R;
 import gianglong.app.chat.longchat.activity.LoginActivity;
 import gianglong.app.chat.longchat.activity.MainActivity;
 import gianglong.app.chat.longchat.activity.ProfileActivity;
+import gianglong.app.chat.longchat.utils.ProgressWheel;
 import gianglong.app.chat.longchat.utils.RippleViewLinear;
 
 /**
@@ -21,9 +22,9 @@ import gianglong.app.chat.longchat.utils.RippleViewLinear;
  */
 public class AccountFragment extends Fragment {
     View v;
-    RippleViewLinear rippleViewLinear1, rippleViewLinear2, rippleViewLinear3, rippleViewLinear4;
-    Button btSignOut;
+    RippleViewLinear rippleViewLinear1, rippleViewLinear2, rippleViewLinear3, rippleViewLinear4, layout_signout;
     SweetAlertDialog mSweetAlertDialog;
+    ProgressWheel progressWheel;
 
 
     public AccountFragment() {
@@ -37,6 +38,7 @@ public class AccountFragment extends Fragment {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_account, container, false);
         initUI();
+        initConfig();
         eventHandle();
 
 
@@ -49,7 +51,26 @@ public class AccountFragment extends Fragment {
         rippleViewLinear2 = (RippleViewLinear) v.findViewById(R.id.rippleViewLinear2);
         rippleViewLinear3 = (RippleViewLinear) v.findViewById(R.id.rippleViewLinear3);
         rippleViewLinear4 = (RippleViewLinear) v.findViewById(R.id.rippleViewLinear4);
-        btSignOut = (Button) v.findViewById(R.id.btSignOut);
+        layout_signout = (RippleViewLinear) v.findViewById(R.id.layout_signout);
+        progressWheel = (ProgressWheel) v.findViewById(R.id.progressWheel);
+    }
+
+
+    public void initConfig(){
+        // progress wheel config
+        progressWheel.setProgress(0.5f);
+        progressWheel.setBarWidth(7);
+        progressWheel.setBarColor(getResources().getColor(R.color.purple));
+        progressWheel.setCallback(new ProgressWheel.ProgressCallback() {
+            @Override
+            public void onProgressUpdate(float progress) {
+                if (progress == 0) {
+                    progressWheel.setProgress(1.0f);
+                } else if (progress == 1.0f) {
+                    progressWheel.setProgress(0.0f);
+                }
+            }
+        });
     }
 
 
@@ -62,12 +83,9 @@ public class AccountFragment extends Fragment {
             }
         });
 
-
-        btSignOut.setOnClickListener(new View.OnClickListener() {
+        layout_signout.setOnRippleCompleteListener(new RippleViewLinear.OnRippleCompleteListener() {
             @Override
-            public void onClick(View view) {
-
-
+            public void onComplete(RippleViewLinear rippleView) {
                 mSweetAlertDialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE);
                 mSweetAlertDialog.setTitleText("Confirm logout");
                 mSweetAlertDialog.setContentText("You will not be able to receive the message. Are you sure ?");
@@ -84,10 +102,9 @@ public class AccountFragment extends Fragment {
                     }
                 });
                 mSweetAlertDialog.show();
-
-
             }
         });
+
     }
 
 }

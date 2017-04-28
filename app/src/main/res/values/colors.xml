@@ -18,8 +18,14 @@
     <!-- other colors -->
     <color name="white_border_button">#dfd4d4</color>
     <color name="bg_color_login_ho">#5fb9f3</color>
+    <color name="bg_color_white_item">#fafafa</color>
     <color name="text_color_tab_selected">#3a4377</color>
     <color name="text_color_tab">#a9acbf</color>
     <color name="text_color_default_spinner">#7A000000</color>
+    <color name="status_online">#51ca31</color>
+    <color name="status_offline">#929292</color>
+    <color name="text_color_strong">#202020</color>
+    <color name="text_color_pale">#acacac</color>
+
 
 </resources>

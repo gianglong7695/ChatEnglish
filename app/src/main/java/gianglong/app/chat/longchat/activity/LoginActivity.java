@@ -29,10 +29,9 @@ import gianglong.app.chat.longchat.database.UserController;
 import gianglong.app.chat.longchat.entity.UserEntity;
 import gianglong.app.chat.longchat.utils.RippleView;
 import gianglong.app.chat.longchat.utils.SessionManager;
-import gianglong.app.chat.longchat.view.inf.LoginView;
 import io.realm.Realm;
 
-public class LoginActivity extends AppCompatActivity implements LoginView {
+public class LoginActivity extends AppCompatActivity {
     Button btLogin;
     TextView tvForget, tvSignUp;
     public static EditText etUser, etPass;
@@ -232,15 +231,5 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
             }
         });
         alertError.show();
-    }
-
-    @Override
-    public void showProgressBar() {
-
-    }
-
-    @Override
-    public void hideProgressBar() {
-
     }
 }

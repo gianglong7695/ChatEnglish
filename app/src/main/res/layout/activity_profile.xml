@@ -51,7 +51,7 @@
                             android:layout_width="80dp"
                             android:layout_height="80dp"
                             android:layout_centerInParent="true"
-                            android:src="@drawable/avatar_default"
+                            android:src="@drawable/avatar_male_default"
                             app:civ_border_overlay="true" />
 
                     </RelativeLayout>

@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:ripple="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.AccountFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -43,13 +44,16 @@
                             android:id="@+id/ivAvatar"
                             android:layout_width="80dp"
                             android:layout_height="80dp"
-                            android:src="@drawable/avatar_default" />
+                            android:src="@drawable/avatar_male_default" />
 
-                        <ProgressBar
-                            android:id="@+id/progressBar"
+
+                        <gianglong.app.chat.longchat.utils.ProgressWheel
+                            android:id="@+id/progressWheel"
                             android:layout_width="25dp"
                             android:layout_height="25dp"
-                            android:layout_centerInParent="true" />
+                            android:layout_centerInParent="true"
+                            ripple:matProg_barColor="@color/purple"
+                            ripple:matProg_barWidth="3dp"/>
                     </RelativeLayout>
 
                     <TextView
@@ -66,14 +70,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2.5dp"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
 
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginRight="5dp"
-                            android:src="@drawable/ic_online" />
+                        <View
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentRight="true"
+                            android:background="@drawable/bg_status_online"
+                            android:layout_marginRight="2.5dp"/>
+
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -377,10 +384,11 @@
 
                 </LinearLayout>
 
-               <LinearLayout
+               <gianglong.app.chat.longchat.utils.RippleViewLinear
+                   android:id="@+id/layout_signout"
                    android:layout_marginTop="25dp"
                    android:layout_width="match_parent"
-                   android:layout_height="wrap_content"
+                   android:layout_height="50dp"
                    android:orientation="vertical"
                    android:layout_marginBottom="50dp"
                    android:background="#efefef">
@@ -388,19 +396,21 @@
                        android:layout_width="match_parent"
                        android:layout_height="0.75dp"
                        android:background="#cccccc" />
-                   <Button
+                   <TextView
                        android:id="@+id/btSignOut"
                        android:layout_width="match_parent"
-                       android:layout_height="wrap_content"
+                       android:layout_height="48.5dp"
                        android:text="Sign out"
-                       android:background="@drawable/ripple_effect"
+                       android:textStyle="bold"
+                       android:textAllCaps="true"
+                       android:gravity="center"
                        android:textColor="#eb2f2f"
                        android:textSize="17sp"/>
                    <View
                        android:layout_width="match_parent"
                        android:layout_height="0.75dp"
                        android:background="#cccccc" />
-               </LinearLayout>
+               </gianglong.app.chat.longchat.utils.RippleViewLinear>
 
             </LinearLayout>
         </LinearLayout>
