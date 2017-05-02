@@ -1,37 +1,95 @@
 package gianglong.app.chat.longchat.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import gianglong.app.chat.longchat.R;
+import java.util.ArrayList;
+
 import de.hdodenhof.circleimageview.CircleImageView;
+import gianglong.app.chat.longchat.R;
+import gianglong.app.chat.longchat.entity.MessageItemEntity;
 
 /**
  * Created by VCCORP on 4/28/2017.
  */
 
-public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHolder>{
+public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHolder> {
+    Context context;
+    ArrayList<MessageItemEntity> alMsg;
 
+
+    public final int TYPE_MINE = 1;
+    public final int TYPE_YOURS = 0;
+
+
+    public MessageAdapter(Context context, ArrayList<MessageItemEntity> alMsg) {
+        this.context = context;
+        this.alMsg = alMsg;
+    }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return null;
+        View v;
+        if (viewType == TYPE_MINE) {
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_message_right, parent, false);
+        } else {
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_message_left, parent, false);
+        }
+
+        return new MyViewHolder(v);
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (alMsg.get(position).getTypeView() == TYPE_MINE) {
+            return TYPE_MINE;
+        } else {
+            return TYPE_YOURS;
+        }
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
+        MessageItemEntity entity = alMsg.get(position);
+
+        if (entity != null) {
+            holder.tvMsg.setText(entity.getMessage());
+            holder.tvTime.setText(entity.getTime());
+            if (entity.getAvatarUrl().equals("0")) {
+                holder.civAvatar.setImageResource(R.drawable.avatar_male_default);
+            } else {
+                holder.civAvatar.setImageResource(R.drawable.avatar_female_default);
+            }
+
+            if (!entity.isHideTime()) {
+                holder.tvTime.setVisibility(View.GONE);
+            }
+
+
+            if (alMsg.size() > 2) {
+                if (entity.getTypeView() == alMsg.get(position - 1).getTypeView()) {
+                    alMsg.get(position - 1).setHideTime(false);
+                    notifyItemChanged(position - 1);
+                }
+
+            }
+
+        }
+
 
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return alMsg.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder {
         CircleImageView civAvatar;
         LinearLayout layout_body_msg;
         TextView tvMsg, tvTime;

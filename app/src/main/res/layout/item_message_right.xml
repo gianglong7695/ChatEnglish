@@ -6,10 +6,11 @@
 
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="2.5dp"
+        android:layout_gravity="right"
         android:layout_marginBottom="2.5dp"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="5dp">
@@ -17,10 +18,10 @@
 
         <LinearLayout
             android:id="@+id/layout_body_msg"
-            android:padding="10dp"
+            android:padding="7.5dp"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:layout_marginRight="5dp"
             android:layout_marginLeft="5dp"
             android:orientation="vertical"
@@ -32,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/text_color_strong"
-                android:text="This is my message. This is my message. This is my message. This is my message" />
+                android:text="This is my message. This is my message. This is my message" />
 
 
             <TextView
@@ -41,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:text="12:34"
                 android:textColor="@color/text_color_pale"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 android:textSize="11sp"/>
         </LinearLayout>
 
