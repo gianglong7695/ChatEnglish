@@ -43,5 +43,4 @@ dependencies {
     testCompile 'junit:junit:4.12'
 }
 
-apply plugin: 'realm-android'
 apply plugin: 'com.google.gms.google-services'

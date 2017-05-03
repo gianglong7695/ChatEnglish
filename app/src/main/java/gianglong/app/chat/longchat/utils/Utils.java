@@ -2,6 +2,7 @@ package gianglong.app.chat.longchat.utils;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
+import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 
@@ -40,5 +41,17 @@ public class Utils {
     public static float dpToPx(Context context, float valueInDp) {
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, valueInDp, metrics);
+    }
+
+
+
+    public static void saveString(Context context, String key, String value) {
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putString(key, value).commit();
+
+    }
+
+    public static String getString(Context context, String key) {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+                .getString(key, null);
     }
 }

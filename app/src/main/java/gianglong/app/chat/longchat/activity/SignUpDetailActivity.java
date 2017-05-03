@@ -13,13 +13,11 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -29,6 +27,8 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -60,13 +60,13 @@ public class SignUpDetailActivity extends AppCompatActivity {
     private SweetAlertDialog pDialog;
     private FirebaseStorage storage = FirebaseStorage.getInstance();
     private Bitmap bAvatar;
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up_detail);
-        //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//        screenConfigPopup();
+        screenConfigPopup();
         initUI();
 
     }
@@ -74,13 +74,15 @@ public class SignUpDetailActivity extends AppCompatActivity {
     public void screenConfigPopup(){
         getSupportActionBar().setHomeButtonEnabled(true);
         setTitle("Add your info");
-        DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
 
-        int width = dm.widthPixels;
-        int height = dm.heightPixels;
-
-        getWindow().setLayout((int) (width*.95), (int) (height*.95));
+//        DisplayMetrics dm = new DisplayMetrics();
+//        getWindowManager().getDefaultDisplay().getMetrics(dm);
+//
+//        int width = dm.widthPixels;
+//        int height = dm.heightPixels;
+//
+//        getWindow().setLayout((int) (width*.95), (int) (height*.95));
+        //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
     }
 
 
@@ -202,38 +204,19 @@ public class SignUpDetailActivity extends AppCompatActivity {
         rippleBtnSignin.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                showDialog();
-//                signUp(email, password);
+                updateUserInfo();
+
             }
         });
     }
 
 
-    public void signUp(String email, String password) {
-//        mAuth.createUserWithEmailAndPassword(email, password)
-//                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<AuthResult> task) {
-//                        // If sign in fails, display a message to the user. If sign in succeeds
-//                        // the auth state listener will be notified and logic to handle the
-//                        // signed in user can be handled in the listener.
-//                        if (!task.isSuccessful()) {
-//                            Toast.makeText(SignUpDetailActivity.this, "Fail!",
-//                                    Toast.LENGTH_SHORT).show();
-//                        } else {
-//                            hideDialog();
-//                            SweetAlertDialog progressSweetDialog = new SweetAlertDialog(SignUpDetailActivity.this, SweetAlertDialog.SUCCESS_TYPE);
-//                            progressSweetDialog.setContentText("Congratulations. You have successfully registered!");
-//                            progressSweetDialog.show();
-//                        }
-//
-//                    }
-//                });
-
-//        if(bAvatar != null){
-//            uploadAvatar(bAvatar);
-//        }
+    public void updateUserInfo(){
+        showDialog();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+//        mDatabase.child(Constants.NODE_MASTER).child(Constants.NODE_USER).child()
     }
+
 
 
     @Override

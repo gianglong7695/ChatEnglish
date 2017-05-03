@@ -1,16 +1,12 @@
 package gianglong.app.chat.longchat.entity;
 
-import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
-
 /**
  * Created by Giang Long on 2/21/2017.
  */
 
-public class UserEntity extends RealmObject{
-    @PrimaryKey
-    String id;
+public class UserEntity{
 
+    String id;
     String email;
     String name;
     String password;
@@ -22,6 +18,10 @@ public class UserEntity extends RealmObject{
     double rate;
     int reviewers;
 
+
+    public UserEntity() {
+        //Default for DataSnapshot.getValue(User.class)
+    }
 
     public String getId() {
         return id;

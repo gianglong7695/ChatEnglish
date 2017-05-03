@@ -8,26 +8,23 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
 
 import gianglong.app.chat.longchat.R;
-import gianglong.app.chat.longchat.database.UserController;
+import gianglong.app.chat.longchat.entity.BasicUserInfoEntity;
+import gianglong.app.chat.longchat.entity.GlobalVars;
 import gianglong.app.chat.longchat.fragment.AccountFragment;
 import gianglong.app.chat.longchat.fragment.FriendFragment;
 import gianglong.app.chat.longchat.fragment.MessageFragment;
 import gianglong.app.chat.longchat.fragment.PeopleFragment;
 import gianglong.app.chat.longchat.utils.RippleView;
 import gianglong.app.chat.longchat.utils.SessionManager;
-import io.realm.Realm;
 
 public class MainActivity extends RuntimePermissionsActivity implements View.OnClickListener {
     private static final int REQUEST_PERMISSIONS = 20;
@@ -54,7 +51,6 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
     private FirebaseAuth.AuthStateListener mAuthListener;
     private String TAG = getClass().getSimpleName();
     public static SessionManager mSessionManager;
-    private Realm mRealm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,14 +63,14 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
 
         // Check to add user info if not exist!
         if(!isUserInfo()){
-            startActivity(new Intent(getApplicationContext(), SignUpDetailActivity.class));
+            Intent it = new Intent(getApplicationContext(), SignUpDetailActivity.class);
+            startActivity(it);
         }
     }
 
 
     public void config(){
         mSessionManager = new SessionManager(getApplicationContext());
-        mRealm = UserController.with(this).getRealm();
     }
 
     public void initUI() {
@@ -273,8 +269,10 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
                 String name = profile.getDisplayName();
                 String email = profile.getEmail();
                 Uri photoUrl = profile.getPhotoUrl();
+                boolean isEmailVerified = profile.isEmailVerified();
 
-
+                BasicUserInfoEntity entity = new BasicUserInfoEntity(providerId, uid, email, photoUrl, isEmailVerified);
+                GlobalVars.setBasicUserInfoEntity(entity);
             }
 
 
