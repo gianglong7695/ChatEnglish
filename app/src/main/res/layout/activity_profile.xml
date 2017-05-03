@@ -9,9 +9,6 @@
     tools:context=".activity.ProfileActivity">
 
 
-    <include layout="@layout/layout_toolbar_basic"/>
-
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">

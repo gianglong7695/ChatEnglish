@@ -8,6 +8,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
@@ -20,6 +21,7 @@ import java.util.Random;
 import gianglong.app.chat.longchat.R;
 import gianglong.app.chat.longchat.adapter.MessageAdapter;
 import gianglong.app.chat.longchat.entity.MessageItemEntity;
+import gianglong.app.chat.longchat.utils.Utils;
 
 public class ChatActivity extends AppCompatActivity {
     String TAG = getClass().getSimpleName();
@@ -31,7 +33,8 @@ public class ChatActivity extends AppCompatActivity {
     MessageAdapter msgAdapter;
     Random rd = new Random();
     LinearLayoutManager linearLayoutManager;
-
+    View activityRootView;
+    boolean isScroll = false;
 
 
     @Override
@@ -49,6 +52,7 @@ public class ChatActivity extends AppCompatActivity {
         rvMessage = (RecyclerView) findViewById(R.id.rvMessage);
         btSend = (ImageButton) findViewById(R.id.btSend);
         etMessage = (EditText) findViewById(R.id.etMessage);
+        activityRootView = findViewById(R.id.activity_chat);
     }
 
 
@@ -102,6 +106,24 @@ public class ChatActivity extends AppCompatActivity {
                     msgAdapter.notifyDataSetChanged();
                     rvMessage.scrollToPosition(alMsg.size() - 1);
                     etMessage.setText("");
+                }
+            }
+        });
+
+
+
+        activityRootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                int heightDiff = activityRootView.getRootView().getHeight() - activityRootView.getHeight();
+                if (heightDiff > Utils.dpToPx(getApplicationContext(), 200)) { // if more than 200 dp, it's probably a keyboard...
+                    if(!isScroll){
+                        rvMessage.scrollToPosition(alMsg.size() - 1);
+                        isScroll = true;
+                    }else{
+                        isScroll = false;
+                    }
+
                 }
             }
         });

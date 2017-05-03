@@ -19,6 +19,7 @@ import gianglong.app.chat.longchat.entity.MessageItemEntity;
  */
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHolder> {
+    String TAG = getClass().getSimpleName();
     Context context;
     ArrayList<MessageItemEntity> alMsg;
 
@@ -71,11 +72,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
             }
 
 
-            if (alMsg.size() > 2) {
-                if (entity.getTypeView() == alMsg.get(position - 1).getTypeView()) {
-                    alMsg.get(position - 1).setHideTime(false);
-                    notifyItemChanged(position - 1);
-                }
+            if (alMsg.size() > 1) {
+//                if (entity.getTypeView() == alMsg.get(position - 1).getTypeView()) {
+//                    alMsg.get(position - 1).setHideTime(false);
+//                    notifyDataSetChanged();
+//                }
 
             }
 

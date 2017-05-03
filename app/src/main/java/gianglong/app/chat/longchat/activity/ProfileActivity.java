@@ -14,6 +14,7 @@ import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -27,11 +28,9 @@ import java.io.FileNotFoundException;
 import java.util.Calendar;
 
 import gianglong.app.chat.longchat.R;
-import gianglong.app.chat.longchat.utils.RippleViewLinear;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener, DatePickerDialog.OnDateSetListener{
-    TextView tvTitle, tvName;
-    RippleViewLinear layoutBack;
+    TextView tvName;
     EditText etName, etPhone, etPass, etEmail, etAddress, etBirthday;
     ImageView ivEditName, ivEditPhone, ivEditPass, ivEditEmail, ivEditAddress, ivAvatar;
     Spinner spGender;
@@ -45,15 +44,13 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         initUI();
+        initConfig();
         eventHandle();
-
 
     }
 
 
     public void initUI(){
-        tvTitle = (TextView) findViewById(R.id.tvTitle);
-        layoutBack = (RippleViewLinear)  findViewById(R.id.layoutBack);
         etName = (EditText) findViewById(R.id.etName);
         etPhone = (EditText) findViewById(R.id.etPhone);
         etPass = (EditText) findViewById(R.id.etPass);
@@ -74,7 +71,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
 
 
-        tvTitle.setText("Profile");
+
         ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.createFromResource(this,
                 R.array.arrGender, R.layout.simple_spinner_item);
         genderAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
@@ -85,13 +82,13 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         etBirthday.setFocusable(false);
     }
 
+
+    public void initConfig(){
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle("Profile");
+    }
+
     public void eventHandle(){
-        layoutBack.setOnRippleCompleteListener(new RippleViewLinear.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleViewLinear rippleView) {
-                onBackPressed();
-            }
-        });
 
 
         etName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -314,5 +311,17 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
         etBirthday.setText(dayOfMonth + "/" + (monthOfYear+1) + "/" + year);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
     }
 }

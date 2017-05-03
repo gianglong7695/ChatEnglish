@@ -38,9 +38,9 @@
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".activity.ProfileActivity"
-            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity android:name=".activity.ChatActivity"
+        <activity
+            android:name=".activity.ChatActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden"></activity>
     </application>
