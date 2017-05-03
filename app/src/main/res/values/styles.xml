@@ -15,6 +15,12 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+    
+    
+    <style name="AppTheme.PopupCustom">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+    </style>
 
     <style name="spinnerItemStyle" parent="android:Widget.TextView.SpinnerItem">
 

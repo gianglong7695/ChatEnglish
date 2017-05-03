@@ -13,8 +13,10 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -45,7 +47,7 @@ public class SignUpDetailActivity extends AppCompatActivity {
     private MaterialEditText etName, etAge;
     private Spinner spCountry, spGender;
     private LinearLayout layout_avatar;
-    private RippleView rippleBtnSignin, rippleBtnBack;
+    private RippleView rippleBtnSignin;
     private CircleImageView ivAvatar;
     private String[] arrGender;
     private String[] arrCountry;
@@ -63,9 +65,22 @@ public class SignUpDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up_detail);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//        screenConfigPopup();
         initUI();
 
+    }
+
+    public void screenConfigPopup(){
+        getSupportActionBar().setHomeButtonEnabled(true);
+        setTitle("Add your info");
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+
+        int width = dm.widthPixels;
+        int height = dm.heightPixels;
+
+        getWindow().setLayout((int) (width*.95), (int) (height*.95));
     }
 
 
@@ -76,7 +91,6 @@ public class SignUpDetailActivity extends AppCompatActivity {
         spGender = (Spinner) findViewById(R.id.spGender);
         layout_avatar = (LinearLayout) findViewById(R.id.layout_avatar);
         rippleBtnSignin = (RippleView) findViewById(R.id.rippleBtnSignin);
-        rippleBtnBack = (RippleView) findViewById(R.id.rippleBtnBack);
         ivAvatar = (CircleImageView) findViewById(R.id.ivAvatar);
 
         // Set dialog
@@ -143,13 +157,6 @@ public class SignUpDetailActivity extends AppCompatActivity {
                 };
         spCountry.setAdapter(countryAdapter);
 
-        rippleBtnBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
-                onBackPressed();
-            }
-        });
-
 
         layout_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -189,14 +196,14 @@ public class SignUpDetailActivity extends AppCompatActivity {
 
         // Firebase
         mAuth = FirebaseAuth.getInstance();
-        email = getIntent().getExtras().getString("email");
-        password = getIntent().getExtras().getString("password");
+//        email = getIntent().getExtras().getString("email");
+//        password = getIntent().getExtras().getString("password");
 
         rippleBtnSignin.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
                 showDialog();
-                signUp(email, password);
+//                signUp(email, password);
             }
         });
     }
@@ -345,11 +352,24 @@ public class SignUpDetailActivity extends AppCompatActivity {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                Toast.makeText(SignUpDetailActivity.this, "Success!", Toast.LENGTH_SHORT).show();
-                hideDialog();
-                Log.d(TAG, downloadUrl.toString());
+//                Uri downloadUrl = taskSnapshot.getDownloadUrl();
+//                Toast.makeText(SignUpDetailActivity.this, "Success!", Toast.LENGTH_SHORT).show();
+//                hideDialog();
+//                Log.d(TAG, downloadUrl.toString());
             }
         });
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
     }
 }

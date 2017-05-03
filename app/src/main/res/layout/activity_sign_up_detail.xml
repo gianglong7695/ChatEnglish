@@ -135,32 +135,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/custom_border_button_transparent"
-                    android:text="Complete registration"
+                    android:text="Finish"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="19sp" />
             </gianglong.app.chat.longchat.utils.RippleView>
-
-            <gianglong.app.chat.longchat.utils.RippleView
-                android:id="@+id/rippleBtnBack"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginTop="20dp"
-                ripple:rv_zoom="true">
-
-                <Button
-                    android:id="@+id/btBack"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/custom_border_button_transparent"
-                    android:text="Back"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:textSize="19sp" />
-            </gianglong.app.chat.longchat.utils.RippleView>
-
 
         </LinearLayout>
     </ScrollView>

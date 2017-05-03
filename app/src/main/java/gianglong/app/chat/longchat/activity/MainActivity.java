@@ -1,16 +1,23 @@
 package gianglong.app.chat.longchat.activity;
 
+import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 
 import gianglong.app.chat.longchat.R;
 import gianglong.app.chat.longchat.database.UserController;
@@ -56,6 +63,12 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
         initUI();
         initFragment();
         config();
+
+
+        // Check to add user info if not exist!
+        if(!isUserInfo()){
+            startActivity(new Intent(getApplicationContext(), SignUpDetailActivity.class));
+        }
     }
 
 
@@ -88,6 +101,7 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
         layout_people.setOnClickListener(this);
         layout_account.setOnClickListener(this);
     }
+
 
 
     public void initFragment() {
@@ -227,4 +241,45 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
             return tabDrawableOff.length;
         }
     }
+
+
+    public boolean isUserInfo(){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null){
+            if(user.getDisplayName() == null){
+                return false;
+            }else{
+                return true;
+            }
+
+        }else{
+            return false;
+        }
+    }
+
+
+    public void getUserInfo(){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null){
+
+            for (UserInfo profile : user.getProviderData()) {
+                // Id of the provider (ex: google.com)
+                String providerId = profile.getProviderId();
+
+                // UID specific to the provider
+                String uid = profile.getUid();
+
+                // Name, email address, and profile photo Url
+                String name = profile.getDisplayName();
+                String email = profile.getEmail();
+                Uri photoUrl = profile.getPhotoUrl();
+
+
+            }
+
+
+
+        }
+    }
+
 }
