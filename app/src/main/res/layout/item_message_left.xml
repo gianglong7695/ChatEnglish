@@ -9,10 +9,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
-        android:layout_marginBottom="2.5dp"
+        android:layout_marginBottom="1.5dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="50dp"
-        android:layout_marginTop="2.5dp"
+        android:layout_marginTop="1.5dp"
         android:orientation="horizontal">
 
 
@@ -31,10 +31,13 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:background="@drawable/border_layout_message"
-            android:gravity="left"
+            android:background="@drawable/border_layout_message_left"
+            android:gravity="left|center_vertical"
             android:orientation="vertical"
-            android:padding="7.5dp">
+            android:paddingTop="7.5dp"
+            android:paddingBottom="7.5dp"
+            android:paddingLeft="12.5dp"
+            android:paddingRight="12.5dp">
 
             <TextView
                 android:id="@+id/tvMsg"
@@ -48,7 +51,7 @@
                 android:id="@+id/tvTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="3dp"
                 android:text="12:34"
                 android:textColor="@color/text_color_pale"
                 android:textSize="11sp" />

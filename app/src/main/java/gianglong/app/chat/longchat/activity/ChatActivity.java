@@ -99,11 +99,21 @@ public class ChatActivity extends AppCompatActivity {
                     String hour = df.format(date);
                     int type = rd.nextInt(2);
 
-                    MessageItemEntity entity = new MessageItemEntity(String.valueOf(type), etMessage.getText().toString(), hour, 1 , type, true);
+                    MessageItemEntity entity = new MessageItemEntity(String.valueOf(type), etMessage.getText().toString(), hour, 1 , type, false);
                     alMsg.add(entity);
 
 
-                    msgAdapter.notifyDataSetChanged();
+                    if(alMsg.size() > 1){
+                        if(entity.getTypeView() == alMsg.get(alMsg.size() - 2).getTypeView()){
+                            alMsg.get(alMsg.size() - 2).setHideTime(true);
+                            msgAdapter.notifyItemChanged(alMsg.size() - 2);
+                        }
+                    }
+
+
+
+
+                    msgAdapter.notifyItemChanged(alMsg.size() - 1);
                     rvMessage.scrollToPosition(alMsg.size() - 1);
                     etMessage.setText("");
                 }
@@ -129,6 +139,7 @@ public class ChatActivity extends AppCompatActivity {
         });
 
     }
+
 
 
 

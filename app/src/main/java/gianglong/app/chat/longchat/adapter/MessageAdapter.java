@@ -67,17 +67,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
                 holder.civAvatar.setImageResource(R.drawable.avatar_female_default);
             }
 
-            if (!entity.isHideTime()) {
+            if (entity.isHideTime()) {
                 holder.tvTime.setVisibility(View.GONE);
-            }
-
-
-            if (alMsg.size() > 1) {
-//                if (entity.getTypeView() == alMsg.get(position - 1).getTypeView()) {
-//                    alMsg.get(position - 1).setHideTime(false);
-//                    notifyDataSetChanged();
-//                }
-
+            }else{
+                holder.tvTime.setVisibility(View.VISIBLE);
             }
 
         }
