@@ -9,6 +9,7 @@ import android.net.Uri;
 public class BasicUserInfoEntity {
     private String providerId;
     private String uid;
+    private String name;
     private String email;
     private Uri photoUrl;
     private boolean isEmailVerified ;
@@ -27,15 +28,22 @@ public class BasicUserInfoEntity {
         GlobalVars.setBasicUserInfoEntity(this);
     }
 
-
-    public BasicUserInfoEntity(String providerId, String uid, String email, Uri photoUrl, boolean isEmailVerified) {
+    public BasicUserInfoEntity(String providerId, String uid, String name, String email, Uri photoUrl, boolean isEmailVerified) {
         this.providerId = providerId;
         this.uid = uid;
+        this.name = name;
         this.email = email;
         this.photoUrl = photoUrl;
         this.isEmailVerified = isEmailVerified;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getProviderId() {
         return providerId;

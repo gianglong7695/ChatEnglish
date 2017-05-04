@@ -25,11 +25,10 @@ import com.google.firebase.auth.FirebaseUser;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import gianglong.app.chat.longchat.R;
-import gianglong.app.chat.longchat.database.UserController;
+import gianglong.app.chat.longchat.database.DatabaseHandler;
 import gianglong.app.chat.longchat.entity.UserEntity;
 import gianglong.app.chat.longchat.utils.RippleView;
 import gianglong.app.chat.longchat.utils.SessionManager;
-import io.realm.Realm;
 
 public class LoginActivity extends AppCompatActivity {
     Button btLogin;
@@ -42,7 +41,6 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private SweetAlertDialog pDialog;
     private SessionManager mSessionManager;
-    private Realm mRealm;
 
 
     @Override
@@ -77,7 +75,6 @@ public class LoginActivity extends AppCompatActivity {
 
     public void config() {
         mSessionManager = new SessionManager(getApplicationContext());
-        mRealm = UserController.with(this).getRealm();
 
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -146,12 +143,6 @@ public class LoginActivity extends AppCompatActivity {
                             userEntity.setId(fUser.getUid());
                             userEntity.setName(fUser.getDisplayName());
 
-                            // Check if not exist -> save user data to database
-                            if (mRealm.where(UserEntity.class).equalTo("id", userEntity.getId()).findFirst() == null) {
-                                mRealm.beginTransaction();
-                                mRealm.copyToRealm(userEntity);
-                                mRealm.commitTransaction();
-                            }
 
 
                         } else {

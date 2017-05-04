@@ -24,9 +24,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -40,6 +44,9 @@ import java.io.FileNotFoundException;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import de.hdodenhof.circleimageview.CircleImageView;
 import gianglong.app.chat.longchat.R;
+import gianglong.app.chat.longchat.entity.BasicUserInfoEntity;
+import gianglong.app.chat.longchat.entity.UserEntity;
+import gianglong.app.chat.longchat.utils.Constants;
 import gianglong.app.chat.longchat.utils.RippleView;
 
 public class SignUpDetailActivity extends AppCompatActivity {
@@ -72,7 +79,7 @@ public class SignUpDetailActivity extends AppCompatActivity {
     }
 
     public void screenConfigPopup(){
-        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("Add your info");
 
 //        DisplayMetrics dm = new DisplayMetrics();
@@ -198,8 +205,6 @@ public class SignUpDetailActivity extends AppCompatActivity {
 
         // Firebase
         mAuth = FirebaseAuth.getInstance();
-//        email = getIntent().getExtras().getString("email");
-//        password = getIntent().getExtras().getString("password");
 
         rippleBtnSignin.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
@@ -214,7 +219,29 @@ public class SignUpDetailActivity extends AppCompatActivity {
     public void updateUserInfo(){
         showDialog();
         mDatabase = FirebaseDatabase.getInstance().getReference();
-//        mDatabase.child(Constants.NODE_MASTER).child(Constants.NODE_USER).child()
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(etName.getText().toString())
+                .setPhotoUri(Uri.parse("https://example.com/jane-q-user/profile.jpg"))
+                .build();
+
+        user.updateProfile(profileUpdates)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+//                            UserEntity userEntity = new UserEntity(BasicUserInfoEntity.getInstance().getUid(),
+//                                    BasicUserInfoEntity.getInstance().getEmail(),
+//                                    etName.getText().toString(),
+//                                    "",
+//                                    sp)
+                            mDatabase.child(Constants.NODE_MASTER).child(Constants.NODE_USER).child(BasicUserInfoEntity.getInstance().getUid()).setValue("");
+                        }
+                    }
+                });
+
     }
 
 
@@ -334,7 +361,6 @@ public class SignUpDetailActivity extends AppCompatActivity {
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
 //                Uri downloadUrl = taskSnapshot.getDownloadUrl();
 //                Toast.makeText(SignUpDetailActivity.this, "Success!", Toast.LENGTH_SHORT).show();
 //                hideDialog();

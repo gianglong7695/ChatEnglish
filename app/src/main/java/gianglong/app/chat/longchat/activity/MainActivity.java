@@ -60,6 +60,8 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
         initFragment();
         config();
 
+        //get basic user info
+        getUserInfo();
 
         // Check to add user info if not exist!
         if(!isUserInfo()){
@@ -271,7 +273,7 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
                 Uri photoUrl = profile.getPhotoUrl();
                 boolean isEmailVerified = profile.isEmailVerified();
 
-                BasicUserInfoEntity entity = new BasicUserInfoEntity(providerId, uid, email, photoUrl, isEmailVerified);
+                BasicUserInfoEntity entity = new BasicUserInfoEntity(providerId, uid, name, email, photoUrl, isEmailVerified);
                 GlobalVars.setBasicUserInfoEntity(entity);
             }
 

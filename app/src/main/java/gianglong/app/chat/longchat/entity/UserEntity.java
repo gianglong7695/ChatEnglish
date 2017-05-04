@@ -19,6 +19,20 @@ public class UserEntity{
     int reviewers;
 
 
+    public UserEntity(String id, String email, String name, String password, String gender, String dateOfBirth, String country, String avatar, String introdution, double rate, int reviewers) {
+        this.id = id;
+        this.email = email;
+        this.name = name;
+        this.password = password;
+        this.gender = gender;
+        this.dateOfBirth = dateOfBirth;
+        this.country = country;
+        this.avatar = avatar;
+        this.introdution = introdution;
+        this.rate = rate;
+        this.reviewers = reviewers;
+    }
+
     public UserEntity() {
         //Default for DataSnapshot.getValue(User.class)
     }
