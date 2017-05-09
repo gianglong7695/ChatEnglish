@@ -11,7 +11,6 @@ public class UserEntity{
     String name;
     String password;
     String gender;
-    String dateOfBirth;
     String country;
     String avatar;
     String introdution;
@@ -19,22 +18,35 @@ public class UserEntity{
     int reviewers;
 
 
-    public UserEntity(String id, String email, String name, String password, String gender, String dateOfBirth, String country, String avatar, String introdution, double rate, int reviewers) {
+
+
+
+    public static UserEntity getInstance() {
+        if (GlobalVars.getBasicUserInfoEntity() == null) {
+
+            GlobalVars.setUserEntity(new UserEntity());
+        }
+
+        return GlobalVars.getUserEntity();
+    }
+
+    public UserEntity() {
+        GlobalVars.setUserEntity(this);
+        //Default for DataSnapshot.getValue(User.class)
+    }
+
+
+    public UserEntity(String id, String email, String name, String password, String gender, String country, String avatar, String introdution, double rate, int reviewers) {
         this.id = id;
         this.email = email;
         this.name = name;
         this.password = password;
         this.gender = gender;
-        this.dateOfBirth = dateOfBirth;
         this.country = country;
         this.avatar = avatar;
         this.introdution = introdution;
         this.rate = rate;
         this.reviewers = reviewers;
-    }
-
-    public UserEntity() {
-        //Default for DataSnapshot.getValue(User.class)
     }
 
     public String getId() {
@@ -75,14 +87,6 @@ public class UserEntity{
 
     public void setGender(String gender) {
         this.gender = gender;
-    }
-
-    public String getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(String dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
     }
 
     public String getCountry() {
@@ -134,7 +138,6 @@ public class UserEntity{
                 ", name='" + name + '\'' +
                 ", password='" + password + '\'' +
                 ", gender='" + gender + '\'' +
-                ", dateOfBirth='" + dateOfBirth + '\'' +
                 ", country='" + country + '\'' +
                 ", avatar='" + avatar + '\'' +
                 ", introdution='" + introdution + '\'' +

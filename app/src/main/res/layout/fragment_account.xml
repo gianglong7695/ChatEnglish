@@ -57,7 +57,7 @@
                     </RelativeLayout>
 
                     <TextView
-                        android:id="@+id/tv_name"
+                        android:id="@+id/tvName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="7.5dp"
@@ -89,6 +89,7 @@
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/tvIntroduce"
                         android:layout_marginTop="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

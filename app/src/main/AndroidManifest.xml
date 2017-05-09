@@ -32,9 +32,9 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name=".activity.SignUpDetailActivity"
+            android:name=".activity.TakeInfoDetailActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.PopupCustom"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".activity.ProfileActivity"

@@ -14,6 +14,7 @@ import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -21,6 +22,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
@@ -28,11 +30,13 @@ import java.io.FileNotFoundException;
 import java.util.Calendar;
 
 import gianglong.app.chat.longchat.R;
+import gianglong.app.chat.longchat.entity.BasicUserInfoEntity;
+import gianglong.app.chat.longchat.entity.UserEntity;
 
-public class ProfileActivity extends AppCompatActivity implements View.OnClickListener, DatePickerDialog.OnDateSetListener{
+public class ProfileActivity extends AppCompatActivity implements View.OnClickListener{
     TextView tvName;
-    EditText etName, etPhone, etPass, etEmail, etAddress, etBirthday;
-    ImageView ivEditName, ivEditPhone, ivEditPass, ivEditEmail, ivEditAddress, ivAvatar;
+    EditText etName, etPass, etEmail, etAddress, etBirthday;
+    ImageView ivEditName, ivEditPass, ivEditEmail, ivEditAddress, ivAvatar;
     Spinner spGender;
 
 
@@ -46,20 +50,18 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         initUI();
         initConfig();
         eventHandle();
-
+        setData();
     }
 
 
     public void initUI(){
         etName = (EditText) findViewById(R.id.etName);
-        etPhone = (EditText) findViewById(R.id.etPhone);
         etPass = (EditText) findViewById(R.id.etPass);
         etEmail = (EditText) findViewById(R.id.etEmail);
         etAddress = (EditText) findViewById(R.id.etAddress);
         etBirthday = (EditText) findViewById(R.id.etBirthday);
 
         ivEditName = (ImageView) findViewById(R.id.ivEdit1);
-        ivEditPhone = (ImageView) findViewById(R.id.ivEdit2);
         ivEditPass = (ImageView) findViewById(R.id.ivEdit3);
         ivEditEmail = (ImageView) findViewById(R.id.ivEdit6);
         ivEditAddress = (ImageView) findViewById(R.id.ivEdit7);
@@ -79,7 +81,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
 
         etPass.setTypeface(Typeface.DEFAULT);
-        etBirthday.setFocusable(false);
+//        etBirthday.setFocusable(false);
     }
 
 
@@ -102,16 +104,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
 
-        etPhone.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    ivEditPhone.setImageResource(R.drawable.ic_pen_focus);
-                } else {
-                    ivEditPhone.setImageResource(R.drawable.ic_pen);
-                }
-            }
-        });
 
         etPass.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -149,7 +141,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         ivEditName.setOnClickListener(this);
         etName.setOnClickListener(this);
-        etPhone.setOnClickListener(this);
         etPass.setOnClickListener(this);
         etEmail.setOnClickListener(this);
         etAddress.setOnClickListener(this);
@@ -176,17 +167,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-//                        String strName = arrayAdapter.getItem(which);
-//                        AlertDialog.Builder builderInner = new AlertDialog.Builder(UserProfileEditActivity.this);
-//                        builderInner.setMessage(strName);
-//                        builderInner.setTitle("Bạn đã chọn ");
-//                        builderInner.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog,int which) {
-//                                dialog.dismiss();
-//                            }
-//                        });
-//                        builderInner.show();
                         switch (which){
                             case 0:
                                 takePicFromCamera();
@@ -283,9 +263,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 etName.setFocusable(true);
                 etName.requestFocus();
                 break;
-            case R.id.etPhone:
-
-                break;
             case R.id.etPass:
 
                 break;
@@ -295,22 +272,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.etAddress:
 
                 break;
-            case R.id.etBirthday:
-                Calendar now = Calendar.getInstance();
-                DatePickerDialog dpd = DatePickerDialog.newInstance(
-                        ProfileActivity.this,
-                        now.get(Calendar.YEAR),
-                        now.get(Calendar.MONTH),
-                        now.get(Calendar.DAY_OF_MONTH)
-                );
-                dpd.show(getFragmentManager(), "Datepickerdialog");
-                break;
         }
-    }
-
-    @Override
-    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-        etBirthday.setText(dayOfMonth + "/" + (monthOfYear+1) + "/" + year);
     }
 
     @Override
@@ -319,9 +281,52 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             case android.R.id.home:
                 onBackPressed();
                 return true;
+            case R.id.itemCompleted:
+                Toast.makeText(this, "Okay", Toast.LENGTH_SHORT).show();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
 
+    }
+
+
+    public void setData(){
+        UserEntity entity = UserEntity.getInstance();
+        if(entity.getName() != null){
+            etName.setText(entity.getName());
+            tvName.setText(entity.getName());
+        }
+
+        if(entity.getEmail() != null){
+            etEmail.setText(entity.getEmail());
+        }
+
+
+        if(entity.getPassword() != null){
+            etPass.setText(entity.getPassword());
+        }
+
+
+        if(entity.getCountry() != null){
+            etAddress.setText(entity.getCountry());
+        }
+
+
+        if(entity.getGender() != null){
+            if(entity.getGender().equals("Male")){
+                spGender.setSelection(0);
+            }else{
+                spGender.setSelection(1);
+            }
+        }
+
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_profile, menu);//Menu Resource, Menu
+        return true;
     }
 }

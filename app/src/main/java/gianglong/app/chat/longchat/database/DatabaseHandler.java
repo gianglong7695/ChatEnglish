@@ -59,7 +59,6 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         values.put(Constants.KEY_EMAIL, user.getEmail());
         values.put(Constants.KEY_PASSWORD, user.getPassword());
         values.put(Constants.KEY_GENDER, user.getGender());
-        values.put(Constants.KEY_DATEOFBIRTH, user.getDateOfBirth());
         values.put(Constants.KEY_COUNTRY, user.getCountry());
         values.put(Constants.KEY_AVATAR, user.getAvatar());
         values.put(Constants.KEY_INTRODUCE, user.getIntrodution());
@@ -102,7 +101,6 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 c.getString(5),
                 c.getString(6),
                 c.getString(7),
-                c.getString(8),
                 0,
                 0);
         // return user

@@ -84,4 +84,17 @@ public class BasicUserInfoEntity {
     public void setEmailVerified(boolean emailVerified) {
         isEmailVerified = emailVerified;
     }
+
+
+    @Override
+    public String toString() {
+        return "BasicUserInfoEntity{" +
+                "providerId='" + providerId + '\'' +
+                ", uid='" + uid + '\'' +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", photoUrl=" + photoUrl +
+                ", isEmailVerified=" + isEmailVerified +
+                '}';
+    }
 }

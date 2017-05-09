@@ -18,6 +18,7 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -49,7 +50,7 @@ import gianglong.app.chat.longchat.entity.UserEntity;
 import gianglong.app.chat.longchat.utils.Constants;
 import gianglong.app.chat.longchat.utils.RippleView;
 
-public class SignUpDetailActivity extends AppCompatActivity {
+public class TakeInfoDetailActivity extends AppCompatActivity {
     private String TAG = getClass().getSimpleName();
     private MaterialEditText etName, etAge;
     private Spinner spCountry, spGender;
@@ -57,7 +58,9 @@ public class SignUpDetailActivity extends AppCompatActivity {
     private RippleView rippleBtnSignin;
     private CircleImageView ivAvatar;
     private String[] arrGender;
+    private int genderPos = 0;
     private String[] arrCountry;
+    private int countryPos = 0;
 
     private static final int CAM_REQUEST = 1;
     private static final int SELECTED_PICTURE_REQUEST = 2;
@@ -75,11 +78,10 @@ public class SignUpDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up_detail);
         screenConfigPopup();
         initUI();
-
+        handleEvent();
     }
 
     public void screenConfigPopup(){
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("Add your info");
 
 //        DisplayMetrics dm = new DisplayMetrics();
@@ -170,10 +172,10 @@ public class SignUpDetailActivity extends AppCompatActivity {
         layout_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder builderSingle = new AlertDialog.Builder(SignUpDetailActivity.this);
+                AlertDialog.Builder builderSingle = new AlertDialog.Builder(TakeInfoDetailActivity.this);
                 builderSingle.setTitle("Choose your avatar");
 
-                final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(SignUpDetailActivity.this, R.layout.item_single_dialog);
+                final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(TakeInfoDetailActivity.this, R.layout.item_single_dialog);
                 arrayAdapter.add("Camera");
                 arrayAdapter.add("Library");
 
@@ -216,6 +218,34 @@ public class SignUpDetailActivity extends AppCompatActivity {
     }
 
 
+    public void handleEvent(){
+        spGender.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                genderPos = position;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+        spCountry.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                countryPos = position;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+
     public void updateUserInfo(){
         showDialog();
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -227,17 +257,34 @@ public class SignUpDetailActivity extends AppCompatActivity {
                 .setPhotoUri(Uri.parse("https://example.com/jane-q-user/profile.jpg"))
                 .build();
 
+
+
+        Log.e(TAG, BasicUserInfoEntity.getInstance().toString());
+
         user.updateProfile(profileUpdates)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-//                            UserEntity userEntity = new UserEntity(BasicUserInfoEntity.getInstance().getUid(),
-//                                    BasicUserInfoEntity.getInstance().getEmail(),
-//                                    etName.getText().toString(),
-//                                    "",
-//                                    sp)
-                            mDatabase.child(Constants.NODE_MASTER).child(Constants.NODE_USER).child(BasicUserInfoEntity.getInstance().getUid()).setValue("");
+                            UserEntity userEntity = new UserEntity(BasicUserInfoEntity.getInstance().getUid(),
+                                    BasicUserInfoEntity.getInstance().getEmail(),
+                                    etName.getText().toString(),
+                                    "password",
+                                    arrGender[genderPos],
+                                    arrCountry[countryPos],
+                                    "avatar",
+                                    "introduce",
+                                    1.5,
+                                    10
+                                    );
+                            mDatabase.child(Constants.NODE_MASTER).child(Constants.NODE_USER).child(BasicUserInfoEntity.getInstance().getUid()).setValue(userEntity).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    hideDialog();
+                                    finish();
+                                    Toast.makeText(TakeInfoDetailActivity.this, "Update success!", Toast.LENGTH_SHORT).show();
+                                }
+                            });
                         }
                     }
                 });
@@ -355,30 +402,18 @@ public class SignUpDetailActivity extends AppCompatActivity {
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(SignUpDetailActivity.this, "Error!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(TakeInfoDetailActivity.this, "Error!", Toast.LENGTH_SHORT).show();
                 hideDialog();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 //                Uri downloadUrl = taskSnapshot.getDownloadUrl();
-//                Toast.makeText(SignUpDetailActivity.this, "Success!", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(TakeInfoDetailActivity.this, "Success!", Toast.LENGTH_SHORT).show();
 //                hideDialog();
 //                Log.d(TAG, downloadUrl.toString());
             }
         });
     }
 
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-
-    }
 }

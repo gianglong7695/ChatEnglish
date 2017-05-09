@@ -1,9 +1,9 @@
 package gianglong.app.chat.longchat.activity;
 
-import android.content.Intent;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -11,10 +11,10 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserInfo;
 
 import gianglong.app.chat.longchat.R;
 import gianglong.app.chat.longchat.entity.BasicUserInfoEntity;
@@ -23,6 +23,8 @@ import gianglong.app.chat.longchat.fragment.AccountFragment;
 import gianglong.app.chat.longchat.fragment.FriendFragment;
 import gianglong.app.chat.longchat.fragment.MessageFragment;
 import gianglong.app.chat.longchat.fragment.PeopleFragment;
+import gianglong.app.chat.longchat.service.UserService;
+import gianglong.app.chat.longchat.utils.DataNotify;
 import gianglong.app.chat.longchat.utils.RippleView;
 import gianglong.app.chat.longchat.utils.SessionManager;
 
@@ -52,6 +54,8 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
     private String TAG = getClass().getSimpleName();
     public static SessionManager mSessionManager;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,19 +63,12 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
         initUI();
         initFragment();
         config();
-
-        //get basic user info
-        getUserInfo();
-
-        // Check to add user info if not exist!
-        if(!isUserInfo()){
-            Intent it = new Intent(getApplicationContext(), SignUpDetailActivity.class);
-            startActivity(it);
-        }
     }
 
 
-    public void config(){
+
+
+    public void config() {
         mSessionManager = new SessionManager(getApplicationContext());
     }
 
@@ -99,7 +96,6 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
         layout_people.setOnClickListener(this);
         layout_account.setOnClickListener(this);
     }
-
 
 
     public void initFragment() {
@@ -241,45 +237,24 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
     }
 
 
-    public boolean isUserInfo(){
+    public boolean isUserInfo() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null){
-            if(user.getDisplayName() == null){
+        if (user != null) {
+            if (user.getDisplayName() == null) {
                 return false;
-            }else{
+            } else {
                 return true;
             }
 
-        }else{
+        } else {
             return false;
         }
     }
 
 
-    public void getUserInfo(){
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null){
-
-            for (UserInfo profile : user.getProviderData()) {
-                // Id of the provider (ex: google.com)
-                String providerId = profile.getProviderId();
-
-                // UID specific to the provider
-                String uid = profile.getUid();
-
-                // Name, email address, and profile photo Url
-                String name = profile.getDisplayName();
-                String email = profile.getEmail();
-                Uri photoUrl = profile.getPhotoUrl();
-                boolean isEmailVerified = profile.isEmailVerified();
-
-                BasicUserInfoEntity entity = new BasicUserInfoEntity(providerId, uid, name, email, photoUrl, isEmailVerified);
-                GlobalVars.setBasicUserInfoEntity(entity);
-            }
 
 
 
-        }
-    }
+
 
 }
