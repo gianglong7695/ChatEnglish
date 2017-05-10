@@ -20,6 +20,7 @@ import com.nostra13.universalimageloader.core.assist.LoadedFrom;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.imageaware.ImageAware;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -27,6 +28,8 @@ import gianglong.app.chat.longchat.R;
 import gianglong.app.chat.longchat.activity.ChatActivity;
 import gianglong.app.chat.longchat.entity.MessageEntity;
 import gianglong.app.chat.longchat.entity.UserEntity;
+import gianglong.app.chat.longchat.utils.Constants;
+import gianglong.app.chat.longchat.utils.RippleViewLinear;
 
 /**
  * Created by VCCORP on 4/28/2017.
@@ -70,7 +73,7 @@ public class ListPeopleAdapter extends RecyclerView.Adapter<ListPeopleAdapter.My
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        UserEntity obj = alListPeople.get(position);
+        final UserEntity obj = alListPeople.get(position);
         if(obj != null){
             if(obj.getAvatar() != null){
                 if(obj.getAvatar().equals("1")){
@@ -112,10 +115,11 @@ public class ListPeopleAdapter extends RecyclerView.Adapter<ListPeopleAdapter.My
 
 
 
-            holder.layout_item.setOnClickListener(new View.OnClickListener() {
+            holder.layout_item.setOnRippleCompleteListener(new RippleViewLinear.OnRippleCompleteListener() {
                 @Override
-                public void onClick(View v) {
+                public void onComplete(RippleViewLinear rippleView) {
                     Intent it = new Intent(context, ChatActivity.class);
+                    it.putExtra(Constants.KEY_USER, obj);
                     context.startActivity(it);
                 }
             });
@@ -140,7 +144,7 @@ public class ListPeopleAdapter extends RecyclerView.Adapter<ListPeopleAdapter.My
         View vUserStatus;
         TextView tvName, tvIntroduce;
         ImageView ivFlag;
-        LinearLayout layout_item;
+        RippleViewLinear layout_item;
 
         public MyViewHolder(View v) {
             super(v);
@@ -150,7 +154,7 @@ public class ListPeopleAdapter extends RecyclerView.Adapter<ListPeopleAdapter.My
             tvName = (TextView) v.findViewById(R.id.tvName);
             tvIntroduce = (TextView) v.findViewById(R.id.tvIntroduce);
             ivFlag = (ImageView) v.findViewById(R.id.ivFlag);
-            layout_item = (LinearLayout) v.findViewById(R.id.layout_item);
+            layout_item = (RippleViewLinear) v.findViewById(R.id.layout_item);
 
         }
     }

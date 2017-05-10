@@ -21,6 +21,8 @@ import java.util.Random;
 import gianglong.app.chat.longchat.R;
 import gianglong.app.chat.longchat.adapter.MessageAdapter;
 import gianglong.app.chat.longchat.entity.MessageItemEntity;
+import gianglong.app.chat.longchat.entity.UserEntity;
+import gianglong.app.chat.longchat.utils.Constants;
 import gianglong.app.chat.longchat.utils.Utils;
 
 public class ChatActivity extends AppCompatActivity {
@@ -35,6 +37,7 @@ public class ChatActivity extends AppCompatActivity {
     LinearLayoutManager linearLayoutManager;
     View activityRootView;
     boolean isScroll = false;
+    UserEntity entity;
 
 
     @Override
@@ -57,6 +60,12 @@ public class ChatActivity extends AppCompatActivity {
 
 
     public void initConfig(){
+        if(getIntent().getExtras() != null){
+            entity = (UserEntity) getIntent().getSerializableExtra(Constants.KEY_USER);
+            setTitle(entity.getName());
+        }else{
+            setTitle("Not yet");
+        }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         linearLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
         rvMessage.setLayoutManager(linearLayoutManager);

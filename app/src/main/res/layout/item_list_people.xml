@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <LinearLayout
+    <gianglong.app.chat.longchat.utils.RippleViewLinear
         android:id="@+id/layout_item"
         android:layout_width="match_parent"
         android:layout_height="80dp"
@@ -77,6 +77,6 @@
 
 
         </LinearLayout>
-    </LinearLayout>
+    </gianglong.app.chat.longchat.utils.RippleViewLinear>
 
 </LinearLayout>

@@ -10,7 +10,7 @@ public class Constants {
     public static final String NODE_USER_ID = "user_id";
     public static final String NODE_IS_ONLINE = "is_online";
     public static final String NODE_PROFILE = "profile";
-    public static final String NODE_MESSAGE = "profile";
+    public static final String NODE_MESSAGE = "message";
     public static final String USER_NAME = "user_name";
     public static final String PASSWORD = "password";
 
@@ -29,5 +29,8 @@ public class Constants {
     public static final String KEY_INTRODUCE = "introduce";
     public static final String KEY_RATE = "rate";
     public static final String KEY_REVIEWER = "reviewer";
+
+    // OTHER
+    public static final String KEY_USER = "user";
 
 }

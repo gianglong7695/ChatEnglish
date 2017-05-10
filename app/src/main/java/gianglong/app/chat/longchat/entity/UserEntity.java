@@ -1,10 +1,12 @@
 package gianglong.app.chat.longchat.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by Giang Long on 2/21/2017.
  */
 
-public class UserEntity{
+public class UserEntity implements Serializable {
 
     String id;
     String email;
