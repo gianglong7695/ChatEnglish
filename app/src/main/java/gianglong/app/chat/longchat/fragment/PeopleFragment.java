@@ -63,7 +63,6 @@ public class PeopleFragment extends Fragment {
     public void getPeople(){
         progressWheel.setVisibility(View.VISIBLE);
         rvListPeople.setVisibility(View.GONE);
-
         Handler handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {

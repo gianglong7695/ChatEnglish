@@ -32,5 +32,7 @@ public class Constants {
 
     // OTHER
     public static final String KEY_USER = "user";
+    public static final int TYPE_MINE = 1;
+    public static final int TYPE_YOURS = 0;
 
 }

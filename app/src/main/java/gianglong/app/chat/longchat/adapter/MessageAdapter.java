@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import de.hdodenhof.circleimageview.CircleImageView;
 import gianglong.app.chat.longchat.R;
 import gianglong.app.chat.longchat.entity.MessageItemEntity;
+import gianglong.app.chat.longchat.utils.Constants;
+import gianglong.app.chat.longchat.utils.DataNotify;
 
 /**
  * Created by VCCORP on 4/28/2017.
@@ -24,8 +26,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
     ArrayList<MessageItemEntity> alMsg;
 
 
-    public final int TYPE_MINE = 1;
-    public final int TYPE_YOURS = 0;
+
 
 
     public MessageAdapter(Context context, ArrayList<MessageItemEntity> alMsg) {
@@ -36,7 +37,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v;
-        if (viewType == TYPE_MINE) {
+        if (viewType == Constants.TYPE_MINE) {
             v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_message_right, parent, false);
         } else {
             v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_message_left, parent, false);
@@ -47,10 +48,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
 
     @Override
     public int getItemViewType(int position) {
-        if (alMsg.get(position).getTypeView() == TYPE_MINE) {
-            return TYPE_MINE;
+        if (alMsg.get(position).getTypeView() == Constants.TYPE_MINE) {
+            return Constants.TYPE_MINE;
         } else {
-            return TYPE_YOURS;
+            return Constants.TYPE_YOURS;
         }
     }
 
@@ -71,6 +72,15 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
                 holder.tvTime.setVisibility(View.GONE);
             }else{
                 holder.tvTime.setVisibility(View.VISIBLE);
+            }
+
+
+            if(entity.getStatusType() == DataNotify.DATA_SUCCESS){
+
+            }else if(entity.getStatusType() == DataNotify.DATA_UNSUCCESS){
+
+            }else if(entity.getStatusType() == 0){
+
             }
 
         }

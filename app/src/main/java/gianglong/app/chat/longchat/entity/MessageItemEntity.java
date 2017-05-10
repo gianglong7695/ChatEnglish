@@ -11,14 +11,19 @@ public class MessageItemEntity {
     private int statusType;
     private int typeView;
     private boolean isHideTime;
+    private String senderID;
 
-    public MessageItemEntity(String avatarUrl, String message, String time, int statusType, int typeView, boolean isHideTime) {
+    public MessageItemEntity() {
+    }
+
+    public MessageItemEntity(String avatarUrl, String message, String time, int statusType, int typeView, boolean isHideTime, String senderID) {
         this.avatarUrl = avatarUrl;
         this.message = message;
         this.time = time;
         this.statusType = statusType;
         this.typeView = typeView;
         this.isHideTime = isHideTime;
+        this.senderID = senderID;
     }
 
     public String getAvatarUrl() {
@@ -67,5 +72,26 @@ public class MessageItemEntity {
 
     public void setHideTime(boolean hideTime) {
         isHideTime = hideTime;
+    }
+
+    public String getSenderID() {
+        return senderID;
+    }
+
+    public void setSenderID(String senderID) {
+        this.senderID = senderID;
+    }
+
+    @Override
+    public String toString() {
+        return "MessageItemEntity{" +
+                "avatarUrl='" + avatarUrl + '\'' +
+                ", message='" + message + '\'' +
+                ", time='" + time + '\'' +
+                ", statusType=" + statusType +
+                ", typeView=" + typeView +
+                ", isHideTime=" + isHideTime +
+                ", senderID='" + senderID + '\'' +
+                '}';
     }
 }

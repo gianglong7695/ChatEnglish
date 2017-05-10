@@ -1,16 +1,27 @@
 package gianglong.app.chat.longchat.activity;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
+
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -19,10 +30,15 @@ import java.util.Date;
 import java.util.Random;
 
 import gianglong.app.chat.longchat.R;
+import gianglong.app.chat.longchat.adapter.ListPeopleAdapter;
 import gianglong.app.chat.longchat.adapter.MessageAdapter;
+import gianglong.app.chat.longchat.entity.BasicUserInfoEntity;
 import gianglong.app.chat.longchat.entity.MessageItemEntity;
 import gianglong.app.chat.longchat.entity.UserEntity;
+import gianglong.app.chat.longchat.service.MessageService;
+import gianglong.app.chat.longchat.service.UserService;
 import gianglong.app.chat.longchat.utils.Constants;
+import gianglong.app.chat.longchat.utils.DataNotify;
 import gianglong.app.chat.longchat.utils.Utils;
 
 public class ChatActivity extends AppCompatActivity {
@@ -38,6 +54,9 @@ public class ChatActivity extends AppCompatActivity {
     View activityRootView;
     boolean isScroll = false;
     UserEntity entity;
+
+    DatabaseReference database;
+    DatabaseReference ref;
 
 
     @Override
@@ -60,9 +79,12 @@ public class ChatActivity extends AppCompatActivity {
 
 
     public void initConfig(){
+        database = FirebaseDatabase.getInstance().getReference();
+
         if(getIntent().getExtras() != null){
             entity = (UserEntity) getIntent().getSerializableExtra(Constants.KEY_USER);
             setTitle(entity.getName());
+            ref = database.child(Constants.NODE_MASTER).child(Constants.NODE_MESSAGE).child(entity.getId()).child(UserEntity.getInstance().getId());
         }else{
             setTitle("Not yet");
         }
@@ -99,6 +121,32 @@ public class ChatActivity extends AppCompatActivity {
 
 
 
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                MessageItemEntity entity = dataSnapshot.getValue(MessageItemEntity.class);
+                if(entity != null){
+                    if(!entity.getSenderID().equals(BasicUserInfoEntity.getInstance().getUid())){
+                        alMsg.add(entity);
+
+                        msgAdapter.notifyItemChanged(alMsg.size() - 1);
+                        rvMessage.scrollToPosition(alMsg.size() - 1);
+                    }
+
+
+                    Log.e(TAG, entity.toString());
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
         btSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,12 +156,15 @@ public class ChatActivity extends AppCompatActivity {
                     String hour = df.format(date);
                     int type = rd.nextInt(2);
 
-                    MessageItemEntity entity = new MessageItemEntity(String.valueOf(type), etMessage.getText().toString(), hour, 1 , type, false);
-                    alMsg.add(entity);
+                    MessageItemEntity messageItem = new MessageItemEntity(String.valueOf(type), etMessage.getText().toString(), hour, 0 , Constants.TYPE_MINE, false, BasicUserInfoEntity.getInstance().getUid());
+                    alMsg.add(messageItem);
+                    pushMessage(messageItem, alMsg.size() - 1);
+
+
 
 
                     if(alMsg.size() > 1){
-                        if(entity.getTypeView() == alMsg.get(alMsg.size() - 2).getTypeView()){
+                        if(messageItem.getTypeView() == alMsg.get(alMsg.size() - 2).getTypeView()){
                             alMsg.get(alMsg.size() - 2).setHideTime(true);
                             msgAdapter.notifyItemChanged(alMsg.size() - 2);
                         }
@@ -187,6 +238,29 @@ public class ChatActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
 
+    }
+
+
+    public void pushMessage(final MessageItemEntity messageItem, final int position){
+        Handler handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+
+
+                if (msg.what == DataNotify.DATA_SUCCESS) {
+//                    messageItem.setStatusType(DataNotify.DATA_SUCCESS);
+//                    msgAdapter.notifyItemChanged(position);
+                    Toast.makeText(ChatActivity.this, "Success!", Toast.LENGTH_SHORT).show();
+                } else if (msg.what == DataNotify.DATA_UNSUCCESS) {
+                    Log.e(TAG, "getUserInfo error!");
+//                    messageItem.setStatusType(DataNotify.DATA_UNSUCCESS);
+//                    msgAdapter.notifyItemChanged(position);
+                }
+            }
+        };
+
+        new MessageService(this).pushMessage(handler, messageItem, entity.getId());
     }
 }
 

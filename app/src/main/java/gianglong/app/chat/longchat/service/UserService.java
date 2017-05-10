@@ -84,11 +84,11 @@ public class UserService {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 UserEntity entity = dataSnapshot.getValue(UserEntity.class);
 
-                if(dataSnapshot.getValue() != null){
+                if (dataSnapshot.getValue() != null) {
                     msg.what = DataNotify.DATA_SUCCESS;
                     msg.obj = entity;
                     handler.sendMessage(msg);
-                }else {
+                } else {
                     msg.what = DataNotify.DATA_SUCCESS_WITH_NO_DATA;
                     msg.obj = null;
                     handler.sendMessage(msg);
@@ -109,7 +109,6 @@ public class UserService {
     }
 
 
-
     public void getAllUser(final Handler handler) {
         final Message msg = new Message();
         final ArrayList<UserEntity> alPeople = new ArrayList<>();
@@ -124,14 +123,17 @@ public class UserService {
                 ref.addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                UserEntity entity = dataSnapshot.getValue(UserEntity.class);
-                alPeople.add(entity);
+                        UserEntity entity = dataSnapshot.getValue(UserEntity.class);
+                        if(!entity.getId().equals(BasicUserInfoEntity.getInstance().getUid())){
+                            alPeople.add(entity);
+                        }
 
-                if(alPeople.size() == dataSnapshot1.getChildrenCount()){
-                    msg.what = DataNotify.DATA_SUCCESS;
-                    msg.obj = alPeople;
-                    handler.sendMessage(msg);
-                }
+
+                        if (alPeople.size() == dataSnapshot1.getChildrenCount() - 1) {
+                            msg.what = DataNotify.DATA_SUCCESS;
+                            msg.obj = alPeople;
+                            handler.sendMessage(msg);
+                        }
 
 
                     }
@@ -167,13 +169,7 @@ public class UserService {
         });
 
 
-
-
-
     }
-
-
-
 
 
 }
