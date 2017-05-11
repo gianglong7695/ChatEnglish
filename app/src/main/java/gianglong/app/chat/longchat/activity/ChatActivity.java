@@ -57,6 +57,7 @@ public class ChatActivity extends AppCompatActivity {
 
     DatabaseReference database;
     DatabaseReference ref;
+    String roomID;
 
 
     @Override
@@ -67,6 +68,8 @@ public class ChatActivity extends AppCompatActivity {
         initConfig();
         event();
         initialData();
+
+        getRoomID();
     }
 
 
@@ -84,7 +87,7 @@ public class ChatActivity extends AppCompatActivity {
         if(getIntent().getExtras() != null){
             entity = (UserEntity) getIntent().getSerializableExtra(Constants.KEY_USER);
             setTitle(entity.getName());
-            ref = database.child(Constants.NODE_MASTER).child(Constants.NODE_MESSAGE).child(entity.getId()).child(UserEntity.getInstance().getId());
+
         }else{
             setTitle("Not yet");
         }
@@ -121,31 +124,6 @@ public class ChatActivity extends AppCompatActivity {
 
 
 
-        ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                MessageItemEntity entity = dataSnapshot.getValue(MessageItemEntity.class);
-                if(entity != null){
-                    if(!entity.getSenderID().equals(BasicUserInfoEntity.getInstance().getUid())){
-                        alMsg.add(entity);
-
-                        msgAdapter.notifyItemChanged(alMsg.size() - 1);
-                        rvMessage.scrollToPosition(alMsg.size() - 1);
-                    }
-
-
-                    Log.e(TAG, entity.toString());
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-
 
         btSend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,19 +134,32 @@ public class ChatActivity extends AppCompatActivity {
                     String hour = df.format(date);
                     int type = rd.nextInt(2);
 
-                    MessageItemEntity messageItem = new MessageItemEntity(String.valueOf(type), etMessage.getText().toString(), hour, 0 , Constants.TYPE_MINE, false, BasicUserInfoEntity.getInstance().getUid());
+                    MessageItemEntity messageItem = new MessageItemEntity(String.valueOf(type), etMessage.getText().toString(), hour, 0 , false , false, BasicUserInfoEntity.getInstance().getUid());
                     alMsg.add(messageItem);
-                    pushMessage(messageItem, alMsg.size() - 1);
+
+                    if(roomID == null){
+                        createRelationship(messageItem, entity.getId());
+                    }else{
+                        pushMessage(messageItem, alMsg.size() - 1);
+                    }
+
 
 
 
 
                     if(alMsg.size() > 1){
-                        if(messageItem.getTypeView() == alMsg.get(alMsg.size() - 2).getTypeView()){
+                        if(messageItem.getSenderID() == alMsg.get(alMsg.size() - 2).getSenderID()){
                             alMsg.get(alMsg.size() - 2).setHideTime(true);
+
+                            if(messageItem.getSenderID() != alMsg.get(alMsg.size() - 2).getSenderID()){
+                                alMsg.get(alMsg.size() - 2).setHideAvatar(true);
+                            }
                             msgAdapter.notifyItemChanged(alMsg.size() - 2);
                         }
                     }
+
+
+
 
 
 
@@ -259,8 +250,85 @@ public class ChatActivity extends AppCompatActivity {
                 }
             }
         };
+        if(roomID != null){
+            new MessageService(this).pushMessage(handler, messageItem, roomID);
+        }else{
+            Toast.makeText(this, "RoomID = null", Toast.LENGTH_SHORT).show();
+        }
 
-        new MessageService(this).pushMessage(handler, messageItem, entity.getId());
     }
+
+
+    public void createRelationship(final MessageItemEntity messageItem, String guestID){
+        Handler handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+
+
+                if (msg.what == DataNotify.DATA_SUCCESS) {
+                    roomID = (String) msg.obj;
+
+                    pushMessage(messageItem, alMsg.size());
+                } else if (msg.what == DataNotify.DATA_UNSUCCESS) {
+                    Log.e(TAG, "getUserInfo error!");
+                }
+            }
+        };
+
+        new MessageService(this).createRelationship(handler, guestID);
+    }
+
+
+    public void getRoomID(){
+        Handler handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+
+
+                if (msg.what == DataNotify.DATA_SUCCESS) {
+                    roomID = (String) msg.obj;
+
+                    ref = database.child(Constants.NODE_MASTER).child(Constants.NODE_MESSAGE).child(Constants.NODE_BOX).child(roomID);
+                    ref.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            MessageItemEntity entity = dataSnapshot.getValue(MessageItemEntity.class);
+                            if(entity != null){
+                                if(!entity.getSenderID().equals(BasicUserInfoEntity.getInstance().getUid())){
+                                    alMsg.add(entity);
+
+                                    msgAdapter.notifyItemChanged(alMsg.size() - 1);
+                                    rvMessage.scrollToPosition(alMsg.size() - 1);
+
+
+                                    if(alMsg.size() > 1){
+                                        if(entity.getSenderID() == alMsg.get(alMsg.size() - 2).getSenderID()){
+                                            alMsg.get(alMsg.size() - 2).setHideTime(true);
+                                            msgAdapter.notifyItemChanged(alMsg.size() - 2);
+                                        }
+                                    }
+                                }
+
+                            }
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+                } else if (msg.what == DataNotify.DATA_UNSUCCESS) {
+                    Log.e(TAG, "getUserInfo error!");
+                }
+            }
+        };
+
+        new MessageService(this).getRoomID(handler, entity.getId());
+    }
+
 }
 

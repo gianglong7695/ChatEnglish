@@ -9,19 +9,19 @@ public class MessageItemEntity {
     private String message;
     private String time;
     private int statusType;
-    private int typeView;
+    private boolean isHideAvatar;
     private boolean isHideTime;
     private String senderID;
 
     public MessageItemEntity() {
     }
 
-    public MessageItemEntity(String avatarUrl, String message, String time, int statusType, int typeView, boolean isHideTime, String senderID) {
+    public MessageItemEntity(String avatarUrl, String message, String time, int statusType, boolean isHideAvatar, boolean isHideTime, String senderID) {
         this.avatarUrl = avatarUrl;
         this.message = message;
         this.time = time;
         this.statusType = statusType;
-        this.typeView = typeView;
+        this.isHideAvatar = isHideAvatar;
         this.isHideTime = isHideTime;
         this.senderID = senderID;
     }
@@ -58,12 +58,12 @@ public class MessageItemEntity {
         this.statusType = statusType;
     }
 
-    public int getTypeView() {
-        return typeView;
+    public boolean isHideAvatar() {
+        return isHideAvatar;
     }
 
-    public void setTypeView(int typeView) {
-        this.typeView = typeView;
+    public void setHideAvatar(boolean hideAvatar) {
+        isHideAvatar = hideAvatar;
     }
 
     public boolean isHideTime() {
@@ -89,7 +89,7 @@ public class MessageItemEntity {
                 ", message='" + message + '\'' +
                 ", time='" + time + '\'' +
                 ", statusType=" + statusType +
-                ", typeView=" + typeView +
+                ", typeView=" + isHideAvatar +
                 ", isHideTime=" + isHideTime +
                 ", senderID='" + senderID + '\'' +
                 '}';
