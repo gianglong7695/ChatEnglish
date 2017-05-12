@@ -8,16 +8,17 @@ import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import gianglong.app.chat.longchat.entity.BasicUserInfoEntity;
 import gianglong.app.chat.longchat.entity.MessageItemEntity;
@@ -37,13 +38,13 @@ public class MessageService {
 
     public MessageService(Context context) {
         this.context = context;
+        database = FirebaseDatabase.getInstance().getReference();
     }
 
 
     public void pushMessage(final Handler handler, MessageItemEntity messageItem, String roomID) {
         final Message msg = new Message();
 
-        database = FirebaseDatabase.getInstance().getReference();
         DatabaseReference ref = database.child(Constants.NODE_MASTER).child(Constants.NODE_MESSAGE).child(Constants.NODE_BOX).child(roomID);
 
 
@@ -62,7 +63,6 @@ public class MessageService {
 
     public void getRoomID(final Handler handler, final String guestID) {
         final Message msg = new Message();
-        database = FirebaseDatabase.getInstance().getReference();
         DatabaseReference ref1 = database.child(Constants.NODE_MASTER).child(Constants.NODE_MESSAGE).child(Constants.NODE_ROOM);
         final DatabaseReference ref2 = database.child(Constants.NODE_MASTER).child(Constants.NODE_MESSAGE).child(Constants.NODE_ROOM).child(BasicUserInfoEntity.getInstance().getUid());
         final DatabaseReference ref3 = database.child(Constants.NODE_MASTER).child(Constants.NODE_MESSAGE).child(Constants.NODE_ROOM).child(BasicUserInfoEntity.getInstance().getUid()).child(guestID);
@@ -125,18 +125,19 @@ public class MessageService {
         Date date = new Date();
         DateFormat df = new SimpleDateFormat("yyyyMMddhhmmssSSS");
         final String time = df.format(date);
-        database = FirebaseDatabase.getInstance().getReference().child(Constants.NODE_MASTER).child(Constants.NODE_MESSAGE).child(Constants.NODE_ROOM);
+
+        final DatabaseReference ref = database.child(Constants.NODE_MASTER).child(Constants.NODE_MESSAGE).child(Constants.NODE_ROOM);
 
 
-        database.addListenerForSingleValueEvent(new ValueEventListener() {
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.hasChild(id)) {
-                    refMine = database.child(BasicUserInfoEntity.getInstance().getUid()).child(id);
+                    refMine = ref.child(BasicUserInfoEntity.getInstance().getUid()).child(id);
                     refMine.setValue(time).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            refYours = database.child(id).child(BasicUserInfoEntity.getInstance().getUid());
+                            refYours = ref.child(id).child(BasicUserInfoEntity.getInstance().getUid());
                             refYours.setValue(time).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
@@ -159,6 +160,68 @@ public class MessageService {
                 msg.what = DataNotify.DATA_UNSUCCESS;
                 msg.obj = null;
                 handler.sendMessage(msg);
+            }
+        });
+    }
+
+
+    public void getMessageHistory(Handler handler){
+        final Message msg = new Message();
+        final DatabaseReference ref1 = database.child(Constants.NODE_MASTER).child(Constants.NODE_MESSAGE).child(Constants.NODE_ROOM);
+
+//        ref1.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                if(dataSnapshot.hasChild(BasicUserInfoEntity.getInstance().getUid())){
+//                    ref1.child(BasicUserInfoEntity.getInstance().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+//                        @Override
+//                        public void onDataChange(DataSnapshot dataSnapshot) {
+//                            Map<String, Object> td = (HashMap<String,Object>) dataSnapshot.getValue();
+////                            List<Object> values = td.values();
+//                            Log.e(TAG, td.size() + "");
+//                        }
+//
+//                        @Override
+//                        public void onCancelled(DatabaseError databaseError) {
+//
+//                        }
+//                    });
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
+
+
+        ref1.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.hasChild(BasicUserInfoEntity.getInstance().getUid())){
+                    ref1.child(BasicUserInfoEntity.getInstance().getUid()).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {};
+
+                            List<String> yourStringArray = dataSnapshot.getValue(t);
+//                            Map<String, Object> td = (HashMap<String,Object>) dataSnapshot.getValue();
+
+                            Log.e(TAG, yourStringArray.size() + "");
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
     }

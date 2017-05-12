@@ -235,26 +235,4 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
             return tabDrawableOff.length;
         }
     }
-
-
-    public boolean isUserInfo() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            if (user.getDisplayName() == null) {
-                return false;
-            } else {
-                return true;
-            }
-
-        } else {
-            return false;
-        }
-    }
-
-
-
-
-
-
-
 }

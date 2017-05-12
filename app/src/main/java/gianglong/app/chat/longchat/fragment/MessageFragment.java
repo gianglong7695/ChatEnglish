@@ -2,6 +2,8 @@ package gianglong.app.chat.longchat.fragment;
 
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +17,9 @@ import java.util.ArrayList;
 import gianglong.app.chat.longchat.R;
 import gianglong.app.chat.longchat.adapter.ListMessageAdapter;
 import gianglong.app.chat.longchat.entity.MessageEntity;
+import gianglong.app.chat.longchat.service.MessageService;
+import gianglong.app.chat.longchat.utils.DataNotify;
+import gianglong.app.chat.longchat.utils.ProgressWheel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,6 +30,7 @@ public class MessageFragment extends Fragment {
     RecyclerView rvListMessage;
     ArrayList<MessageEntity> alListMessage;
     ListMessageAdapter messageAdapter;
+    ProgressWheel progressWheel;
 
     public MessageFragment() {
         // Required empty public constructor
@@ -50,17 +56,67 @@ public class MessageFragment extends Fragment {
 
         messageAdapter = new ListMessageAdapter(getActivity(), alListMessage);
         rvListMessage.setAdapter(messageAdapter);
+
+
+        getMessageHistory();
+
         return v;
     }
 
 
     public void initUI(){
         rvListMessage = (RecyclerView) v.findViewById(R.id.rvListMessage);
+        progressWheel = (ProgressWheel) v.findViewById(R.id.progressWheel);
     }
 
 
     public void initConfig(){
         rvListMessage.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        // progress wheel config
+        progressWheel.setProgress(0.5f);
+        progressWheel.setBarWidth(7);
+        progressWheel.setBarColor(getResources().getColor(R.color.purple));
+        progressWheel.setCallback(new ProgressWheel.ProgressCallback() {
+            @Override
+            public void onProgressUpdate(float progress) {
+                if (progress == 0) {
+                    progressWheel.setProgress(1.0f);
+                } else if (progress == 1.0f) {
+                    progressWheel.setProgress(0.0f);
+                }
+            }
+        });
+    }
+
+
+    public void getMessageHistory(){
+        progressWheel.setVisibility(View.VISIBLE);
+        rvListMessage.setVisibility(View.GONE);
+
+        Handler handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                progressWheel.setVisibility(View.GONE);
+                rvListMessage.setVisibility(View.VISIBLE);
+
+                if (msg.what == DataNotify.DATA_SUCCESS) {
+
+//                    alListMessage = (ArrayList<MessageEntity>) msg.obj;
+//                    messageAdapter = new ListMessageAdapter(getActivity(), alListMessage);
+//                    rvListMessage.setAdapter(messageAdapter);
+
+
+                    Log.e(TAG, msg.obj + "");
+
+
+                } else if (msg.what == DataNotify.DATA_UNSUCCESS) {
+                    Log.e(TAG, "getUserInfo error!");
+                }
+            }
+        };
+
+        new MessageService(getActivity()).getMessageHistory(handler);
     }
 
 }
