@@ -2,31 +2,21 @@ package gianglong.app.chat.longchat.activity;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import gianglong.app.chat.longchat.R;
-import gianglong.app.chat.longchat.database.DatabaseHandler;
-import gianglong.app.chat.longchat.entity.BasicUserInfoEntity;
-import gianglong.app.chat.longchat.entity.GlobalVars;
 import gianglong.app.chat.longchat.fragment.AccountFragment;
 import gianglong.app.chat.longchat.fragment.FriendFragment;
 import gianglong.app.chat.longchat.fragment.MessageFragment;
 import gianglong.app.chat.longchat.fragment.PeopleFragment;
-import gianglong.app.chat.longchat.service.UserService;
-import gianglong.app.chat.longchat.utils.DataNotify;
 import gianglong.app.chat.longchat.utils.RippleView;
 import gianglong.app.chat.longchat.utils.SessionManager;
 
@@ -55,7 +45,7 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
     private FirebaseAuth.AuthStateListener mAuthListener;
     private String TAG = getClass().getSimpleName();
     public static SessionManager mSessionManager;
-    public static DatabaseHandler databaseHandler;
+
 
 
     @Override
@@ -72,10 +62,6 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
 
     public void config() {
         mSessionManager = new SessionManager(getApplicationContext());
-        databaseHandler = new DatabaseHandler(this);
-
-
-        Log.e(TAG, databaseHandler.isUserExist("zdcsz") + "");
     }
 
     public void initUI() {
