@@ -26,7 +26,7 @@
     <color name="status_offline">#929292</color>
     <color name="text_color_strong">#202020</color>
     <color name="text_color_pale">#cacaca</color>
-    <color name="bg_color_message_item_left">#61a4c4</color>
+    <color name="bg_color_message_item_left">#eaeaea</color>
     <color name="bg_color_message_item_right">#86aec1</color>
 
 

@@ -17,10 +17,13 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import gianglong.app.chat.longchat.entity.BasicUserInfoEntity;
+import gianglong.app.chat.longchat.entity.KeyValueEntity;
 import gianglong.app.chat.longchat.entity.MessageItemEntity;
 import gianglong.app.chat.longchat.utils.Constants;
 import gianglong.app.chat.longchat.utils.DataNotify;
@@ -165,36 +168,10 @@ public class MessageService {
     }
 
 
-    public void getMessageHistory(Handler handler){
+    public void getMessageHistory(final Handler handler){
         final Message msg = new Message();
         final DatabaseReference ref1 = database.child(Constants.NODE_MASTER).child(Constants.NODE_MESSAGE).child(Constants.NODE_ROOM);
-
-//        ref1.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                if(dataSnapshot.hasChild(BasicUserInfoEntity.getInstance().getUid())){
-//                    ref1.child(BasicUserInfoEntity.getInstance().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-//                        @Override
-//                        public void onDataChange(DataSnapshot dataSnapshot) {
-//                            Map<String, Object> td = (HashMap<String,Object>) dataSnapshot.getValue();
-////                            List<Object> values = td.values();
-//                            Log.e(TAG, td.size() + "");
-//                        }
-//
-//                        @Override
-//                        public void onCancelled(DatabaseError databaseError) {
-//
-//                        }
-//                    });
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
-
+        final ArrayList<KeyValueEntity> listSave = new ArrayList<>();
 
         ref1.addValueEventListener(new ValueEventListener() {
             @Override
@@ -203,12 +180,22 @@ public class MessageService {
                     ref1.child(BasicUserInfoEntity.getInstance().getUid()).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {};
+                            Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
+                            int length = (int) dataSnapshot.getChildrenCount();
+                            int pos = 0;
 
-                            List<String> yourStringArray = dataSnapshot.getValue(t);
-//                            Map<String, Object> td = (HashMap<String,Object>) dataSnapshot.getValue();
 
-                            Log.e(TAG, yourStringArray.size() + "");
+                            while(pos < length) {
+                                DataSnapshot currentPosData = iterator.next();
+                                listSave.add(new KeyValueEntity(currentPosData.getKey(), currentPosData.getValue().toString()));
+                                pos++;
+                            }
+
+                            if(pos == length){
+                                msg.what = DataNotify.DATA_SUCCESS;
+                                msg.obj = listSave;
+                                handler.sendMessage(msg);
+                            }
                         }
 
                         @Override

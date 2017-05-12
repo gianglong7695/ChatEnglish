@@ -5,6 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+import android.util.Log;
 
 import gianglong.app.chat.longchat.entity.UserEntity;
 import gianglong.app.chat.longchat.utils.Constants;
@@ -13,11 +16,18 @@ import gianglong.app.chat.longchat.utils.Constants;
  * Created by Giang Long on 2/22/2017.
  */
 
-public class DatabaseHandler extends SQLiteOpenHelper{
-
+public class DatabaseHandler extends SQLiteOpenHelper {
+    private String TAG = getClass().getSimpleName();
 
     public DatabaseHandler(Context context) {
         super(context, Constants.DATABASE_NAME, null, Constants.DATABASE_VERSION);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+    @Override
+    public void onConfigure(SQLiteDatabase db) {
+        super.onConfigure(db);
+        db.setForeignKeyConstraintsEnabled(true);
     }
 
     @Override
@@ -33,7 +43,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 + Constants.KEY_AVATAR + " TEXT,"
                 + Constants.KEY_INTRODUCE + " TEXT,"
                 + Constants.KEY_RATE + " TEXT,"
-                + Constants.KEY_REVIEWER + " TEXT,"
+                + Constants.KEY_REVIEWER + " TEXT"
                 + ")";
         db.execSQL(CREATE_USER_PROFILE_TABLE);
     }
@@ -48,6 +58,71 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     }
 
     // Add, update, delete methods
+
+
+    public long addOrUpdateUser(UserEntity user) {
+        // The database connection is cached so it's not expensive to call getWriteableDatabase() multiple times.
+        SQLiteDatabase db = getWritableDatabase();
+        long userId = -1;
+
+        db.beginTransaction();
+        try {
+            ContentValues values = new ContentValues();
+            values.put(Constants.KEY_UID, user.getId());
+            values.put(Constants.KEY_NAME, user.getName());
+            values.put(Constants.KEY_EMAIL, user.getEmail());
+            values.put(Constants.KEY_PASSWORD, user.getPassword());
+            values.put(Constants.KEY_GENDER, user.getGender());
+            values.put(Constants.KEY_COUNTRY, user.getCountry());
+            values.put(Constants.KEY_AVATAR, user.getAvatar());
+            values.put(Constants.KEY_INTRODUCE, user.getIntrodution());
+            values.put(Constants.KEY_RATE, user.getRate());
+            values.put(Constants.KEY_REVIEWER, user.getReviewers());
+
+            // First try to update the user in case the user already exists in the database
+            // This assumes userNames are unique
+            int rows = db.update(Constants.TABLE_USER_PROFILE, values, Constants.KEY_UID + "= ?", new String[]{user.getId()});
+
+            // Check if update succeeded
+            if (rows == 1) {
+                // Get the primary key of the user we just updated
+                String usersSelectQuery = String.format("SELECT %s FROM %s WHERE %s = ?",
+                        Constants.KEY_UID, Constants.TABLE_USER_PROFILE, Constants.KEY_UID);
+                Cursor cursor = db.rawQuery(usersSelectQuery, new String[]{String.valueOf(user.getId())});
+                try {
+                    if (cursor.moveToFirst()) {
+                        userId = cursor.getInt(0);
+                        db.setTransactionSuccessful();
+                    }
+                } finally {
+                    if (cursor != null && !cursor.isClosed()) {
+                        cursor.close();
+                    }
+                }
+            } else {
+                // user with this userName did not already exist, so insert new user
+                userId = db.insertOrThrow(Constants.TABLE_USER_PROFILE, null, values);
+                db.setTransactionSuccessful();
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "Error while trying to add or update user");
+        } finally {
+            db.endTransaction();
+        }
+        return userId;
+    }
+
+
+    public boolean isUserExist(String id){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.query(Constants.TABLE_USER_PROFILE, new String[]{}, Constants.KEY_UID + "=?", new String[] {id}, null, null, null);
+        if(c != null){
+            return true;
+        }
+
+        return false;
+    }
+
 
 
     public void addUser(UserEntity user) {
@@ -76,7 +151,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     public UserEntity getUser(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor c = db.query(Constants.TABLE_USER_PROFILE, new String[] {
+        Cursor c = db.query(Constants.TABLE_USER_PROFILE, new String[]{
                         Constants.KEY_UID,
                         Constants.KEY_NAME,
                         Constants.KEY_EMAIL,
@@ -88,7 +163,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                         Constants.KEY_INTRODUCE,
                         Constants.KEY_RATE,
                         Constants.KEY_REVIEWER}, Constants.KEY_UID + "=?",
-                new String[] { String.valueOf(id) }, null, null, null, null);
+                new String[]{String.valueOf(id)}, null, null, null, null);
         if (c != null)
             c.moveToFirst();
 

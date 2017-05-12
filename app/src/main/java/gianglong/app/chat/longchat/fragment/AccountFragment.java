@@ -29,6 +29,7 @@ import gianglong.app.chat.longchat.activity.LoginActivity;
 import gianglong.app.chat.longchat.activity.MainActivity;
 import gianglong.app.chat.longchat.activity.ProfileActivity;
 import gianglong.app.chat.longchat.activity.TakeInfoDetailActivity;
+import gianglong.app.chat.longchat.database.DatabaseHandler;
 import gianglong.app.chat.longchat.entity.BasicUserInfoEntity;
 import gianglong.app.chat.longchat.entity.GlobalVars;
 import gianglong.app.chat.longchat.entity.UserEntity;
@@ -51,11 +52,12 @@ public class AccountFragment extends Fragment{
 
     ImageLoader imageLoader;
     DisplayImageOptions options;
+    DatabaseHandler databaseHandler;
 
 
 
     public AccountFragment() {
-        // Required empty public constructor
+        databaseHandler = MainActivity.databaseHandler;
     }
 
 
@@ -180,6 +182,7 @@ public class AccountFragment extends Fragment{
                     GlobalVars.setUserEntity(userEntity);
 
                     setData();
+//                    Toast.makeText(getActivity(), databaseHandler.isUserExist(userEntity.getId()) + "", Toast.LENGTH_SHORT).show();
 
                 } else if (msg.what == DataNotify.DATA_SUCCESS_WITH_NO_DATA) {
 
