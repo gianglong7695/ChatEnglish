@@ -16,7 +16,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,13 +29,11 @@ import java.util.Date;
 import java.util.Random;
 
 import gianglong.app.chat.longchat.R;
-import gianglong.app.chat.longchat.adapter.ListPeopleAdapter;
 import gianglong.app.chat.longchat.adapter.MessageAdapter;
 import gianglong.app.chat.longchat.entity.BasicUserInfoEntity;
 import gianglong.app.chat.longchat.entity.MessageItemEntity;
 import gianglong.app.chat.longchat.entity.UserEntity;
 import gianglong.app.chat.longchat.service.MessageService;
-import gianglong.app.chat.longchat.service.UserService;
 import gianglong.app.chat.longchat.utils.Constants;
 import gianglong.app.chat.longchat.utils.DataNotify;
 import gianglong.app.chat.longchat.utils.Utils;
@@ -68,7 +65,6 @@ public class ChatActivity extends AppCompatActivity {
         initConfig();
         event();
         initialData();
-
         getRoomID();
     }
 
@@ -83,7 +79,7 @@ public class ChatActivity extends AppCompatActivity {
 
     public void initConfig(){
         database = FirebaseDatabase.getInstance().getReference();
-
+        database.child(Constants.NODE_MASTER).child(Constants.NODE_MESSAGE).child(Constants.NODE_BOX).child(roomID).setValue(1);
         if(getIntent().getExtras() != null){
             entity = (UserEntity) getIntent().getSerializableExtra(Constants.KEY_USER);
             setTitle(entity.getName());
@@ -289,37 +285,44 @@ public class ChatActivity extends AppCompatActivity {
 
                 if (msg.what == DataNotify.DATA_SUCCESS) {
                     roomID = (String) msg.obj;
+                    try {
+                        ref = database.child(Constants.NODE_MASTER).child(Constants.NODE_MESSAGE).child(Constants.NODE_BOX).child(roomID);
 
-                    ref = database.child(Constants.NODE_MASTER).child(Constants.NODE_MESSAGE).child(Constants.NODE_BOX).child(roomID);
-                    ref.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            MessageItemEntity entity = dataSnapshot.getValue(MessageItemEntity.class);
-                            if(entity != null){
-                                if(!entity.getSenderID().equals(BasicUserInfoEntity.getInstance().getUid())){
-                                    alMsg.add(entity);
+                        ref.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                MessageItemEntity entity = dataSnapshot.getValue(MessageItemEntity.class);
+                                if(entity != null){
+                                    if(!entity.getSenderID().equals(BasicUserInfoEntity.getInstance().getUid())){
+                                        alMsg.add(entity);
 
-                                    msgAdapter.notifyItemChanged(alMsg.size() - 1);
-                                    rvMessage.scrollToPosition(alMsg.size() - 1);
+                                        msgAdapter.notifyItemChanged(alMsg.size() - 1);
+                                        rvMessage.scrollToPosition(alMsg.size() - 1);
 
 
-                                    if(alMsg.size() > 1){
-                                        if(entity.getSenderID() == alMsg.get(alMsg.size() - 2).getSenderID()){
-                                            alMsg.get(alMsg.size() - 2).setHideTime(true);
-                                            msgAdapter.notifyItemChanged(alMsg.size() - 2);
+                                        if(alMsg.size() > 1){
+                                            if(entity.getSenderID() == alMsg.get(alMsg.size() - 2).getSenderID()){
+                                                alMsg.get(alMsg.size() - 2).setHideTime(true);
+                                                msgAdapter.notifyItemChanged(alMsg.size() - 2);
+                                            }
                                         }
                                     }
+
                                 }
 
                             }
 
-                        }
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
+                            }
+                        });
+                    }catch (Exception e){
+                        database.child(Constants.NODE_MASTER).child(Constants.NODE_MESSAGE).child(Constants.NODE_BOX).child(roomID).setValue(1);
+                        getRoomID();
+                    }
 
-                        }
-                    });
+
 
                 } else if (msg.what == DataNotify.DATA_UNSUCCESS) {
                     Log.e(TAG, "getUserInfo error!");

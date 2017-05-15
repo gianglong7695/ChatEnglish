@@ -11,6 +11,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
+import gianglong.app.chat.longchat.entity.KeyValueEntity;
 import gianglong.app.chat.longchat.entity.UserEntity;
 
 import static android.content.ContentValues.TAG;
@@ -26,7 +27,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
     // Table Names
     public static final String TABLE_USER = "tbl_user";
-    public static final String TABLE_MESSAGE = "tbl_message";
+    public static final String TABLE_ROOM = "tbl_room";
 
 
     // User Table Columns
@@ -41,8 +42,9 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     public static final String KEY_USER_RATE = "rate";
     public static final String KEY_USER_REVIEWER = "reviewer";
 
-    // Message Table Columns
-    public static final String KEY_MESSAGE_= "";
+    // Room Table Columns
+    public static final String KEY_ROOM_ID = "id";
+    public static final String KEY_ROOM_VALUE = "value";
 
 
     private static DatabaseHelper instance;
@@ -92,7 +94,14 @@ public class DatabaseHelper extends SQLiteOpenHelper{
                 KEY_USER_REVIEWER + " TEXT" +
                 ")";
 
+
+        String CREATE_TABLE_ROOM = "CREATE TABLE " + TABLE_ROOM + "(" +
+                KEY_ROOM_ID + " TEXT PRIMARY KEY," + // Define a primary key
+                KEY_ROOM_VALUE + " TEXT" +
+                ")";
+
         db.execSQL(CREATE_TABLE_USER);
+        db.execSQL(CREATE_TABLE_ROOM);
     }
 
 
@@ -126,6 +135,8 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         }
     }
 
+
+    /* -----------------USER----------------------- */
 
     public long addOrUpdateUser(UserEntity user) {
         // The database connection is cached so it's not expensive to call getWriteableDatabase() multiple times.
@@ -180,7 +191,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     }
 
     // Get all posts in the database
-    public ArrayList<UserEntity> getAllPosts() {
+    public ArrayList<UserEntity> getAllUser() {
         ArrayList<UserEntity> alUser = new ArrayList<>();
 
         // SELECT * FROM POSTS
@@ -219,7 +230,6 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         return alUser;
     }
 
-    // Update the user's profile picture url
     public int updateUserField(UserEntity user, String columName, String value) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -244,5 +254,85 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         } finally {
             db.endTransaction();
         }
+    }
+
+
+    /* -------ROOM------- */
+    public long addOrUpdateRoom(KeyValueEntity room) {
+        // The database connection is cached so it's not expensive to call getWriteableDatabase() multiple times.
+        SQLiteDatabase db = getWritableDatabase();
+        long roomId = -1;
+
+        db.beginTransaction();
+        try {
+            ContentValues values = new ContentValues();
+            values.put(KEY_USER_ID, room.getKey());
+            values.put(KEY_USER_NAME, room.getValue());
+
+            // First try to update the user in case the user already exists in the database
+            // This assumes userNames are unique
+            int rows = db.update(TABLE_ROOM, values, KEY_ROOM_ID + "= ?", new String[]{room.getKey()});
+
+            // Check if update succeeded
+            if (rows == 1) {
+                // Get the primary key of the user we just updated
+                String usersSelectQuery = String.format("SELECT %s FROM %s WHERE %s = ?",
+                        KEY_ROOM_ID, TABLE_ROOM, KEY_ROOM_ID);
+                Cursor cursor = db.rawQuery(usersSelectQuery, new String[]{String.valueOf(room.getKey())});
+                try {
+                    if (cursor.moveToFirst()) {
+                        roomId = cursor.getInt(0);
+                        db.setTransactionSuccessful();
+                    }
+                } finally {
+                    if (cursor != null && !cursor.isClosed()) {
+                        cursor.close();
+                    }
+                }
+            } else {
+                // user with this userName did not already exist, so insert new user
+                roomId = db.insertOrThrow(TABLE_ROOM, null, values);
+                db.setTransactionSuccessful();
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "Error while trying to add or update user");
+        } finally {
+            db.endTransaction();
+        }
+        return roomId;
+    }
+
+
+
+    // Get all posts in the database
+    public ArrayList<KeyValueEntity> getAllRoom() {
+        ArrayList<KeyValueEntity> alUser = new ArrayList<>();
+
+        // SELECT * FROM POSTS
+        // LEFT OUTER JOIN USERS
+        // ON POSTS.KEY_POST_USER_ID_FK = USERS.KEY_USER_ID
+        String USER_SELECT_QUERY ="SELECT * FROM " + TABLE_ROOM;
+
+        // "getReadableDatabase()" and "getWriteableDatabase()" return the same object (except under low
+        // disk space scenarios)
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(USER_SELECT_QUERY, null);
+        try {
+            if (cursor.moveToFirst()) {
+                do {
+                    UserEntity user = new UserEntity();
+                    user.setId(cursor.getString(cursor.getColumnIndex(KEY_ROOM_ID)));
+                    user.setName(cursor.getString(cursor.getColumnIndex(KEY_ROOM_VALUE)));
+
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "Error while trying to get posts from database");
+        } finally {
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+        }
+        return alUser;
     }
 }
