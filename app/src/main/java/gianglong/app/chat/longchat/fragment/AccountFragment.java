@@ -2,7 +2,6 @@ package gianglong.app.chat.longchat.fragment;
 
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -13,14 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.nostra13.universalimageloader.core.assist.LoadedFrom;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
-import com.nostra13.universalimageloader.core.imageaware.ImageAware;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import gianglong.app.chat.longchat.R;
@@ -47,9 +38,6 @@ public class AccountFragment extends Fragment{
     ProgressWheel progressWheel;
     TextView tvName, tvIntroduce;
     UserEntity user;
-
-    ImageLoader imageLoader;
-    DisplayImageOptions options;
 
 
 
@@ -101,24 +89,6 @@ public class AccountFragment extends Fragment{
             }
         });
 
-
-        // ImageLoader
-        imageLoader = ImageLoader.getInstance();
-        imageLoader.init(ImageLoaderConfiguration.createDefault(getActivity()));
-        options = new DisplayImageOptions.Builder()
-                .showImageForEmptyUri(R.drawable.no_image)
-                .showImageOnFail(R.drawable.no_image)
-                .imageScaleType(ImageScaleType.IN_SAMPLE_INT)
-                .bitmapConfig(Bitmap.Config.RGB_565)
-                .displayer(new FadeInBitmapDisplayer(0) {
-                    @Override
-                    public void display(Bitmap bitmap, ImageAware imageAware, LoadedFrom loadedFrom) {
-                        imageAware.setImageBitmap(bitmap);
-                        if (loadedFrom == LoadedFrom.NETWORK) {
-                            animate(imageAware.getWrappedView(), 300);
-                        }
-                    }
-                }).build();
 
     }
 

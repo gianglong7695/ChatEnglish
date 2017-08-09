@@ -1,6 +1,5 @@
 package gianglong.app.chat.longchat.activity;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.graphics.Typeface;
@@ -23,56 +22,55 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import cn.pedant.SweetAlert.SweetAlertDialog;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import gianglong.app.chat.longchat.R;
 import gianglong.app.chat.longchat.entity.UserEntity;
 import gianglong.app.chat.longchat.utils.RippleView;
 import gianglong.app.chat.longchat.utils.SessionManager;
+import gianglong.app.chat.longchat.utils.SweetDialog;
 
 public class LoginActivity extends AppCompatActivity {
+    @BindView(R.id.btLogin)
     Button btLogin;
-    TextView tvForget, tvSignUp;
-    public static EditText etUser, etPass;
-    Dialog mDialog;
-    ImageView ivFacebook, ivGoogle, ivLogo;
+    @BindView(R.id.tvForget)
+    TextView tvForget;
+    @BindView(R.id.tvSignUp)
+    TextView tvSignUp;
+    @BindView(R.id.etUser)
+    EditText etUser;
+    @BindView(R.id.etPassword)
+    EditText etPass;
+    @BindView(R.id.ivLogo)
+    ImageView ivLogo;
+    @BindView(R.id.ivFacebook)
+    ImageView ivFacebook;
+    @BindView(R.id.ivGoogle)
+    ImageView ivGoogle;
+    @BindView(R.id.layout_bottom)
     LinearLayout layout_bottom;
+    @BindView(R.id.rippleBtnSignin)
     RippleView rippleBtnSignin;
-    private FirebaseAuth mAuth;
-    private SweetAlertDialog pDialog;
-    private SessionManager mSessionManager;
 
+    private FirebaseAuth mAuth;
+    private SessionManager mSessionManager;
+    private SweetDialog mSweetDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        mAuth = FirebaseAuth.getInstance();
-        initUI();
-        config();
+        ButterKnife.bind(this);
+        init();
         runAnimation();
-
     }
 
 
-    public void initUI() {
-        btLogin = (Button) findViewById(R.id.btLogin);
-        tvForget = (TextView) findViewById(R.id.tvForget);
-        tvSignUp = (TextView) findViewById(R.id.tvSignUp);
-        etUser = (EditText) findViewById(R.id.etUser);
-        etPass = (EditText) findViewById(R.id.etPassword);
-        ivLogo = (ImageView) findViewById(R.id.ivLogo);
-        layout_bottom = (LinearLayout) findViewById(R.id.layout_bottom);
-        rippleBtnSignin = (RippleView) findViewById(R.id.rippleBtnSignin);
-//        ivFacebook = (ImageView) findViewById(R.id.ivFacebook);
-//        loginButton = (LoginButton) findViewById(R.id.login_button);
-//        ivGoogle = (ImageView) findViewById(R.id.ivGoogle);
-//        btSignIn = (SignInButton) findViewById(R.id.btSignInButton);
 
+    public void init() {
+        mAuth = FirebaseAuth.getInstance();
+        mSweetDialog = new SweetDialog(this);
 
-    }
-
-
-    public void config() {
         mSessionManager = new SessionManager(getApplicationContext());
 
 
@@ -108,19 +106,11 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(it);
             finish();
         }
-
-
-        // Set dialog
-        pDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
-        pDialog.getProgressHelper().setBarColor(getResources().getColor(R.color.purple));
-        pDialog.setTitleText("Please wait ...");
-        pDialog.setCancelable(false);
-
     }
 
 
     public void signIn(String email, String password) {
-        showDialog();
+        mSweetDialog.showProgress("Please wait ...");
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -130,7 +120,7 @@ public class LoginActivity extends AppCompatActivity {
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
                         if (task.isSuccessful()) {
-                            hideDialog();
+                            mSweetDialog.dismiss();
                             mSessionManager.setLogin(true);
                             Intent it = new Intent(getApplicationContext(), MainActivity.class);
                             startActivity(it);
@@ -143,10 +133,9 @@ public class LoginActivity extends AppCompatActivity {
                             userEntity.setName(fUser.getDisplayName());
 
 
-
                         } else {
-                            hideDialog();
-                            showDialogError();
+                            mSweetDialog.dismiss();
+                            mSweetDialog.showError("Oops...", "Email or password is incorrect!");
                         }
                     }
                 });
@@ -198,28 +187,4 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    public void showDialog() {
-        pDialog.show();
-    }
-
-    public void hideDialog() {
-        pDialog.dismiss();
-
-
-    }
-
-
-    public void showDialogError() {
-        SweetAlertDialog alertError = new SweetAlertDialog(LoginActivity.this, SweetAlertDialog.ERROR_TYPE);
-        alertError.setTitleText("Oops...");
-        alertError.setContentText("Email or password is incorrect!");
-        alertError.setCancelable(false);
-        alertError.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-            @Override
-            public void onClick(SweetAlertDialog sDialog) {
-                sDialog.dismissWithAnimation();
-            }
-        });
-        alertError.show();
-    }
 }

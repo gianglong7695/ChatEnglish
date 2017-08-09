@@ -2,31 +2,18 @@ package gianglong.app.chat.longchat.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.nostra13.universalimageloader.core.assist.LoadedFrom;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
-import com.nostra13.universalimageloader.core.imageaware.ImageAware;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import gianglong.app.chat.longchat.R;
 import gianglong.app.chat.longchat.activity.ChatActivity;
-import gianglong.app.chat.longchat.entity.MessageEntity;
 import gianglong.app.chat.longchat.entity.UserEntity;
 import gianglong.app.chat.longchat.utils.Constants;
 import gianglong.app.chat.longchat.utils.RippleViewLinear;
@@ -38,30 +25,11 @@ import gianglong.app.chat.longchat.utils.RippleViewLinear;
 public class ListPeopleAdapter extends RecyclerView.Adapter<ListPeopleAdapter.MyViewHolder> {
     Context context;
     ArrayList<UserEntity> alListPeople;
-    ImageLoader imageLoader;
-    DisplayImageOptions options;
 
 
     public ListPeopleAdapter(Context context, ArrayList<UserEntity> people) {
         this.context = context;
         this.alListPeople = people;
-
-        imageLoader = ImageLoader.getInstance();
-        imageLoader.init(ImageLoaderConfiguration.createDefault(context));
-        options = new DisplayImageOptions.Builder()
-                .showImageForEmptyUri(R.drawable.no_image)
-                .showImageOnFail(R.drawable.no_image)
-                .imageScaleType(ImageScaleType.IN_SAMPLE_INT)
-                .bitmapConfig(Bitmap.Config.RGB_565)
-                .displayer(new FadeInBitmapDisplayer(0) {
-                    @Override
-                    public void display(Bitmap bitmap, ImageAware imageAware, LoadedFrom loadedFrom) {
-                        imageAware.setImageBitmap(bitmap);
-                        if (loadedFrom == LoadedFrom.NETWORK) {
-                            animate(imageAware.getWrappedView(), 300);
-                        }
-                    }
-                }).build();
     }
 
 

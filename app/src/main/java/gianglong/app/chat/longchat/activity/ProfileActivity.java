@@ -23,14 +23,9 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
-
 import java.io.FileNotFoundException;
-import java.util.Calendar;
 
 import gianglong.app.chat.longchat.R;
-import gianglong.app.chat.longchat.entity.BasicUserInfoEntity;
 import gianglong.app.chat.longchat.entity.UserEntity;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener{
