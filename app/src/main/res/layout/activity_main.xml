@@ -6,8 +6,8 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="#f5f4f9"
+    android:orientation="vertical"
     tools:context=".activity.MainActivity">
 
 
@@ -55,7 +55,6 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-
                 android:layout_height="match_parent"
                 android:layout_above="@+id/tv_chat"
                 android:layout_centerHorizontal="true">
@@ -94,10 +93,8 @@
         <gianglong.app.chat.longchat.utils.RippleView
             android:id="@+id/layout_friend"
             android:layout_width="match_parent"
-
             android:layout_height="match_parent"
             android:layout_weight="1"
-
             ripple:rv_rippleDuration="100"
             ripple:rv_zoom="true">
 
@@ -129,10 +126,8 @@
         <gianglong.app.chat.longchat.utils.RippleView
             android:id="@+id/layout_people"
             android:layout_width="match_parent"
-
             android:layout_height="match_parent"
             android:layout_weight="1"
-
             ripple:rv_rippleDuration="100"
             ripple:rv_zoom="true">
 
@@ -148,8 +143,7 @@
                 android:maxLines="1"
                 android:text="People"
                 android:textColor="@color/text_color_tab"
-                android:textSize="12dp"
-                />
+                android:textSize="12dp" />
 
             <ImageView
                 android:id="@+id/img_people"
@@ -164,10 +158,8 @@
         <gianglong.app.chat.longchat.utils.RippleView
             android:id="@+id/layout_account"
             android:layout_width="match_parent"
-
             android:layout_height="match_parent"
             android:layout_weight="1"
-
             ripple:rv_rippleDuration="100"
             ripple:rv_zoom="true">
 
@@ -183,8 +175,7 @@
                 android:maxLines="1"
                 android:text="Account"
                 android:textColor="@color/text_color_tab"
-                android:textSize="12dp"
-                />
+                android:textSize="12dp" />
 
             <ImageView
                 android:id="@+id/img_account"

@@ -21,5 +21,8 @@ public class Constants {
     public static final String KEY_USER = "user";
     public static final int TYPE_MINE = 1;
     public static final int TYPE_YOURS = 0;
+    public static final String STORAGE_URL = "gs://longchat-1bc37.appspot.com";
+
+
 
 }

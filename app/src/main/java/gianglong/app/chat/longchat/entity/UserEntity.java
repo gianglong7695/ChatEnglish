@@ -8,16 +8,16 @@ import java.io.Serializable;
 
 public class UserEntity implements Serializable {
 
-    String id;
-    String email;
-    String name;
-    String password;
-    String gender;
-    String country;
-    String avatar;
-    String introdution;
-    double rate;
-    int reviewers;
+    private String id;
+    private String email;
+    private String name;
+    private String password;
+    private String gender;
+    private String country;
+    private String avatar;
+    private String introdution;
+    private double rate;
+    private int reviewers;
 
 
 

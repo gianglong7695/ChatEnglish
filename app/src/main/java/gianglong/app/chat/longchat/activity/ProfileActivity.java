@@ -23,15 +23,37 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import java.io.FileNotFoundException;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import gianglong.app.chat.longchat.R;
 import gianglong.app.chat.longchat.entity.UserEntity;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener{
+    @BindView(R.id.tv_name)
     TextView tvName;
-    EditText etName, etPass, etEmail, etAddress, etBirthday;
-    ImageView ivEditName, ivEditPass, ivEditEmail, ivEditAddress, ivAvatar;
+    @BindView(R.id.etName)
+    EditText etName;
+    @BindView(R.id.etPass)
+    EditText etPass;
+    @BindView(R.id.etEmail)
+    EditText etEmail;
+    @BindView(R.id.etAddress)
+    EditText etAddress;
+
+    @BindView(R.id.ivPenName)
+    ImageView ivPenName;
+    @BindView(R.id.ivPenPass)
+    ImageView ivPenPass;
+    @BindView(R.id.ivPenEmail)
+    ImageView ivPenEmail;
+    @BindView(R.id.ivPenAddress)
+    ImageView ivPenAddress;
+    @BindView(R.id.ivAvatar)
+    ImageView ivAvatar;
+    @BindView(R.id.spGender)
     Spinner spGender;
 
 
@@ -42,32 +64,17 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        initUI();
-        initConfig();
+        ButterKnife.bind(this);
+
+        init();
         eventHandle();
         setData();
     }
 
 
-    public void initUI(){
-        etName = (EditText) findViewById(R.id.etName);
-        etPass = (EditText) findViewById(R.id.etPass);
-        etEmail = (EditText) findViewById(R.id.etEmail);
-        etAddress = (EditText) findViewById(R.id.etAddress);
-        etBirthday = (EditText) findViewById(R.id.etBirthday);
-
-        ivEditName = (ImageView) findViewById(R.id.ivEdit1);
-        ivEditPass = (ImageView) findViewById(R.id.ivEdit3);
-        ivEditEmail = (ImageView) findViewById(R.id.ivEdit6);
-        ivEditAddress = (ImageView) findViewById(R.id.ivEdit7);
-        tvName = (TextView) findViewById(R.id.tv_name);
-        ivAvatar = (ImageView) findViewById(R.id.ivAvatar);
-        spGender = (Spinner) findViewById(R.id.spGender);
-
-
-
-
-
+    public void init(){
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle("Profile");
 
         ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.createFromResource(this,
                 R.array.arrGender, R.layout.simple_spinner_item);
@@ -80,10 +87,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     }
 
 
-    public void initConfig(){
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle("Profile");
-    }
 
     public void eventHandle(){
 
@@ -92,9 +95,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b) {
-                    ivEditName.setImageResource(R.drawable.ic_pen_focus);
+                    ivPenName.setImageResource(R.drawable.ic_pen_focus);
                 } else {
-                    ivEditName.setImageResource(R.drawable.ic_pen);
+                    ivPenName.setImageResource(R.drawable.ic_pen);
                 }
             }
         });
@@ -104,9 +107,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b) {
-                    ivEditPass.setImageResource(R.drawable.ic_pen_focus);
+                    ivPenPass.setImageResource(R.drawable.ic_pen_focus);
                 } else {
-                    ivEditPass.setImageResource(R.drawable.ic_pen);
+                    ivPenPass.setImageResource(R.drawable.ic_pen);
                 }
             }
         });
@@ -115,9 +118,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b) {
-                    ivEditEmail.setImageResource(R.drawable.ic_pen_focus);
+                    ivPenEmail.setImageResource(R.drawable.ic_pen_focus);
                 } else {
-                    ivEditEmail.setImageResource(R.drawable.ic_pen);
+                    ivPenEmail.setImageResource(R.drawable.ic_pen);
                 }
             }
         });
@@ -126,20 +129,19 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b) {
-                    ivEditAddress.setImageResource(R.drawable.ic_pen_focus);
+                    ivPenAddress.setImageResource(R.drawable.ic_pen_focus);
                 } else {
-                    ivEditAddress.setImageResource(R.drawable.ic_pen);
+                    ivPenAddress.setImageResource(R.drawable.ic_pen);
                 }
             }
         });
 
 
-        ivEditName.setOnClickListener(this);
+        ivPenName.setOnClickListener(this);
         etName.setOnClickListener(this);
         etPass.setOnClickListener(this);
         etEmail.setOnClickListener(this);
         etAddress.setOnClickListener(this);
-        etBirthday.setOnClickListener(this);
 
 
 

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -17,47 +16,45 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.hanks.htextview.HTextView;
 import com.hanks.htextview.HTextViewType;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import gianglong.app.chat.longchat.R;
 import gianglong.app.chat.longchat.utils.RippleView;
 import gianglong.app.chat.longchat.utils.SessionManager;
+import gianglong.app.chat.longchat.utils.SweetDialog;
 
 public class SignUpActivity extends AppCompatActivity {
-    private EditText etUser, etPass, etRePass;
-    private Button btSignUp;
-    private HTextView hTextView;
-    private RippleView rippleBtnSignin;
-    private SweetAlertDialog pDialog;
+
+    @BindView(R.id.etUser)
+    EditText etUser;
+    @BindView(R.id.etPass)
+    EditText etPass;
+    @BindView(R.id.etRePass)
+    EditText etRePass;
+    @BindView(R.id.rippleBtnSignin)
+    RippleView rippleBtnSignin;
+    @BindView(R.id.textLogo)
+    HTextView hTextView;
+
+    private SweetDialog mSweetDialog;
     private FirebaseAuth mAuth;
     private SessionManager mSessionManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        initUI();
-
-
+        ButterKnife.bind(this);
+        init();
     }
 
 
-    public void initUI() {
-        btSignUp = (Button) findViewById(R.id.btSignUp);
-        etUser = (EditText) findViewById(R.id.etUser);
-        etPass = (EditText) findViewById(R.id.etPassword);
-        etRePass = (EditText) findViewById(R.id.etRePassword);
-        hTextView = (HTextView) findViewById(R.id.text);
-        rippleBtnSignin = (RippleView) findViewById(R.id.rippleBtnSignin);
-
+    public void init() {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        mSweetDialog = new SweetDialog(this);
         etPass.setTypeface(Typeface.DEFAULT);
         etRePass.setTypeface(Typeface.DEFAULT);
-
-
-        // Set dialog
-        pDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
-        pDialog.getProgressHelper().setBarColor(getResources().getColor(R.color.purple));
-        pDialog.setTitleText("Please wait ...");
-        pDialog.setCancelable(false);
 
 
         /* Title animation */
@@ -67,12 +64,9 @@ public class SignUpActivity extends AppCompatActivity {
         hTextView.animateText("Sign Up"); // animate
 
 
-
-
         // Firebase
         mAuth = FirebaseAuth.getInstance();
         mSessionManager = new SessionManager(getApplicationContext());
-
 
 
         rippleBtnSignin.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
@@ -81,18 +75,18 @@ public class SignUpActivity extends AppCompatActivity {
                 String user = etUser.getText().toString();
                 String pass = etPass.getText().toString();
                 String repass = etRePass.getText().toString();
-                if(user.length() > 0 && pass.length() > 0 && repass.length() > 0){
-                    showDialog();
+
+                if (user.length() > 0 && pass.length() > 0 && repass.length() > 0) {
+                    mSweetDialog.showProgress("Please wait ...");
                     signUp(user, pass);
 
-                }else{
-                    Toast.makeText(SignUpActivity.this, "Không thể để rỗng!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(SignUpActivity.this, "Can not be empty!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
     }
-
 
 
     public void signUp(String email, String password) {
@@ -106,33 +100,28 @@ public class SignUpActivity extends AppCompatActivity {
                         if (!task.isSuccessful()) {
                             Toast.makeText(getApplicationContext(), "Fail!",
                                     Toast.LENGTH_SHORT).show();
-                            hideDialog();
+                            mSweetDialog.dismiss();
                         } else {
-                            hideDialog();
-                            SweetAlertDialog progressSweetDialog = new SweetAlertDialog(SignUpActivity.this, SweetAlertDialog.SUCCESS_TYPE);
-                            progressSweetDialog.setTitleText("Success!");
-                            progressSweetDialog.setContentText("You have successfully registered. Login now ?");
-                            progressSweetDialog.setCancelText("No");
-                            progressSweetDialog.setConfirmText("Yes");
-                            progressSweetDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            mSweetDialog.dismiss();
+                            mSweetDialog.showSuccess("Success!", "You have successfully registered. Login now ?");
+                            mSweetDialog.getmSweetAlertDialog().setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                                 @Override
-                                public void onClick(SweetAlertDialog sDialog) {
-                                    sDialog.dismissWithAnimation();
+                                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                    sweetAlertDialog.dismissWithAnimation();
                                     mSessionManager.setLogin(true);
                                     Intent it = new Intent(SignUpActivity.this, LoginActivity.class);
                                     it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                     startActivity(it);
                                 }
                             });
-
-                            progressSweetDialog.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            mSweetDialog.getmSweetAlertDialog().setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
                                 @Override
                                 public void onClick(SweetAlertDialog sweetAlertDialog) {
                                     sweetAlertDialog.dismissWithAnimation();
                                     finish();
                                 }
                             });
-                            progressSweetDialog.show();
+                            mSweetDialog.show();
                         }
 
                     }
@@ -141,15 +130,6 @@ public class SignUpActivity extends AppCompatActivity {
 //        if(bAvatar != null){
 //            uploadAvatar(bAvatar);
 //        }
-    }
-
-
-    public void showDialog() {
-        pDialog.show();
-    }
-
-    public void hideDialog() {
-        pDialog.dismiss();
     }
 
 }

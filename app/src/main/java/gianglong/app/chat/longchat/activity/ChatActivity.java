@@ -8,7 +8,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -28,6 +27,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import gianglong.app.chat.longchat.R;
 import gianglong.app.chat.longchat.adapter.MessageAdapter;
 import gianglong.app.chat.longchat.entity.BasicUserInfoEntity;
@@ -36,45 +37,44 @@ import gianglong.app.chat.longchat.entity.UserEntity;
 import gianglong.app.chat.longchat.service.MessageService;
 import gianglong.app.chat.longchat.utils.Constants;
 import gianglong.app.chat.longchat.utils.DataNotify;
+import gianglong.app.chat.longchat.utils.LogUtil;
 import gianglong.app.chat.longchat.utils.Utils;
 
 public class ChatActivity extends AppCompatActivity {
-    String TAG = getClass().getSimpleName();
+    @BindView(R.id.rvMessage)
     RecyclerView rvMessage;
+    @BindView(R.id.btSend)
     ImageButton btSend;
-    boolean isSend = false;
+    @BindView(R.id.etMessage)
     EditText etMessage;
-    ArrayList<MessageItemEntity> alMsg;
-    MessageAdapter msgAdapter;
-    Random rd = new Random();
-    LinearLayoutManager linearLayoutManager;
+    @BindView(R.id.activity_chat)
     View activityRootView;
-    boolean isScroll = false;
-    UserEntity entity;
 
-    DatabaseReference database;
-    DatabaseReference ref;
-    String roomID;
+    private boolean isScroll = false;
+    private UserEntity entity;
 
+    private DatabaseReference database;
+    private DatabaseReference ref;
+    private String roomID;
+
+    private LinearLayoutManager linearLayoutManager;
+    private boolean isSend = false;
+    private ArrayList<MessageItemEntity> alMsg;
+    private MessageAdapter msgAdapter;
+    private Random rd = new Random();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        initUI();
+        ButterKnife.bind(this);
+
         initConfig();
         event();
         initialData();
         getRoomID();
     }
 
-
-    public void initUI(){
-        rvMessage = (RecyclerView) findViewById(R.id.rvMessage);
-        btSend = (ImageButton) findViewById(R.id.btSend);
-        etMessage = (EditText) findViewById(R.id.etMessage);
-        activityRootView = findViewById(R.id.activity_chat);
-    }
 
 
     public void initConfig(){
@@ -240,7 +240,7 @@ public class ChatActivity extends AppCompatActivity {
 //                    msgAdapter.notifyItemChanged(position);
                     Toast.makeText(ChatActivity.this, "Success!", Toast.LENGTH_SHORT).show();
                 } else if (msg.what == DataNotify.DATA_UNSUCCESS) {
-                    Log.e(TAG, "getUserInfo error!");
+                    LogUtil.e("getUserInfo error!");
 //                    messageItem.setStatusType(DataNotify.DATA_UNSUCCESS);
 //                    msgAdapter.notifyItemChanged(position);
                 }
@@ -267,7 +267,7 @@ public class ChatActivity extends AppCompatActivity {
 
                     pushMessage(messageItem, alMsg.size());
                 } else if (msg.what == DataNotify.DATA_UNSUCCESS) {
-                    Log.e(TAG, "getUserInfo error!");
+                    LogUtil.e("getUserInfo error!");
                 }
             }
         };
@@ -325,7 +325,7 @@ public class ChatActivity extends AppCompatActivity {
 
 
                 } else if (msg.what == DataNotify.DATA_UNSUCCESS) {
-                    Log.e(TAG, "getUserInfo error!");
+                    LogUtil.e("getUserInfo error!");
                 }
             }
         };

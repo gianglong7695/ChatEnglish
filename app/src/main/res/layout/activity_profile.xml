@@ -102,7 +102,7 @@
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="40dp"
                         android:layout_marginTop="10dp">
 
                         <EditText
@@ -115,12 +115,13 @@
                             android:paddingLeft="55dp"
                             android:paddingRight="40dp"
                             android:inputType="text"
+                            android:textSize="17sp"
                             android:imeOptions="actionNext"
                             android:textCursorDrawable="@drawable/custom_cursor_edtitext" />
 
                         <ImageView
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
+                            android:layout_width="38dp"
+                            android:layout_height="38dp"
                             android:layout_centerVertical="true"
                             android:layout_marginLeft="1dp"
                             android:background="@drawable/custom_edittext_iconleft"
@@ -128,14 +129,14 @@
                             android:src="@drawable/ic_user_menubar" />
 
                         <ImageView
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
                             android:src="@drawable/ic_pen_focus"
                             android:layout_marginRight="10dp"
                             android:layout_centerVertical="true"
                             android:layout_alignParentRight="true"
                             android:layout_alignParentEnd="true"
-                            android:id="@+id/ivEdit1" />
+                            android:id="@+id/ivPenName" />
                     </RelativeLayout>
                 </LinearLayout>
 
@@ -154,7 +155,7 @@
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="40dp"
                         android:layout_marginTop="10dp">
 
                         <EditText
@@ -164,6 +165,7 @@
                             android:background="@drawable/custom_edittext_selector"
                             android:hint="(Not yet)"
                             android:text="abcdefgh"
+                            android:textSize="17sp"
                             android:paddingLeft="55dp"
                             android:paddingRight="40dp"
                             android:inputType="textPassword"
@@ -171,8 +173,8 @@
                             android:textCursorDrawable="@drawable/custom_cursor_edtitext" />
 
                         <ImageView
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
+                            android:layout_width="38dp"
+                            android:layout_height="38dp"
                             android:layout_centerVertical="true"
                             android:layout_marginLeft="1dp"
                             android:background="@drawable/custom_edittext_iconleft"
@@ -180,14 +182,14 @@
                             android:src="@drawable/ic_password_edittext" />
 
                         <ImageView
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
                             android:src="@drawable/ic_pen"
                             android:layout_marginRight="10dp"
                             android:layout_centerVertical="true"
                             android:layout_alignParentRight="true"
                             android:layout_alignParentEnd="true"
-                            android:id="@+id/ivEdit3" />
+                            android:id="@+id/ivPenPass" />
                     </RelativeLayout>
                 </LinearLayout>
 
@@ -207,7 +209,7 @@
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="40dp"
                         android:layout_marginTop="10dp">
 
                         <Spinner
@@ -223,77 +225,16 @@
                             android:textCursorDrawable="@drawable/custom_cursor_edtitext" />
 
                         <ImageView
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
+                            android:layout_width="38dp"
+                            android:layout_height="38dp"
                             android:layout_centerVertical="true"
                             android:layout_marginLeft="1dp"
                             android:background="@drawable/custom_edittext_iconleft"
                             android:padding="10dp"
                             android:src="@drawable/ic_sex_edittext" />
-
-                        <ImageView
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
-                            android:src="@drawable/ic_pen"
-                            android:layout_marginRight="10dp"
-                            android:layout_centerVertical="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_alignParentEnd="true"/>
                     </RelativeLayout>
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Age"
-                        android:textColor="#222222"
-                        android:textSize="17sp" />
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginTop="10dp">
-
-                        <EditText
-                            android:id="@+id/etBirthday"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/custom_edittext_selector"
-                            android:hint="(Not yet)"
-                            android:maxLines="1"
-                            android:maxLength="2"
-                            android:paddingLeft="55dp"
-                            android:paddingRight="40dp"
-                            android:inputType="number"
-                            android:imeOptions="actionNext"
-                            android:textCursorDrawable="@drawable/custom_cursor_edtitext" />
-
-                        <ImageView
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
-                            android:layout_centerVertical="true"
-                            android:layout_marginLeft="1dp"
-                            android:background="@drawable/custom_edittext_iconleft"
-                            android:padding="10dp"
-                            android:src="@drawable/ic_birthday_edittext" />
-
-                        <ImageView
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
-                            android:src="@drawable/ic_pen"
-                            android:layout_marginRight="10dp"
-                            android:layout_centerVertical="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_alignParentEnd="true"
-                            android:id="@+id/ivEdit5" />
-                    </RelativeLayout>
-                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -310,7 +251,7 @@
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="40dp"
                         android:layout_marginTop="10dp">
 
                         <EditText
@@ -322,12 +263,13 @@
                             android:paddingLeft="55dp"
                             android:paddingRight="42.5dp"
                             android:inputType="number"
+                            android:textSize="17sp"
                             android:imeOptions="actionNext"
                             android:textCursorDrawable="@drawable/custom_cursor_edtitext" />
 
                         <ImageView
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
+                            android:layout_width="38dp"
+                            android:layout_height="38dp"
                             android:layout_centerVertical="true"
                             android:layout_marginLeft="1dp"
                             android:background="@drawable/custom_edittext_iconleft"
@@ -335,14 +277,14 @@
                             android:src="@drawable/ic_email_edittext" />
 
                         <ImageView
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
                             android:src="@drawable/ic_pen"
                             android:layout_marginRight="10dp"
                             android:layout_centerVertical="true"
                             android:layout_alignParentRight="true"
                             android:layout_alignParentEnd="true"
-                            android:id="@+id/ivEdit6" />
+                            android:id="@+id/ivPenEmail" />
                     </RelativeLayout>
 
                 </LinearLayout>
@@ -362,7 +304,7 @@
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="40dp"
                         android:layout_marginTop="10dp">
 
                         <EditText
@@ -372,6 +314,7 @@
                             android:background="@drawable/custom_edittext_selector"
                             android:hint="(Not yet)"
                             android:text="Viet Nam"
+                            android:textSize="17sp"
                             android:paddingLeft="55dp"
                             android:paddingRight="42.5dp"
                             android:ellipsize="end"
@@ -381,8 +324,8 @@
                             android:textCursorDrawable="@drawable/custom_cursor_edtitext" />
 
                         <ImageView
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
+                            android:layout_width="38dp"
+                            android:layout_height="38dp"
                             android:layout_centerVertical="true"
                             android:layout_marginLeft="1dp"
                             android:background="@drawable/custom_edittext_iconleft"
@@ -390,14 +333,14 @@
                             android:src="@drawable/ic_location_edittext" />
 
                         <ImageView
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
                             android:src="@drawable/ic_pen"
                             android:layout_marginRight="10dp"
                             android:layout_centerVertical="true"
                             android:layout_alignParentRight="true"
                             android:layout_alignParentEnd="true"
-                            android:id="@+id/ivEdit7" />
+                            android:id="@+id/ivPenAddress" />
                     </RelativeLayout>
                 </LinearLayout>
 

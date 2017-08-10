@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="gianglong.app.chat.longchat">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -9,9 +10,10 @@
     <application
         android:name=".utils.MyApplication"
         android:allowBackup="true"
-        android:icon="@drawable/logo_app"
+        android:icon="@drawable/logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
+        tools:replace="android:icon"
         android:theme="@style/AppTheme">
         <activity
             android:name=".activity.MainActivity"

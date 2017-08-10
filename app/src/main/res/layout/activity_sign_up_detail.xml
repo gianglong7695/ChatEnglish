@@ -36,21 +36,21 @@
                 app:met_singleLineEllipsis="true"
                 app:met_textColor="@color/white" />
 
-            <com.rengwuxian.materialedittext.MaterialEditText
-                android:id="@+id/etAge"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Age"
-                android:imeOptions="actionNext"
-                android:inputType="number"
-                android:maxLength="2"
-                android:maxLines="1"
-                app:met_floatingLabel="highlight"
-                app:met_iconLeft="@drawable/ic_age_50px_black"
-                app:met_iconPadding="0dp"
-                app:met_primaryColor="@color/white"
-                app:met_singleLineEllipsis="true"
-                app:met_textColor="@color/white" />
+            <!--<com.rengwuxian.materialedittext.MaterialEditText-->
+                <!--android:id="@+id/etAge"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:hint="Age"-->
+                <!--android:imeOptions="actionNext"-->
+                <!--android:inputType="number"-->
+                <!--android:maxLength="2"-->
+                <!--android:maxLines="1"-->
+                <!--app:met_floatingLabel="highlight"-->
+                <!--app:met_iconLeft="@drawable/ic_age_50px_black"-->
+                <!--app:met_iconPadding="0dp"-->
+                <!--app:met_primaryColor="@color/white"-->
+                <!--app:met_singleLineEllipsis="true"-->
+                <!--app:met_textColor="@color/white" />-->
 
             <LinearLayout
                 android:layout_width="match_parent"

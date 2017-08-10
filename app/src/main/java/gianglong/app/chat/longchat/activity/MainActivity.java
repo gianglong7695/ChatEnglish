@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import gianglong.app.chat.longchat.R;
 import gianglong.app.chat.longchat.fragment.AccountFragment;
 import gianglong.app.chat.longchat.fragment.FriendFragment;
@@ -28,11 +30,34 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
     private int[] tabDrawableOff = {R.drawable.ic_chat, R.drawable.ic_friends,
             R.drawable.ic_people, R.drawable.ic_account};
 
+    @BindView(R.id.vp_main)
+    ViewPager viewPager;
+    @BindView(R.id.layout_chat)
+    RippleView layout_chat;
+    @BindView(R.id.layout_friend)
+    RippleView layout_friend;
+    @BindView(R.id.layout_people)
+    RippleView layout_people;
+    @BindView(R.id.layout_account)
+    RippleView layout_account;
 
-    private ViewPager viewPager;
-    private RippleView layout_chat, layout_friend, layout_people, layout_account;
-    private ImageView img_chat, img_friend, img_people, img_account;
-    private TextView tv_chat, tv_friend, tv_people, tv_account;
+    @BindView(R.id.img_chat)
+    ImageView img_chat;
+    @BindView(R.id.img_friend)
+    ImageView img_friend;
+    @BindView(R.id.img_people)
+    ImageView img_people;
+    @BindView(R.id.img_account)
+    ImageView img_account;
+
+    @BindView(R.id.tv_chat)
+    TextView tv_chat;
+    @BindView(R.id.tv_friend)
+    TextView tv_friend;
+    @BindView(R.id.tv_people)
+    TextView tv_people;
+    @BindView(R.id.tv_account)
+    TextView tv_account;
 
 
     private MessageFragment messageFragment;
@@ -52,36 +77,15 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initUI();
+        ButterKnife.bind(this);
+
+        init();
         initFragment();
-        config();
     }
 
 
-
-
-    public void config() {
+    public void init() {
         mSessionManager = new SessionManager(getApplicationContext());
-    }
-
-    public void initUI() {
-        viewPager = (ViewPager) findViewById(R.id.vp_main);
-
-        layout_chat = (RippleView) findViewById(R.id.layout_chat);
-        layout_friend = (RippleView) findViewById(R.id.layout_friend);
-        layout_people = (RippleView) findViewById(R.id.layout_people);
-        layout_account = (RippleView) findViewById(R.id.layout_account);
-
-        img_chat = (ImageView) findViewById(R.id.img_chat);
-        img_friend = (ImageView) findViewById(R.id.img_friend);
-        img_people = (ImageView) findViewById(R.id.img_people);
-        img_account = (ImageView) findViewById(R.id.img_account);
-
-        tv_chat = (TextView) findViewById(R.id.tv_chat);
-        tv_friend = (TextView) findViewById(R.id.tv_friend);
-        tv_people = (TextView) findViewById(R.id.tv_people);
-        tv_account = (TextView) findViewById(R.id.tv_account);
-
 
         layout_chat.setOnClickListener(this);
         layout_friend.setOnClickListener(this);
@@ -110,9 +114,7 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
 
         @Override
         public void onPageSelected(int position) {
-
             changeTab(position);
-
         }
 
         @Override
@@ -122,7 +124,6 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
     };
 
     public void changeTab(int position) {
-
         if (position == 0) {
             img_chat.setImageResource(tabDrawableOn[0]);
             tv_chat.setTypeface(null, Typeface.BOLD);

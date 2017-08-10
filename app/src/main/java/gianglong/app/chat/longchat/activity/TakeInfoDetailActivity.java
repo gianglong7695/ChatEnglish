@@ -13,9 +13,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Gravity;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -42,21 +40,34 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 
-import cn.pedant.SweetAlert.SweetAlertDialog;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import gianglong.app.chat.longchat.R;
 import gianglong.app.chat.longchat.entity.BasicUserInfoEntity;
 import gianglong.app.chat.longchat.entity.UserEntity;
 import gianglong.app.chat.longchat.utils.Constants;
+import gianglong.app.chat.longchat.utils.LogUtil;
 import gianglong.app.chat.longchat.utils.RippleView;
+import gianglong.app.chat.longchat.utils.SweetDialog;
+
+import static gianglong.app.chat.longchat.utils.Constants.STORAGE_URL;
 
 public class TakeInfoDetailActivity extends AppCompatActivity {
-    private String TAG = getClass().getSimpleName();
-    private MaterialEditText etName, etAge;
-    private Spinner spCountry, spGender;
-    private LinearLayout layout_avatar;
-    private RippleView rippleBtnSignin;
-    private CircleImageView ivAvatar;
+    @BindView(R.id.etName)
+    MaterialEditText etName;
+    @BindView(R.id.spCountry)
+    Spinner spCountry;
+    @BindView(R.id.spGender)
+    Spinner spGender;
+    @BindView(R.id.layout_avatar)
+    LinearLayout layout_avatar;
+    @BindView(R.id.rippleBtnSignin)
+    RippleView rippleBtnSignin;
+    @BindView(R.id.ivAvatar)
+    CircleImageView ivAvatar;
+
+
     private String[] arrGender;
     private int genderPos = 0;
     private String[] arrCountry;
@@ -67,7 +78,7 @@ public class TakeInfoDetailActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private String email, password;
-    private SweetAlertDialog pDialog;
+    private SweetDialog mSweetDialog;
     private FirebaseStorage storage = FirebaseStorage.getInstance();
     private Bitmap bAvatar;
     private DatabaseReference mDatabase;
@@ -76,12 +87,14 @@ public class TakeInfoDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up_detail);
+        ButterKnife.bind(this);
+
         screenConfigPopup();
-        initUI();
+        init();
         handleEvent();
     }
 
-    public void screenConfigPopup(){
+    public void screenConfigPopup() {
         setTitle("Add your info");
 
 //        DisplayMetrics dm = new DisplayMetrics();
@@ -95,20 +108,8 @@ public class TakeInfoDetailActivity extends AppCompatActivity {
     }
 
 
-    public void initUI() {
-        etName = (MaterialEditText) findViewById(R.id.etName);
-        etAge = (MaterialEditText) findViewById(R.id.etAge);
-        spCountry = (Spinner) findViewById(R.id.spCountry);
-        spGender = (Spinner) findViewById(R.id.spGender);
-        layout_avatar = (LinearLayout) findViewById(R.id.layout_avatar);
-        rippleBtnSignin = (RippleView) findViewById(R.id.rippleBtnSignin);
-        ivAvatar = (CircleImageView) findViewById(R.id.ivAvatar);
-
-        // Set dialog
-        pDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
-        pDialog.getProgressHelper().setBarColor(getResources().getColor(R.color.purple));
-        pDialog.setTitleText("Please wait ...");
-        pDialog.setCancelable(false);
+    public void init() {
+        mSweetDialog = new SweetDialog(this);
 
 
         arrGender = getResources().getStringArray(R.array.arrGender);
@@ -218,7 +219,7 @@ public class TakeInfoDetailActivity extends AppCompatActivity {
     }
 
 
-    public void handleEvent(){
+    public void handleEvent() {
         spGender.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -246,8 +247,8 @@ public class TakeInfoDetailActivity extends AppCompatActivity {
     }
 
 
-    public void updateUserInfo(){
-        showDialog();
+    public void updateUserInfo() {
+        mSweetDialog.showProgress("Please wait ...");
         mDatabase = FirebaseDatabase.getInstance().getReference();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -258,8 +259,7 @@ public class TakeInfoDetailActivity extends AppCompatActivity {
                 .build();
 
 
-
-        Log.e(TAG, BasicUserInfoEntity.getInstance().toString());
+        LogUtil.e(BasicUserInfoEntity.getInstance().toString());
 
         user.updateProfile(profileUpdates)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -276,11 +276,11 @@ public class TakeInfoDetailActivity extends AppCompatActivity {
                                     "introduce",
                                     1.5,
                                     10
-                                    );
+                            );
                             mDatabase.child(Constants.NODE_MASTER).child(Constants.NODE_USER).child(BasicUserInfoEntity.getInstance().getUid()).setValue(userEntity).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
-                                    hideDialog();
+                                    mSweetDialog.dismiss();
                                     finish();
                                     Toast.makeText(TakeInfoDetailActivity.this, "Update success!", Toast.LENGTH_SHORT).show();
                                 }
@@ -290,7 +290,6 @@ public class TakeInfoDetailActivity extends AppCompatActivity {
                 });
 
     }
-
 
 
     @Override
@@ -322,7 +321,7 @@ public class TakeInfoDetailActivity extends AppCompatActivity {
 
 
             } catch (Exception e) {
-                Log.d(TAG, e.toString());
+                LogUtil.e(e.toString());
             }
         }
 
@@ -366,26 +365,17 @@ public class TakeInfoDetailActivity extends AppCompatActivity {
     }
 
 
-    public void showDialog() {
-        pDialog.show();
-    }
-
-    public void hideDialog() {
-        pDialog.cancel();
-    }
-
-
     public void uploadAvatar(Bitmap bm) {
         // Create a storage reference from our app
-        StorageReference storageRef = storage.getReferenceFromUrl("gs://longchat-1bc37.appspot.com");
+        StorageReference storageRef = storage.getReferenceFromUrl(STORAGE_URL);
 
-// Create a reference to "mountains.jpg"
+        // Create a reference to "mountains.jpg"
         StorageReference mountainsRef = storageRef.child("mountains.png");
 
-// Create a reference to 'images/mountains.jpg'
+        // Create a reference to 'images/mountains.jpg'
         StorageReference mountainImagesRef = storageRef.child("images/mountains.png");
 
-// While the file names are the same, the references point to different files
+        // While the file names are the same, the references point to different files
         mountainsRef.getName().equals(mountainImagesRef.getName());    // true
         mountainsRef.getPath().equals(mountainImagesRef.getPath());    // false
 
@@ -403,7 +393,7 @@ public class TakeInfoDetailActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 Toast.makeText(TakeInfoDetailActivity.this, "Error!", Toast.LENGTH_SHORT).show();
-                hideDialog();
+                mSweetDialog.dismiss();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override

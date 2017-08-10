@@ -13,7 +13,7 @@
     tools:context=".activity.SignUpActivity">
 
     <com.hanks.htextview.HTextView
-        android:id="@+id/text"
+        android:id="@+id/textLogo"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_marginBottom="50dp"
@@ -42,7 +42,7 @@
         app:met_textColor="@color/white" />
 
     <com.rengwuxian.materialedittext.MaterialEditText
-        android:id="@+id/etPassword"
+        android:id="@+id/etPass"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Password"
@@ -60,7 +60,7 @@
         app:met_textColor="@color/white" />
 
     <com.rengwuxian.materialedittext.MaterialEditText
-        android:id="@+id/etRePassword"
+        android:id="@+id/etRePass"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Confirm password"

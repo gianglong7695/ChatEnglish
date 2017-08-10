@@ -2,7 +2,7 @@
     <string name="app_name">English Chat</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment">Blank fragment</string>
 
 
     <string name="fragment_account_item1">My profile</string>

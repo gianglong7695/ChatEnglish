@@ -17,6 +17,9 @@ public class SweetDialog {
         this.mContext = mContext;
     }
 
+    public SweetAlertDialog getmSweetAlertDialog() {
+        return mSweetAlertDialog;
+    }
 
     public void showError(String title, String msg) {
         mSweetAlertDialog = new SweetAlertDialog(mContext, SweetAlertDialog.ERROR_TYPE);
@@ -38,6 +41,15 @@ public class SweetDialog {
         mSweetAlertDialog.setTitleText(msg);
         mSweetAlertDialog.setCancelable(false);
         show();
+    }
+
+
+    public void showSuccess(String title, String msg){
+        mSweetAlertDialog = new SweetAlertDialog(mContext, SweetAlertDialog.SUCCESS_TYPE);
+        mSweetAlertDialog.setTitleText(title);
+        mSweetAlertDialog.setContentText(msg);
+        mSweetAlertDialog.setCancelText("No");
+        mSweetAlertDialog.setConfirmText("Yes");
     }
 
 
