@@ -103,9 +103,9 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(etMessage.getText().length() > 0){
-                    setActiveButtonSend(1);
+                    setActiveButtonSend(true);
                 }else{
-                    setActiveButtonSend(0);
+                    setActiveButtonSend(false);
                 }
 
 
@@ -190,16 +190,16 @@ public class ChatActivity extends AppCompatActivity {
 
 
 
-    public void setActiveButtonSend(int type){
-        if(type == 0){
-            if(isSend){
-                btSend.setImageResource(R.drawable.ic_send_deactivate);
-                isSend = false;
-            }
-        }else{
+    public void setActiveButtonSend(boolean isActive){
+        if(isActive){
             if(!isSend){
                 btSend.setImageResource(R.drawable.ic_send_activate);
                 isSend = true;
+            }
+        }else{
+            if(isSend){
+                btSend.setImageResource(R.drawable.ic_send_deactivate);
+                isSend = false;
             }
         }
     }
