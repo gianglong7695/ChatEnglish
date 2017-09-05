@@ -79,13 +79,12 @@ public class ChatActivity extends AppCompatActivity {
 
     public void initConfig(){
         database = FirebaseDatabase.getInstance().getReference();
-        database.child(Constants.NODE_MASTER).child(Constants.NODE_MESSAGE).child(Constants.NODE_BOX).child(roomID).setValue(1);
+//        database.child(Constants.NODE_MASTER).child(Constants.NODE_MESSAGE).child(Constants.NODE_BOX).child(roomID).setValue(1);
         if(getIntent().getExtras() != null){
             entity = (UserEntity) getIntent().getSerializableExtra(Constants.KEY_USER);
             setTitle(entity.getName());
-
         }else{
-            setTitle("Not yet");
+            setTitle(getResources().getString(R.string.title_room_default));
         }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         linearLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
@@ -107,8 +106,6 @@ public class ChatActivity extends AppCompatActivity {
                 }else{
                     setActiveButtonSend(false);
                 }
-
-
 
             }
 

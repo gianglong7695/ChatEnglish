@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -12,7 +11,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
@@ -20,7 +18,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
 
 import gianglong.app.chat.longchat.entity.BasicUserInfoEntity;
 import gianglong.app.chat.longchat.entity.KeyValueEntity;
@@ -33,7 +30,6 @@ import gianglong.app.chat.longchat.utils.DataNotify;
  */
 
 public class MessageService {
-    String TAG = getClass().getSimpleName();
     Context context;
     DatabaseReference database;
     DatabaseReference refMine;

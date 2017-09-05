@@ -26,10 +26,10 @@
             android:background="@drawable/border_layout_message_right"
             android:gravity="right|center_vertical"
             android:orientation="vertical"
-            android:paddingBottom="7.5dp"
-            android:paddingLeft="12.5dp"
-            android:paddingRight="12.5dp"
-            android:paddingTop="7.5dp">
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp">
 
             <TextView
                 android:id="@+id/tvMsg"

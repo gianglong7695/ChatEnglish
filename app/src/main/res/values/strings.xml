@@ -9,6 +9,8 @@
     <string name="fragment_account_item2">Chat setting</string>
     <string name="fragment_account_item3">Private setting</string>
     <string name="fragment_account_item4">Notification setting</string>
+    <string name="title_room_default">Not yet</string>
+
 
 
     <string-array name="arrGender">
