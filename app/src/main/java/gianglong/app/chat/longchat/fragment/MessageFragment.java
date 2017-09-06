@@ -7,7 +7,6 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,13 +19,13 @@ import gianglong.app.chat.longchat.entity.KeyValueEntity;
 import gianglong.app.chat.longchat.entity.MessageEntity;
 import gianglong.app.chat.longchat.service.MessageService;
 import gianglong.app.chat.longchat.utils.DataNotify;
+import gianglong.app.chat.longchat.utils.LogUtil;
 import gianglong.app.chat.longchat.utils.ProgressWheel;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class MessageFragment extends Fragment {
-    String TAG = getClass().getSimpleName();
     View v;
     RecyclerView rvListMessage;
     ArrayList<MessageEntity> alListMessage;
@@ -47,20 +46,20 @@ public class MessageFragment extends Fragment {
         initUI();
         initConfig();
 
-//        alListMessage = new ArrayList<>();
-//        alListMessage.add(new MessageEntity("0", "Giang Long", "12:34", "Hello. We can talk together ???", true, 1, true));
-//        alListMessage.add(new MessageEntity("1", "Giang Long", "12:34", "Hello. We can talk together ???", false, 0, true));
-//        alListMessage.add(new MessageEntity("0", "Giang Long", "12:34", "Hello. We can talk together ???", true, 1, false));
-//        alListMessage.add(new MessageEntity("1", "Giang Long", "12:34", "Hello. We can talk together ???", false, 0, true));
-//        alListMessage.add(new MessageEntity("1", "Giang Long", "12:34", "Hello. We can talk together ???", false, 1, false));
-//        alListMessage.add(new MessageEntity("0", "Giang Long", "12:34", "Hello. We can talk together ???", true, 1, true));
-//
-//
-//        messageAdapter = new ListMessageAdapter(getActivity(), alListMessage);
-//        rvListMessage.setAdapter(messageAdapter);
+        alListMessage = new ArrayList<>();
+        alListMessage.add(new MessageEntity("0", "Giang Long", "12:34", "Hello. We can talk together ???", true, 1, true));
+        alListMessage.add(new MessageEntity("1", "Giang Long", "12:34", "Hello. We can talk together ???", false, 0, true));
+        alListMessage.add(new MessageEntity("0", "Giang Long", "12:34", "Hello. We can talk together ???", true, 1, false));
+        alListMessage.add(new MessageEntity("1", "Giang Long", "12:34", "Hello. We can talk together ???", false, 0, true));
+        alListMessage.add(new MessageEntity("1", "Giang Long", "12:34", "Hello. We can talk together ???", false, 1, false));
+        alListMessage.add(new MessageEntity("0", "Giang Long", "12:34", "Hello. We can talk together ???", true, 1, true));
 
 
-        getMessageHistory();
+        messageAdapter = new ListMessageAdapter(getActivity(), alListMessage);
+        rvListMessage.setAdapter(messageAdapter);
+
+
+//        getMessageHistory();
 
         return v;
     }
@@ -109,11 +108,11 @@ public class MessageFragment extends Fragment {
 //                    rvListMessage.setAdapter(messageAdapter);
 
                     listRoom = (ArrayList<KeyValueEntity>) msg.obj;
-                    Log.e(TAG, listRoom.size() + "");
+                    LogUtil.e(listRoom.size() + "");
 
 
                 } else if (msg.what == DataNotify.DATA_UNSUCCESS) {
-                    Log.e(TAG, "getUserInfo error!");
+                    LogUtil.e("getUserInfo error!");
                 }
             }
         };

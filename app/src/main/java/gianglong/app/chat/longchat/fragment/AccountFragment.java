@@ -2,11 +2,11 @@ package gianglong.app.chat.longchat.fragment;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,30 +19,34 @@ import gianglong.app.chat.longchat.activity.LoginActivity;
 import gianglong.app.chat.longchat.activity.MainActivity;
 import gianglong.app.chat.longchat.activity.ProfileActivity;
 import gianglong.app.chat.longchat.activity.TakeInfoDetailActivity;
+import gianglong.app.chat.longchat.database.DatabaseHandler;
 import gianglong.app.chat.longchat.entity.BasicUserInfoEntity;
 import gianglong.app.chat.longchat.entity.GlobalVars;
 import gianglong.app.chat.longchat.entity.UserEntity;
 import gianglong.app.chat.longchat.service.UserService;
 import gianglong.app.chat.longchat.utils.DataNotify;
+import gianglong.app.chat.longchat.utils.LogUtil;
 import gianglong.app.chat.longchat.utils.ProgressWheel;
 import gianglong.app.chat.longchat.utils.RippleViewLinear;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class AccountFragment extends Fragment{
-    String TAG = getClass().getSimpleName();
     View v;
     RippleViewLinear rippleViewLinear1, rippleViewLinear2, rippleViewLinear3, rippleViewLinear4, layout_signout;
     SweetAlertDialog mSweetAlertDialog;
     ProgressWheel progressWheel;
     TextView tvName, tvIntroduce;
     UserEntity user;
-
+    DatabaseHandler databaseHandler;
+    SharedPreferences pref;
 
 
     public AccountFragment() {
-
+        databaseHandler = DatabaseHandler.getInstance(getContext());
     }
 
 
@@ -55,7 +59,18 @@ public class AccountFragment extends Fragment{
         initConfig();
         eventHandle();
 
-        getBasicUserInfo();
+        pref = getActivity().getSharedPreferences("user", MODE_PRIVATE);
+        user = databaseHandler.getUserByID(pref.getString(DatabaseHandler.KEY_USER_ID, ""));
+
+
+        if(databaseHandler.isCheckExist(DatabaseHandler.TABLE_USER, DatabaseHandler.KEY_USER_ID, user.getId())){
+            getUserInfo(user.getId());
+        }else{
+//            getBasicUserInfo();
+            LogUtil.e("This user is not exist!!!");
+        }
+
+
         return v;
     }
 
@@ -128,7 +143,6 @@ public class AccountFragment extends Fragment{
 
 
     public void setData() {
-        user = UserEntity.getInstance();
         if (user != null) {
             tvName.setText(user.getName());
             tvIntroduce.setText(user.getIntrodution());
@@ -149,14 +163,13 @@ public class AccountFragment extends Fragment{
                     GlobalVars.setUserEntity(userEntity);
 
                     setData();
-//                    Toast.makeText(getActivity(), databaseHandler.isUserExist(userEntity.getId()) + "", Toast.LENGTH_SHORT).show();
 
                 } else if (msg.what == DataNotify.DATA_SUCCESS_WITH_NO_DATA) {
 
                     Intent it = new Intent(getActivity(), TakeInfoDetailActivity.class);
                     startActivity(it);
                 } else if (msg.what == DataNotify.DATA_UNSUCCESS) {
-                    Log.e(TAG, "getUserInfo error!");
+                    LogUtil.e("getUserInfo error!");
                 }
             }
         };
@@ -176,7 +189,7 @@ public class AccountFragment extends Fragment{
                     GlobalVars.setBasicUserInfoEntity(entity);
 
 
-                    getUserInfo(entity.getUid());
+//                    getUserInfo(entity.getUid());
                 } else if (msg.what == DataNotify.DATA_UNSUCCESS) {
                     Toast.makeText(getActivity(), "Error!!!", Toast.LENGTH_SHORT).show();
                 }

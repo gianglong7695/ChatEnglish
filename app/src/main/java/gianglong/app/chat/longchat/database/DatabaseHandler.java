@@ -20,7 +20,7 @@ import static android.content.ContentValues.TAG;
  * Created by VCCORP on 5/12/2017.
  */
 
-public class DatabaseHelper extends SQLiteOpenHelper{
+public class DatabaseHandler extends SQLiteOpenHelper{
     // Database Info
     public static final String DATABASE_NAME = "longchat";
     public static final int DATABASE_VERSION = 1;
@@ -28,6 +28,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     // Table Names
     public static final String TABLE_USER = "tbl_user";
     public static final String TABLE_ROOM = "tbl_room";
+    public static final String TABLE_MSG = "tbl_message";
 
 
     // User Table Columns
@@ -46,15 +47,21 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     public static final String KEY_ROOM_ID = "id";
     public static final String KEY_ROOM_VALUE = "value";
 
+    // Message Table Columns
+    public static final String KEY_MSG_RECEIVER_ID = "id";
+    public static final String KEY_MSG_CONTENT = "content";
+    public static final String KEY_MSG_TIME = "time";
+    public static final String KEY_MSG_SENDER_ID = "sender_id";
 
-    private static DatabaseHelper instance;
+
+    private static DatabaseHandler instance;
 
 
-    public static synchronized DatabaseHelper getInstance(Context context) {
+    public static synchronized DatabaseHandler getInstance(Context context) {
         // Use the application context, which will ensure that you
         // don't accidentally leak an Activity's context.
         if (instance == null) {
-            instance = new DatabaseHelper(context.getApplicationContext());
+            instance = new DatabaseHandler(context);
         }
         return instance;
     }
@@ -64,7 +71,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
      * Constructor should be private to prevent direct instantiation.
      * Make a call to the static method "getInstance()" instead.
      */
-    private DatabaseHelper(Context context) {
+    public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -84,7 +91,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         String CREATE_TABLE_USER = "CREATE TABLE " + TABLE_USER + "(" +
                 KEY_USER_ID + " TEXT PRIMARY KEY," + // Define a primary key
                 KEY_USER_NAME + " TEXT," +
-                KEY_USER_EMAIL + "TEXT," +
+                KEY_USER_EMAIL + " TEXT," +
                 KEY_USER_PASSWORD + " TEXT," +
                 KEY_USER_GENDER + " TEXT," +
                 KEY_USER_COUNTRY + " TEXT," +
@@ -100,8 +107,17 @@ public class DatabaseHelper extends SQLiteOpenHelper{
                 KEY_ROOM_VALUE + " TEXT" +
                 ")";
 
+
+        String CREATE_TABLE_MESSAGE = "CREATE TABLE " + TABLE_MSG + "(" +
+                KEY_MSG_RECEIVER_ID + " TEXT PRIMARY KEY," + // Define a primary key
+                KEY_MSG_CONTENT + " TEXT," +
+                KEY_MSG_TIME + " TEXT," +
+                KEY_MSG_SENDER_ID + " TEXT" +
+                ")";
+
         db.execSQL(CREATE_TABLE_USER);
         db.execSQL(CREATE_TABLE_ROOM);
+        db.execSQL(CREATE_TABLE_MESSAGE);
     }
 
 
@@ -109,7 +125,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getReadableDatabase();
         try {
 
-            Cursor cursor = db.rawQuery("SELECT " + columnName + " FROM " + tableName + " WHERE " + columnName + "='" + columnValue + "'", null);
+            Cursor cursor = db.rawQuery("SELECT " + " * " + " FROM " + tableName + " WHERE " + columnName + "='" + columnValue + "'", null);
             if (cursor.moveToFirst()) {
                 db.close();
                 return true;//record Exists
@@ -137,6 +153,26 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
 
     /* -----------------USER----------------------- */
+    public long addUser(UserEntity user) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_USER_ID, user.getId());
+        values.put(KEY_USER_NAME, user.getName());
+        values.put(KEY_USER_EMAIL, user.getEmail());
+        values.put(KEY_USER_PASSWORD, user.getPassword());
+        values.put(KEY_USER_GENDER, user.getGender());
+        values.put(KEY_USER_COUNTRY, user.getCountry());
+        values.put(KEY_USER_AVATAR, user.getAvatar());
+        values.put(KEY_USER_INTRODUCE, user.getIntrodution());
+        values.put(KEY_USER_RATE, user.getRate());
+        values.put(KEY_USER_REVIEWER, user.getReviewers());
+
+        long result_code = db.insert(TABLE_USER, null, values);
+        db.close();
+
+        return result_code;
+    }
 
     public long addOrUpdateUser(UserEntity user) {
         // The database connection is cached so it's not expensive to call getWriteableDatabase() multiple times.
@@ -228,6 +264,42 @@ public class DatabaseHelper extends SQLiteOpenHelper{
             }
         }
         return alUser;
+    }
+
+
+    // Getting single contact
+    public UserEntity getUserByID (String id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor c = db.query(TABLE_USER, new String[] {
+                        KEY_USER_ID,
+                        KEY_USER_NAME,
+                        KEY_USER_EMAIL,
+                        KEY_USER_PASSWORD,
+                        KEY_USER_GENDER,
+                        KEY_USER_COUNTRY,
+                        KEY_USER_AVATAR,
+                        KEY_USER_INTRODUCE,
+                        KEY_USER_RATE,
+                        KEY_USER_REVIEWER},
+                KEY_USER_ID + "=?", new String[] { String.valueOf(id) }, null, null, null, null);
+        if (c != null)
+            c.moveToFirst();
+
+        UserEntity userEntity = new UserEntity(
+                c.getString(0),
+                c.getString(1),
+                c.getString(2),
+                c.getString(3),
+                c.getString(4),
+                c.getString(5),
+                c.getString(6),
+                c.getString(7),
+                c.getDouble(8),
+                c.getInt(9)
+        );
+        // return user entity
+        return userEntity;
     }
 
     public int updateUserField(UserEntity user, String columName, String value) {

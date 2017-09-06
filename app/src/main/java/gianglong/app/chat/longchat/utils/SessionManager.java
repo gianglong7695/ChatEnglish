@@ -3,11 +3,8 @@ package gianglong.app.chat.longchat.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.util.Log;
 
 public class SessionManager {
-	private static String TAG = SessionManager.class.getSimpleName();
-
 	// Shared Preferences
 	SharedPreferences pref;
 
@@ -35,7 +32,7 @@ public class SessionManager {
 		// commit changes
 		editor.commit();
 
-		Log.d(TAG, "User login session modified!");
+		LogUtil.d("User login session modified!");
 	}
 	
 	public boolean isLoggedIn(){

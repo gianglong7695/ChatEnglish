@@ -1,6 +1,7 @@
 package gianglong.app.chat.longchat.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import com.google.firebase.auth.FirebaseUser;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import gianglong.app.chat.longchat.R;
+import gianglong.app.chat.longchat.database.DatabaseHandler;
 import gianglong.app.chat.longchat.entity.UserEntity;
 import gianglong.app.chat.longchat.utils.RippleView;
 import gianglong.app.chat.longchat.utils.SessionManager;
@@ -55,12 +57,14 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private SessionManager mSessionManager;
     private SweetDialog mSweetDialog;
+    private DatabaseHandler databaseHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        databaseHandler = new DatabaseHandler(this);
         init();
         runAnimation();
     }
@@ -132,7 +136,12 @@ public class LoginActivity extends AppCompatActivity {
                             userEntity.setId(fUser.getUid());
                             userEntity.setName(fUser.getDisplayName());
 
-
+                            // Saving basic user entity to database & save id to preference
+                            databaseHandler.addOrUpdateUser(userEntity);
+                            SharedPreferences pref = getSharedPreferences("user", MODE_PRIVATE);
+                            SharedPreferences.Editor edit = pref.edit();
+                            edit.putString(DatabaseHandler.KEY_USER_ID, userEntity.getId());
+                            edit.commit();
                         } else {
                             mSweetDialog.dismiss();
                             mSweetDialog.showError("Oops...", "Email or password is incorrect!");

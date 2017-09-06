@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import gianglong.app.chat.longchat.R;
+import gianglong.app.chat.longchat.database.DatabaseHandler;
 import gianglong.app.chat.longchat.fragment.AccountFragment;
 import gianglong.app.chat.longchat.fragment.FriendFragment;
 import gianglong.app.chat.longchat.fragment.MessageFragment;
@@ -68,8 +69,8 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
     private MyViewPagerAdapter viewPagerAdapter;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private String TAG = getClass().getSimpleName();
     public static SessionManager mSessionManager;
+    private DatabaseHandler database;
 
 
 
@@ -78,7 +79,7 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
+        database = DatabaseHandler.getInstance(this);
         init();
         initFragment();
     }
