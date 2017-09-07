@@ -313,6 +313,24 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     }
 
 
+    public void deleteAllTable(){
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+        try {
+            // Order of deletions is important when foreign key relationships exist.
+            db.delete(TABLE_USER, null, null);
+            db.delete(TABLE_ROOM, null, null);
+            db.delete(TABLE_MSG, null, null);
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.d(TAG, "Error while trying to delete all posts and users");
+        } finally {
+            db.endTransaction();
+        }
+//        db.execSQL("delete from "+ TABLE_NAME);
+    }
+
+
     /* -------ROOM------- */
     public long addOrUpdateRoom(KeyValueEntity room) {
         // The database connection is cached so it's not expensive to call getWriteableDatabase() multiple times.

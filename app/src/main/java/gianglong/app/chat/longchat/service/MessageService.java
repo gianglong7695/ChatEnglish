@@ -19,9 +19,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
-import gianglong.app.chat.longchat.entity.BasicUserInfoEntity;
 import gianglong.app.chat.longchat.entity.KeyValueEntity;
 import gianglong.app.chat.longchat.entity.MessageItemEntity;
+import gianglong.app.chat.longchat.entity.UserEntity;
 import gianglong.app.chat.longchat.utils.Constants;
 import gianglong.app.chat.longchat.utils.DataNotify;
 
@@ -63,13 +63,13 @@ public class MessageService {
     public void getRoomID(final Handler handler, final String guestID) {
         final Message msg = new Message();
         DatabaseReference ref1 = database.child(Constants.NODE_MASTER).child(Constants.NODE_MESSAGE).child(Constants.NODE_ROOM);
-        final DatabaseReference ref2 = database.child(Constants.NODE_MASTER).child(Constants.NODE_MESSAGE).child(Constants.NODE_ROOM).child(BasicUserInfoEntity.getInstance().getUid());
-        final DatabaseReference ref3 = database.child(Constants.NODE_MASTER).child(Constants.NODE_MESSAGE).child(Constants.NODE_ROOM).child(BasicUserInfoEntity.getInstance().getUid()).child(guestID);
+        final DatabaseReference ref2 = database.child(Constants.NODE_MASTER).child(Constants.NODE_MESSAGE).child(Constants.NODE_ROOM).child(UserEntity.getInstance().getId());
+        final DatabaseReference ref3 = database.child(Constants.NODE_MASTER).child(Constants.NODE_MESSAGE).child(Constants.NODE_ROOM).child(UserEntity.getInstance().getId()).child(guestID);
 
         ref1.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.hasChild(BasicUserInfoEntity.getInstance().getUid())) {
+                if (dataSnapshot.hasChild(UserEntity.getInstance().getId())) {
                     ref2.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot1) {
@@ -132,11 +132,11 @@ public class MessageService {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.hasChild(id)) {
-                    refMine = ref.child(BasicUserInfoEntity.getInstance().getUid()).child(id);
+                    refMine = ref.child(UserEntity.getInstance().getId()).child(id);
                     refMine.setValue(time).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            refYours = ref.child(id).child(BasicUserInfoEntity.getInstance().getUid());
+                            refYours = ref.child(id).child(UserEntity.getInstance().getId());
                             refYours.setValue(time).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
@@ -172,8 +172,8 @@ public class MessageService {
         ref1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.hasChild(BasicUserInfoEntity.getInstance().getUid())){
-                    ref1.child(BasicUserInfoEntity.getInstance().getUid()).addValueEventListener(new ValueEventListener() {
+                if(dataSnapshot.hasChild(UserEntity.getInstance().getId())){
+                    ref1.child(UserEntity.getInstance().getId()).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();

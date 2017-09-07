@@ -127,7 +127,7 @@ public class ChatActivity extends AppCompatActivity {
                     String hour = df.format(date);
                     int type = rd.nextInt(2);
 
-                    MessageItemEntity messageItem = new MessageItemEntity(String.valueOf(type), etMessage.getText().toString(), hour, 0 , false , false, BasicUserInfoEntity.getInstance().getUid());
+                    MessageItemEntity messageItem = new MessageItemEntity(String.valueOf(type), etMessage.getText().toString(), hour, 0 , false , false, UserEntity.getInstance().getId());
                     alMsg.add(messageItem);
 
                     if(roomID == null){
@@ -315,7 +315,7 @@ public class ChatActivity extends AppCompatActivity {
                             }
                         });
                     }catch (Exception e){
-                        database.child(Constants.NODE_MASTER).child(Constants.NODE_MESSAGE).child(Constants.NODE_BOX).child(roomID).setValue(1);
+//                        database.child(Constants.NODE_MASTER).child(Constants.NODE_MESSAGE).child(Constants.NODE_BOX).child(roomID).setValue(1);
                         getRoomID();
                     }
 

@@ -44,7 +44,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import gianglong.app.chat.longchat.R;
-import gianglong.app.chat.longchat.entity.BasicUserInfoEntity;
 import gianglong.app.chat.longchat.entity.UserEntity;
 import gianglong.app.chat.longchat.utils.Constants;
 import gianglong.app.chat.longchat.utils.LogUtil;
@@ -259,15 +258,15 @@ public class TakeInfoDetailActivity extends AppCompatActivity {
                 .build();
 
 
-        LogUtil.e(BasicUserInfoEntity.getInstance().toString());
+        LogUtil.e(UserEntity.getInstance().toString());
 
         user.updateProfile(profileUpdates)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            UserEntity userEntity = new UserEntity(BasicUserInfoEntity.getInstance().getUid(),
-                                    BasicUserInfoEntity.getInstance().getEmail(),
+                            UserEntity userEntity = new UserEntity(UserEntity.getInstance().getId(),
+                                    UserEntity.getInstance().getEmail(),
                                     etName.getText().toString(),
                                     "password",
                                     arrGender[genderPos],
@@ -277,7 +276,7 @@ public class TakeInfoDetailActivity extends AppCompatActivity {
                                     1.5,
                                     10
                             );
-                            mDatabase.child(Constants.NODE_MASTER).child(Constants.NODE_USER).child(BasicUserInfoEntity.getInstance().getUid()).setValue(userEntity).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            mDatabase.child(Constants.NODE_MASTER).child(Constants.NODE_USER).child(UserEntity.getInstance().getId()).setValue(userEntity).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     mSweetDialog.dismiss();

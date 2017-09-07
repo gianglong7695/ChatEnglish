@@ -3,7 +3,6 @@ package gianglong.app.chat.longchat.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,10 +13,12 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import gianglong.app.chat.longchat.R;
 import gianglong.app.chat.longchat.activity.LoginActivity;
-import gianglong.app.chat.longchat.activity.MainActivity;
+import gianglong.app.chat.longchat.activity.ProfileActivity;
 import gianglong.app.chat.longchat.database.DatabaseHandler;
 import gianglong.app.chat.longchat.entity.UserEntity;
 import gianglong.app.chat.longchat.utils.ProgressWheel;
@@ -28,12 +29,26 @@ import gianglong.app.chat.longchat.utils.RippleViewLinear;
  */
 public class AccountFragment extends Fragment {
     View v;
-    RippleViewLinear rippleViewLinear1, rippleViewLinear2, rippleViewLinear3, rippleViewLinear4, layout_signout;
-    SweetAlertDialog mSweetAlertDialog;
+    @BindView(R.id.rippleViewLinear1)
+    RippleViewLinear rippleViewLinear1;
+    @BindView(R.id.rippleViewLinear2)
+    RippleViewLinear rippleViewLinear2;
+    @BindView(R.id.rippleViewLinear3)
+    RippleViewLinear rippleViewLinear3;
+    @BindView(R.id.rippleViewLinear4)
+    RippleViewLinear rippleViewLinear4;
+    @BindView(R.id.layout_signout)
+    RippleViewLinear layout_signout;
+    @BindView(R.id.tvName)
+    TextView tvName;
+    @BindView(R.id.tvIntroduce)
+    TextView tvIntroduce;
+    @BindView(R.id.progressWheel)
     ProgressWheel progressWheel;
-    TextView tvName, tvIntroduce;
-    UserEntity user;
-    DatabaseHandler databaseHandler;
+
+    private SweetAlertDialog mSweetAlertDialog;
+    private UserEntity user;
+    private DatabaseHandler databaseHandler;
 
 
     public AccountFragment() {
@@ -45,20 +60,15 @@ public class AccountFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_account, container, false);
+        ButterKnife.bind(this, v);
 
         initUI();
-        initConfig();
         eventHandle();
 
 
         return v;
     }
 
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     public void onStart() {
@@ -73,26 +83,13 @@ public class AccountFragment extends Fragment {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    public void onGetUserEntity (UserEntity userEntity){
+    public void onGetUserEntity(UserEntity userEntity) {
         user = userEntity;
-        tvName.setText(userEntity.getName());
-        tvIntroduce.setText(userEntity.getIntrodution());
+        tvName.setText(user.getName());
+        tvIntroduce.setText(user.getIntrodution());
     }
 
     public void initUI() {
-        rippleViewLinear1 = (RippleViewLinear) v.findViewById(R.id.rippleViewLinear1);
-        rippleViewLinear2 = (RippleViewLinear) v.findViewById(R.id.rippleViewLinear2);
-        rippleViewLinear3 = (RippleViewLinear) v.findViewById(R.id.rippleViewLinear3);
-        rippleViewLinear4 = (RippleViewLinear) v.findViewById(R.id.rippleViewLinear4);
-        layout_signout = (RippleViewLinear) v.findViewById(R.id.layout_signout);
-        progressWheel = (ProgressWheel) v.findViewById(R.id.progressWheel);
-        tvName = (TextView) v.findViewById(R.id.tvName);
-        tvIntroduce = (TextView) v.findViewById(R.id.tvIntroduce);
-
-    }
-
-
-    public void initConfig() {
         // progress wheel config
         progressWheel.setProgress(0.5f);
         progressWheel.setBarWidth(7);
@@ -108,7 +105,6 @@ public class AccountFragment extends Fragment {
             }
         });
 
-
     }
 
 
@@ -116,9 +112,8 @@ public class AccountFragment extends Fragment {
         rippleViewLinear1.setOnRippleCompleteListener(new RippleViewLinear.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleViewLinear rippleView) {
-//                Intent it = new Intent(getActivity(), ProfileActivity.class);
-//                startActivity(it);
-                EventBus.getDefault().post(new String("hákhdjkjhk"));
+                Intent it = new Intent(getActivity(), ProfileActivity.class);
+                startActivity(it);
             }
         });
 
@@ -134,7 +129,8 @@ public class AccountFragment extends Fragment {
                     @Override
                     public void onClick(SweetAlertDialog sDialog) {
                         sDialog.dismissWithAnimation();
-                        MainActivity.mSessionManager.setLogin(false);
+                        databaseHandler.deleteAllTable();
+                        EventBus.getDefault().post(new Boolean(false));
                         Intent it = new Intent(getActivity(), LoginActivity.class);
                         startActivity(it);
                         getActivity().finish();

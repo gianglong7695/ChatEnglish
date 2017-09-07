@@ -12,8 +12,8 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import gianglong.app.chat.longchat.R;
-import gianglong.app.chat.longchat.entity.BasicUserInfoEntity;
 import gianglong.app.chat.longchat.entity.MessageItemEntity;
+import gianglong.app.chat.longchat.entity.UserEntity;
 import gianglong.app.chat.longchat.utils.Constants;
 import gianglong.app.chat.longchat.utils.DataNotify;
 
@@ -49,7 +49,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
 
     @Override
     public int getItemViewType(int position) {
-        if (alMsg.get(position).getSenderID() == BasicUserInfoEntity.getInstance().getUid()) {
+        if (alMsg.get(position).getSenderID() == UserEntity.getInstance().getId()) {
             return Constants.TYPE_MINE;
         } else {
             return Constants.TYPE_YOURS;

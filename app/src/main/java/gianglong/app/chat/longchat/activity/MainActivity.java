@@ -16,11 +16,13 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import gianglong.app.chat.longchat.R;
 import gianglong.app.chat.longchat.database.DatabaseHandler;
+import gianglong.app.chat.longchat.entity.GlobalVars;
 import gianglong.app.chat.longchat.entity.UserEntity;
 import gianglong.app.chat.longchat.fragment.AccountFragment;
 import gianglong.app.chat.longchat.fragment.FriendFragment;
@@ -78,7 +80,7 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
     private MyViewPagerAdapter viewPagerAdapter;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    public static SessionManager mSessionManager;
+    private SessionManager mSessionManager;
     private DatabaseHandler databaseHandler;
     private SharedPreferences pref;
     private UserEntity user;
@@ -90,12 +92,24 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
         databaseHandler = DatabaseHandler.getInstance(this);
         init();
         initFragment();
     }
 
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+
+    @Subscribe
+    public void onLogout (Boolean isLogout) {
+        mSessionManager.setLogin(false);
+    }
 
     public void init() {
         mSessionManager = new SessionManager(getApplicationContext());
@@ -113,6 +127,8 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
                 user = databaseHandler.getUserByID(userID);
 
                 EventBus.getDefault().postSticky(user);
+                //Saving user entity to global variable
+                GlobalVars.setUserEntity(user);
             } else {
                 getUserInfo(userID);
             }
@@ -267,6 +283,7 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
 
                     // Send user enity to onEvent method of Account fragment
                     EventBus.getDefault().post(user);
+                    GlobalVars.setUserEntity(user);
                 } else if (msg.what == DataNotify.DATA_SUCCESS_WITH_NO_DATA) {
 
 
