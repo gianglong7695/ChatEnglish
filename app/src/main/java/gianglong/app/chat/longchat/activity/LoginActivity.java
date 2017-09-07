@@ -137,7 +137,6 @@ public class LoginActivity extends AppCompatActivity {
                             userEntity.setName(fUser.getDisplayName());
 
                             // Saving basic user entity to database & save id to preference
-                            databaseHandler.addOrUpdateUser(userEntity);
                             SharedPreferences pref = getSharedPreferences("user", MODE_PRIVATE);
                             SharedPreferences.Editor edit = pref.edit();
                             edit.putString(DatabaseHandler.KEY_USER_ID, userEntity.getId());

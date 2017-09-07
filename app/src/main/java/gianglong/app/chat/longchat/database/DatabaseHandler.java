@@ -153,26 +153,6 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
 
     /* -----------------USER----------------------- */
-    public long addUser(UserEntity user) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put(KEY_USER_ID, user.getId());
-        values.put(KEY_USER_NAME, user.getName());
-        values.put(KEY_USER_EMAIL, user.getEmail());
-        values.put(KEY_USER_PASSWORD, user.getPassword());
-        values.put(KEY_USER_GENDER, user.getGender());
-        values.put(KEY_USER_COUNTRY, user.getCountry());
-        values.put(KEY_USER_AVATAR, user.getAvatar());
-        values.put(KEY_USER_INTRODUCE, user.getIntrodution());
-        values.put(KEY_USER_RATE, user.getRate());
-        values.put(KEY_USER_REVIEWER, user.getReviewers());
-
-        long result_code = db.insert(TABLE_USER, null, values);
-        db.close();
-
-        return result_code;
-    }
 
     public long addOrUpdateUser(UserEntity user) {
         // The database connection is cached so it's not expensive to call getWriteableDatabase() multiple times.
@@ -282,24 +262,28 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                         KEY_USER_INTRODUCE,
                         KEY_USER_RATE,
                         KEY_USER_REVIEWER},
-                KEY_USER_ID + "=?", new String[] { String.valueOf(id) }, null, null, null, null);
-        if (c != null)
+                KEY_USER_ID + "=?", new String[] {id}, null, null, null, null);
+
+        if (c != null){
             c.moveToFirst();
 
-        UserEntity userEntity = new UserEntity(
-                c.getString(0),
-                c.getString(1),
-                c.getString(2),
-                c.getString(3),
-                c.getString(4),
-                c.getString(5),
-                c.getString(6),
-                c.getString(7),
-                c.getDouble(8),
-                c.getInt(9)
-        );
-        // return user entity
-        return userEntity;
+            UserEntity userEntity = new UserEntity(
+                    c.getString(0),
+                    c.getString(1),
+                    c.getString(2),
+                    c.getString(3),
+                    c.getString(4),
+                    c.getString(5),
+                    c.getString(6),
+                    c.getString(7),
+                    c.getDouble(8),
+                    c.getInt(9)
+            );
+            // return user entity if exist
+            return userEntity;
+        }
+
+        return null;
     }
 
     public int updateUserField(UserEntity user, String columName, String value) {

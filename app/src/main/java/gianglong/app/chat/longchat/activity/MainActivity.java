@@ -1,7 +1,10 @@
 package gianglong.app.chat.longchat.activity;
 
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -12,14 +15,20 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import org.greenrobot.eventbus.EventBus;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import gianglong.app.chat.longchat.R;
 import gianglong.app.chat.longchat.database.DatabaseHandler;
+import gianglong.app.chat.longchat.entity.UserEntity;
 import gianglong.app.chat.longchat.fragment.AccountFragment;
 import gianglong.app.chat.longchat.fragment.FriendFragment;
 import gianglong.app.chat.longchat.fragment.MessageFragment;
 import gianglong.app.chat.longchat.fragment.PeopleFragment;
+import gianglong.app.chat.longchat.service.UserService;
+import gianglong.app.chat.longchat.utils.DataNotify;
+import gianglong.app.chat.longchat.utils.LogUtil;
 import gianglong.app.chat.longchat.utils.RippleView;
 import gianglong.app.chat.longchat.utils.SessionManager;
 
@@ -70,8 +79,10 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     public static SessionManager mSessionManager;
-    private DatabaseHandler database;
-
+    private DatabaseHandler databaseHandler;
+    private SharedPreferences pref;
+    private UserEntity user;
+    private String userID;
 
 
     @Override
@@ -79,10 +90,11 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        database = DatabaseHandler.getInstance(this);
+        databaseHandler = DatabaseHandler.getInstance(this);
         init();
         initFragment();
     }
+
 
 
     public void init() {
@@ -92,6 +104,19 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
         layout_friend.setOnClickListener(this);
         layout_people.setOnClickListener(this);
         layout_account.setOnClickListener(this);
+
+        pref = getSharedPreferences("user", MODE_PRIVATE);
+        userID = pref.getString(DatabaseHandler.KEY_USER_ID, DataNotify.NO_DATA);
+
+        if (userID != null) {
+            if (databaseHandler.isCheckExist(DatabaseHandler.TABLE_USER, DatabaseHandler.KEY_USER_ID, userID)) {
+                user = databaseHandler.getUserByID(userID);
+
+                EventBus.getDefault().postSticky(user);
+            } else {
+                getUserInfo(userID);
+            }
+        }
     }
 
 
@@ -228,5 +253,29 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
         public int getCount() {
             return tabDrawableOff.length;
         }
+    }
+
+
+    public void getUserInfo(String id) {
+        Handler handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                if (msg.what == DataNotify.DATA_SUCCESS) {
+                    user = (UserEntity) msg.obj;
+                    databaseHandler.addOrUpdateUser(user);
+
+                    // Send user enity to onEvent method of Account fragment
+                    EventBus.getDefault().post(user);
+                } else if (msg.what == DataNotify.DATA_SUCCESS_WITH_NO_DATA) {
+
+
+                } else if (msg.what == DataNotify.DATA_UNSUCCESS) {
+                    LogUtil.e("getUserInfo error!");
+                }
+            }
+        };
+
+        new UserService(this).getUserInfo(handler, id);
     }
 }

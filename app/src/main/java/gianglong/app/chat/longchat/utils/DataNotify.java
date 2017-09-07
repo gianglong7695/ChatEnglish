@@ -9,4 +9,5 @@ public class DataNotify {
     public static final int DATA_SUCCESS_WITH_NO_DATA = 0x005;
     public static final int DATA_UNSUCCESS = 0x002;
     public static final int NO_NETWORK = 0x003;
+    public static final String NO_DATA = "NOT_YET";
 }

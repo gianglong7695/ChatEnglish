@@ -2,39 +2,31 @@ package gianglong.app.chat.longchat.fragment;
 
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import gianglong.app.chat.longchat.R;
 import gianglong.app.chat.longchat.activity.LoginActivity;
 import gianglong.app.chat.longchat.activity.MainActivity;
-import gianglong.app.chat.longchat.activity.ProfileActivity;
-import gianglong.app.chat.longchat.activity.TakeInfoDetailActivity;
 import gianglong.app.chat.longchat.database.DatabaseHandler;
-import gianglong.app.chat.longchat.entity.BasicUserInfoEntity;
-import gianglong.app.chat.longchat.entity.GlobalVars;
 import gianglong.app.chat.longchat.entity.UserEntity;
-import gianglong.app.chat.longchat.service.UserService;
-import gianglong.app.chat.longchat.utils.DataNotify;
-import gianglong.app.chat.longchat.utils.LogUtil;
 import gianglong.app.chat.longchat.utils.ProgressWheel;
 import gianglong.app.chat.longchat.utils.RippleViewLinear;
-
-import static android.content.Context.MODE_PRIVATE;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AccountFragment extends Fragment{
+public class AccountFragment extends Fragment {
     View v;
     RippleViewLinear rippleViewLinear1, rippleViewLinear2, rippleViewLinear3, rippleViewLinear4, layout_signout;
     SweetAlertDialog mSweetAlertDialog;
@@ -42,38 +34,50 @@ public class AccountFragment extends Fragment{
     TextView tvName, tvIntroduce;
     UserEntity user;
     DatabaseHandler databaseHandler;
-    SharedPreferences pref;
 
 
     public AccountFragment() {
         databaseHandler = DatabaseHandler.getInstance(getContext());
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_account, container, false);
+
         initUI();
         initConfig();
         eventHandle();
-
-        pref = getActivity().getSharedPreferences("user", MODE_PRIVATE);
-        user = databaseHandler.getUserByID(pref.getString(DatabaseHandler.KEY_USER_ID, ""));
-
-
-        if(databaseHandler.isCheckExist(DatabaseHandler.TABLE_USER, DatabaseHandler.KEY_USER_ID, user.getId())){
-            getUserInfo(user.getId());
-        }else{
-//            getBasicUserInfo();
-            LogUtil.e("This user is not exist!!!");
-        }
 
 
         return v;
     }
 
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onGetUserEntity (UserEntity userEntity){
+        user = userEntity;
+        tvName.setText(userEntity.getName());
+        tvIntroduce.setText(userEntity.getIntrodution());
+    }
 
     public void initUI() {
         rippleViewLinear1 = (RippleViewLinear) v.findViewById(R.id.rippleViewLinear1);
@@ -112,8 +116,9 @@ public class AccountFragment extends Fragment{
         rippleViewLinear1.setOnRippleCompleteListener(new RippleViewLinear.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleViewLinear rippleView) {
-                Intent it = new Intent(getActivity(), ProfileActivity.class);
-                startActivity(it);
+//                Intent it = new Intent(getActivity(), ProfileActivity.class);
+//                startActivity(it);
+                EventBus.getDefault().post(new String("hákhdjkjhk"));
             }
         });
 
@@ -139,64 +144,6 @@ public class AccountFragment extends Fragment{
             }
         });
 
-    }
-
-
-    public void setData() {
-        if (user != null) {
-            tvName.setText(user.getName());
-            tvIntroduce.setText(user.getIntrodution());
-        }
-
-
-    }
-
-
-    public void getUserInfo(String id) {
-        Handler handler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                if (msg.what == DataNotify.DATA_SUCCESS) {
-
-                    UserEntity userEntity = (UserEntity) msg.obj;
-                    GlobalVars.setUserEntity(userEntity);
-
-                    setData();
-
-                } else if (msg.what == DataNotify.DATA_SUCCESS_WITH_NO_DATA) {
-
-                    Intent it = new Intent(getActivity(), TakeInfoDetailActivity.class);
-                    startActivity(it);
-                } else if (msg.what == DataNotify.DATA_UNSUCCESS) {
-                    LogUtil.e("getUserInfo error!");
-                }
-            }
-        };
-
-        new UserService(getActivity()).getUserInfo(handler, id);
-    }
-
-
-    public void getBasicUserInfo() {
-        Handler handler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                if (msg.what == DataNotify.DATA_SUCCESS) {
-
-                    BasicUserInfoEntity entity = (BasicUserInfoEntity) msg.obj;
-                    GlobalVars.setBasicUserInfoEntity(entity);
-
-
-//                    getUserInfo(entity.getUid());
-                } else if (msg.what == DataNotify.DATA_UNSUCCESS) {
-                    Toast.makeText(getActivity(), "Error!!!", Toast.LENGTH_SHORT).show();
-                }
-            }
-        };
-
-        new UserService(getActivity()).getBasicUserInfo(handler);
     }
 
 }

@@ -9,8 +9,8 @@ import java.io.Serializable;
 public class UserEntity implements Serializable {
 
     private String id;
-    private String email;
     private String name;
+    private String email;
     private String password;
     private String gender;
     private String country;
@@ -38,10 +38,10 @@ public class UserEntity implements Serializable {
     }
 
 
-    public UserEntity(String id, String email, String name, String password, String gender, String country, String avatar, String introdution, double rate, int reviewers) {
+    public UserEntity(String id, String name, String email, String password, String gender, String country, String avatar, String introdution, double rate, int reviewers) {
         this.id = id;
-        this.email = email;
         this.name = name;
+        this.email = email;
         this.password = password;
         this.gender = gender;
         this.country = country;
