@@ -17,7 +17,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import gianglong.app.chat.longchat.R;
-import gianglong.app.chat.longchat.activity.LoginActivity;
 import gianglong.app.chat.longchat.activity.ProfileActivity;
 import gianglong.app.chat.longchat.database.DatabaseHandler;
 import gianglong.app.chat.longchat.entity.UserEntity;
@@ -131,9 +130,6 @@ public class AccountFragment extends Fragment {
                         sDialog.dismissWithAnimation();
                         databaseHandler.deleteAllTable();
                         EventBus.getDefault().post(new Boolean(false));
-                        Intent it = new Intent(getActivity(), LoginActivity.class);
-                        startActivity(it);
-                        getActivity().finish();
                     }
                 });
                 mSweetAlertDialog.show();

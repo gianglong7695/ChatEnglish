@@ -1,5 +1,6 @@
 package gianglong.app.chat.longchat.activity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -109,6 +110,9 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
     @Subscribe
     public void onLogout (Boolean isLogout) {
         mSessionManager.setLogin(false);
+        Intent it = new Intent(this, LoginActivity.class);
+        startActivity(it);
+        finish();
     }
 
     public void init() {
