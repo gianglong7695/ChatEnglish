@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,7 +28,9 @@ import java.io.FileNotFoundException;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import gianglong.app.chat.longchat.R;
+import gianglong.app.chat.longchat.entity.GlobalVars;
 import gianglong.app.chat.longchat.entity.UserEntity;
+import gianglong.app.chat.longchat.utils.LogUtil;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener{
     @BindView(R.id.tv_name)
@@ -59,7 +60,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     private static final int CAM_REQUEST = 1;
     private static final int SELECTED_PICTURE_REQUEST = 2;
-    private final String TAG = getClass().getSimpleName();
+    private UserEntity entity;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -221,7 +224,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 ivAvatar.setImageDrawable(drawable);
 
             }catch (Exception e){
-                Log.d(TAG, e.toString());
+                LogUtil.e(e.toString());
             }
         }
     }
@@ -289,7 +292,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
 
     public void setData(){
-        UserEntity entity = UserEntity.getInstance();
+        entity = GlobalVars.getUserEntity();
         if(entity.getName() != null){
             etName.setText(entity.getName());
             tvName.setText(entity.getName());

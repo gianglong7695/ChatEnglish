@@ -129,7 +129,7 @@ public class AccountFragment extends Fragment {
                     public void onClick(SweetAlertDialog sDialog) {
                         sDialog.dismissWithAnimation();
                         databaseHandler.deleteAllTable();
-                        EventBus.getDefault().post(new Boolean(false));
+                        EventBus.getDefault().postSticky(new Boolean(false));
                     }
                 });
                 mSweetAlertDialog.show();

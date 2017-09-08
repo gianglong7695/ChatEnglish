@@ -18,9 +18,11 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import gianglong.app.chat.longchat.R;
 import gianglong.app.chat.longchat.database.DatabaseHandler;
 import gianglong.app.chat.longchat.entity.GlobalVars;
@@ -86,6 +88,7 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
     private SharedPreferences pref;
     private UserEntity user;
     private String userID;
+    private SweetAlertDialog mSweetAlertDialog;
 
 
     @Override
@@ -107,7 +110,7 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
     }
 
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onLogout (Boolean isLogout) {
         mSessionManager.setLogin(false);
         Intent it = new Intent(this, LoginActivity.class);
@@ -298,5 +301,22 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
         };
 
         new UserService(this).getUserInfo(handler, id);
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        mSweetAlertDialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE);
+        mSweetAlertDialog.setTitleText("Confirm exit");
+        mSweetAlertDialog.setContentText("Close this application. Are you sure ?");
+        mSweetAlertDialog.setCancelText("No");
+        mSweetAlertDialog.setConfirmText("Yes");
+        mSweetAlertDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+            @Override
+            public void onClick(SweetAlertDialog sDialog) {
+                finish();
+            }
+        });
+        mSweetAlertDialog.show();
     }
 }
