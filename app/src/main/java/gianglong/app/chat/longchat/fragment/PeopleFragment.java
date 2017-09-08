@@ -1,39 +1,40 @@
 package gianglong.app.chat.longchat.fragment;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import gianglong.app.chat.longchat.R;
-import gianglong.app.chat.longchat.activity.TakeInfoDetailActivity;
 import gianglong.app.chat.longchat.adapter.ListPeopleAdapter;
-import gianglong.app.chat.longchat.entity.GlobalVars;
 import gianglong.app.chat.longchat.entity.UserEntity;
 import gianglong.app.chat.longchat.service.UserService;
 import gianglong.app.chat.longchat.utils.DataNotify;
+import gianglong.app.chat.longchat.utils.LogUtil;
 import gianglong.app.chat.longchat.utils.ProgressWheel;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class PeopleFragment extends Fragment {
-    String TAG = getClass().getSimpleName();
-    View v;
+    @BindView(R.id.rvListPeople)
     RecyclerView rvListPeople;
-    ArrayList<UserEntity> alPeople;
-    ListPeopleAdapter peopleAdapter;
+    @BindView(R.id.progressWheel)
     ProgressWheel progressWheel;
+
+    private View v;
+    private ArrayList<UserEntity> alPeople;
+    private ListPeopleAdapter peopleAdapter;
 
     public PeopleFragment() {
         // Required empty public constructor
@@ -45,8 +46,8 @@ public class PeopleFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_people, container, false);
+        ButterKnife.bind(this, v);
         initUI();
-        initConfig();
 
         getPeople();
 
@@ -55,8 +56,22 @@ public class PeopleFragment extends Fragment {
 
 
     public void initUI(){
-        rvListPeople = (RecyclerView) v.findViewById(R.id.rvListPeople);
-        progressWheel = (ProgressWheel) v.findViewById(R.id.progressWheel);
+        rvListPeople.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+
+        // progress wheel config
+        progressWheel.setProgress(0.5f);
+        progressWheel.setBarWidth(7);
+        progressWheel.setBarColor(getResources().getColor(R.color.purple));
+        progressWheel.setCallback(new ProgressWheel.ProgressCallback() {
+            @Override
+            public void onProgressUpdate(float progress) {
+                if (progress == 0) {
+                    progressWheel.setProgress(1.0f);
+                } else if (progress == 1.0f) {
+                    progressWheel.setProgress(0.0f);
+                }
+            }
+        });
     }
 
 
@@ -78,7 +93,7 @@ public class PeopleFragment extends Fragment {
 
 
                 } else if (msg.what == DataNotify.DATA_UNSUCCESS) {
-                    Log.e(TAG, "getUserInfo error!");
+                    LogUtil.e("getUserInfo error!");
                 }
             }
         };
@@ -87,23 +102,5 @@ public class PeopleFragment extends Fragment {
     }
 
 
-    public void initConfig(){
-        rvListPeople.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-
-        // progress wheel config
-        progressWheel.setProgress(0.5f);
-        progressWheel.setBarWidth(7);
-        progressWheel.setBarColor(getResources().getColor(R.color.purple));
-        progressWheel.setCallback(new ProgressWheel.ProgressCallback() {
-            @Override
-            public void onProgressUpdate(float progress) {
-                if (progress == 0) {
-                    progressWheel.setProgress(1.0f);
-                } else if (progress == 1.0f) {
-                    progressWheel.setProgress(0.0f);
-                }
-            }
-        });
-    }
 
 }

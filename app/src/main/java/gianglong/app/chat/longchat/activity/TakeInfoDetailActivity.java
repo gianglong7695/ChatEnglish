@@ -254,21 +254,19 @@ public class TakeInfoDetailActivity extends AppCompatActivity {
 
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setDisplayName(etName.getText().toString())
-                .setPhotoUri(Uri.parse("https://example.com/jane-q-user/profile.jpg"))
+                .setPhotoUri(Uri.parse("https://www.timeshighereducation.com/sites/default/files/byline_photos/default-avatar.png"))
                 .build();
 
-
-        LogUtil.e(UserEntity.getInstance().toString());
 
         user.updateProfile(profileUpdates)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            UserEntity userEntity = new UserEntity(UserEntity.getInstance().getId(),
-                                    UserEntity.getInstance().getEmail(),
+                            UserEntity userEntity = new UserEntity(MainActivity.basicUser.getId(),
+                                    MainActivity.basicUser.getEmail(),
                                     etName.getText().toString(),
-                                    "password",
+                                    MainActivity.basicUser.getPassword(),
                                     arrGender[genderPos],
                                     arrCountry[countryPos],
                                     "avatar",

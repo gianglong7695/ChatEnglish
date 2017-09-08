@@ -232,6 +232,17 @@
                             android:background="@drawable/custom_edittext_iconleft"
                             android:padding="10dp"
                             android:src="@drawable/ic_sex_edittext" />
+
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:src="@drawable/ic_sort_down_black"
+                            android:layout_marginRight="10dp"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentEnd="true"
+                            android:visibility="gone"
+                            android:id="@+id/ivSortGender" />
                     </RelativeLayout>
                 </LinearLayout>
 
@@ -307,20 +318,16 @@
                         android:layout_height="40dp"
                         android:layout_marginTop="10dp">
 
-                        <EditText
-                            android:id="@+id/etAddress"
+
+                        <Spinner
+                            android:id="@+id/spCountry"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="@drawable/custom_edittext_selector"
-                            android:hint="(Not yet)"
-                            android:text="Viet Nam"
-                            android:textSize="17sp"
-                            android:paddingLeft="55dp"
-                            android:paddingRight="42.5dp"
-                            android:ellipsize="end"
-                            android:maxLines="1"
+                            android:paddingLeft="40dp"
+                            android:paddingRight="40dp"
                             android:inputType="number"
-                            android:imeOptions="actionDone"
+                            android:imeOptions="actionNext"
                             android:textCursorDrawable="@drawable/custom_cursor_edtitext" />
 
                         <ImageView
@@ -333,14 +340,15 @@
                             android:src="@drawable/ic_location_edittext" />
 
                         <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/ic_pen"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:src="@drawable/ic_sort_down_black"
                             android:layout_marginRight="10dp"
                             android:layout_centerVertical="true"
                             android:layout_alignParentRight="true"
                             android:layout_alignParentEnd="true"
-                            android:id="@+id/ivPenAddress" />
+                            android:visibility="gone"
+                            android:id="@+id/ivSortCountry" />
                     </RelativeLayout>
                 </LinearLayout>
 

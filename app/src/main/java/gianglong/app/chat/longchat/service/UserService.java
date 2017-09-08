@@ -1,11 +1,9 @@
 package gianglong.app.chat.longchat.service;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -18,6 +16,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import gianglong.app.chat.longchat.activity.MainActivity;
 import gianglong.app.chat.longchat.entity.BasicUserInfoEntity;
 import gianglong.app.chat.longchat.entity.UserEntity;
 import gianglong.app.chat.longchat.utils.Constants;
@@ -124,7 +123,7 @@ public class UserService {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                         UserEntity entity = dataSnapshot.getValue(UserEntity.class);
-                        if(!entity.getId().equals(BasicUserInfoEntity.getInstance().getUid())){
+                        if(!entity.getId().equals(MainActivity.basicUser.getId())){
                             alPeople.add(entity);
                         }
 

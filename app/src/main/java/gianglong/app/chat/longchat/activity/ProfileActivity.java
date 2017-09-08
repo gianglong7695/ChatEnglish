@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -28,7 +29,7 @@ import java.io.FileNotFoundException;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import gianglong.app.chat.longchat.R;
-import gianglong.app.chat.longchat.entity.GlobalVars;
+import gianglong.app.chat.longchat.database.DatabaseHandler;
 import gianglong.app.chat.longchat.entity.UserEntity;
 import gianglong.app.chat.longchat.utils.LogUtil;
 
@@ -41,8 +42,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     EditText etPass;
     @BindView(R.id.etEmail)
     EditText etEmail;
-    @BindView(R.id.etAddress)
-    EditText etAddress;
 
     @BindView(R.id.ivPenName)
     ImageView ivPenName;
@@ -50,28 +49,36 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     ImageView ivPenPass;
     @BindView(R.id.ivPenEmail)
     ImageView ivPenEmail;
-    @BindView(R.id.ivPenAddress)
-    ImageView ivPenAddress;
+    @BindView(R.id.ivSortCountry)
+    ImageView ivSortCountry;
+    @BindView(R.id.ivSortGender)
+    ImageView ivSortGender;
     @BindView(R.id.ivAvatar)
     ImageView ivAvatar;
     @BindView(R.id.spGender)
     Spinner spGender;
+    @BindView(R.id.spCountry)
+    Spinner spCountry;
 
 
     private static final int CAM_REQUEST = 1;
     private static final int SELECTED_PICTURE_REQUEST = 2;
     private UserEntity entity;
-
+    private DatabaseHandler databaseHandler;
+    private String[] arrCountry;
+    private int countryPos = 0;
+    private int genderPos = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         ButterKnife.bind(this);
-
+        databaseHandler = DatabaseHandler.getInstance(this);
         init();
         eventHandle();
-        setData();
+
+
     }
 
 
@@ -79,14 +86,21 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("Profile");
 
-        ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.createFromResource(this,
-                R.array.arrGender, R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.createFromResource(this, R.array.arrGender, R.layout.simple_spinner_item);
         genderAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
         spGender.setAdapter(genderAdapter);
 
 
+        arrCountry = getResources().getStringArray(R.array.arrCountry);
+        ArrayAdapter<String> countryAdapter = new ArrayAdapter<>(this, R.layout.item_simple_list, arrCountry);
+        countryAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
+        spCountry.setAdapter(countryAdapter);
+
+
         etPass.setTypeface(Typeface.DEFAULT);
-//        etBirthday.setFocusable(false);
+
+
+        setData();
     }
 
 
@@ -128,14 +142,32 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
 
-        etAddress.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+
+
+        spCountry.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    ivPenAddress.setImageResource(R.drawable.ic_pen_focus);
-                } else {
-                    ivPenAddress.setImageResource(R.drawable.ic_pen);
-                }
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                countryPos = position;
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+
+        spGender.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                genderPos = position;
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
             }
         });
 
@@ -144,7 +176,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         etName.setOnClickListener(this);
         etPass.setOnClickListener(this);
         etEmail.setOnClickListener(this);
-        etAddress.setOnClickListener(this);
 
 
 
@@ -269,9 +300,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.etEmail:
 
                 break;
-            case R.id.etAddress:
-
-                break;
         }
     }
 
@@ -292,7 +320,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
 
     public void setData(){
-        entity = GlobalVars.getUserEntity();
+        entity = databaseHandler.getUserByID(MainActivity.basicUser.getId());
+//        entity = UserEntity.getInstance();
+
+
         if(entity.getName() != null){
             etName.setText(entity.getName());
             tvName.setText(entity.getName());
@@ -308,16 +339,18 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         }
 
 
-        if(entity.getCountry() != null){
-            etAddress.setText(entity.getCountry());
-        }
-
-
         if(entity.getGender() != null){
             if(entity.getGender().equals("Male")){
                 spGender.setSelection(0);
             }else{
                 spGender.setSelection(1);
+            }
+        }
+
+        for (int i = 0; i < arrCountry.length; i++) {
+            if(entity.getCountry().equals(arrCountry[i])){
+                countryPos = i;
+                spCountry.setSelection(countryPos);
             }
         }
 
@@ -329,4 +362,5 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         getMenuInflater().inflate(R.menu.menu_profile, menu);//Menu Resource, Menu
         return true;
     }
+
 }

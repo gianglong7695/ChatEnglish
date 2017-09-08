@@ -15,23 +15,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import gianglong.app.chat.longchat.R;
 import gianglong.app.chat.longchat.database.DatabaseHandler;
-import gianglong.app.chat.longchat.entity.GlobalVars;
 import gianglong.app.chat.longchat.entity.UserEntity;
 import gianglong.app.chat.longchat.fragment.AccountFragment;
 import gianglong.app.chat.longchat.fragment.FriendFragment;
 import gianglong.app.chat.longchat.fragment.MessageFragment;
 import gianglong.app.chat.longchat.fragment.PeopleFragment;
 import gianglong.app.chat.longchat.service.UserService;
+import gianglong.app.chat.longchat.utils.Constants;
 import gianglong.app.chat.longchat.utils.DataNotify;
 import gianglong.app.chat.longchat.utils.LogUtil;
 import gianglong.app.chat.longchat.utils.RippleView;
@@ -83,11 +82,11 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
     private MyViewPagerAdapter viewPagerAdapter;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private SessionManager mSessionManager;
+    public static SessionManager mSessionManager;
     private DatabaseHandler databaseHandler;
     private SharedPreferences pref;
-    private UserEntity user;
-    private String userID;
+    public static UserEntity user;
+    public static UserEntity basicUser;
     private SweetAlertDialog mSweetAlertDialog;
 
 
@@ -96,7 +95,7 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        EventBus.getDefault().register(this);
+//        EventBus.getDefault().register(this);
         databaseHandler = DatabaseHandler.getInstance(this);
         init();
         initFragment();
@@ -106,17 +105,17 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
     @Override
     protected void onStop() {
         super.onStop();
-        EventBus.getDefault().unregister(this);
+//        EventBus.getDefault().unregister(this);
     }
 
 
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    public void onLogout (Boolean isLogout) {
-        mSessionManager.setLogin(false);
-        Intent it = new Intent(this, LoginActivity.class);
-        startActivity(it);
-        finish();
-    }
+//    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+//    public void onLogout (Boolean isLogout) {
+//        mSessionManager.setLogin(false);
+//        Intent it = new Intent(this, LoginActivity.class);
+//        startActivity(it);
+//        finish();
+//    }
 
     public void init() {
         mSessionManager = new SessionManager(getApplicationContext());
@@ -126,18 +125,19 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
         layout_people.setOnClickListener(this);
         layout_account.setOnClickListener(this);
 
-        pref = getSharedPreferences("user", MODE_PRIVATE);
-        userID = pref.getString(DatabaseHandler.KEY_USER_ID, DataNotify.NO_DATA);
+        pref = getSharedPreferences(Constants.KEY_USER, MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = pref.getString(Constants.KEY_USER_ENTITY, DataNotify.NO_DATA);
+        basicUser = gson.fromJson(json, UserEntity.class);
 
-        if (userID != null) {
-            if (databaseHandler.isCheckExist(DatabaseHandler.TABLE_USER, DatabaseHandler.KEY_USER_ID, userID)) {
-                user = databaseHandler.getUserByID(userID);
+
+        if (basicUser.getId() != null) {
+            if (databaseHandler.isCheckExist(DatabaseHandler.TABLE_USER, DatabaseHandler.KEY_USER_ID, basicUser.getId())) {
+                user = databaseHandler.getUserByID(basicUser.getId());
 
                 EventBus.getDefault().postSticky(user);
-                //Saving user entity to global variable
-                GlobalVars.setUserEntity(user);
             } else {
-                getUserInfo(userID);
+                getUserInfo(basicUser.getId());
             }
         }
     }
@@ -290,9 +290,11 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
 
                     // Send user enity to onEvent method of Account fragment
                     EventBus.getDefault().post(user);
-                    GlobalVars.setUserEntity(user);
-                } else if (msg.what == DataNotify.DATA_SUCCESS_WITH_NO_DATA) {
 
+
+                } else if (msg.what == DataNotify.DATA_SUCCESS_WITH_NO_DATA) {
+                    // If haven't user info, need redirect to takeInfoDetailActivity activity class
+                    startActivity(new Intent(getApplicationContext(), TakeInfoDetailActivity.class));
 
                 } else if (msg.what == DataNotify.DATA_UNSUCCESS) {
                     LogUtil.e("getUserInfo error!");

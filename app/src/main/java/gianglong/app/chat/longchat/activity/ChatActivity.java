@@ -31,7 +31,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import gianglong.app.chat.longchat.R;
 import gianglong.app.chat.longchat.adapter.MessageAdapter;
-import gianglong.app.chat.longchat.entity.BasicUserInfoEntity;
 import gianglong.app.chat.longchat.entity.MessageItemEntity;
 import gianglong.app.chat.longchat.entity.UserEntity;
 import gianglong.app.chat.longchat.service.MessageService;
@@ -127,7 +126,7 @@ public class ChatActivity extends AppCompatActivity {
                     String hour = df.format(date);
                     int type = rd.nextInt(2);
 
-                    MessageItemEntity messageItem = new MessageItemEntity(String.valueOf(type), etMessage.getText().toString(), hour, 0 , false , false, UserEntity.getInstance().getId());
+                    MessageItemEntity messageItem = new MessageItemEntity(String.valueOf(type), etMessage.getText().toString(), hour, 0 , false , false, MainActivity.basicUser.getId() );
                     alMsg.add(messageItem);
 
                     if(roomID == null){
@@ -290,7 +289,7 @@ public class ChatActivity extends AppCompatActivity {
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 MessageItemEntity entity = dataSnapshot.getValue(MessageItemEntity.class);
                                 if(entity != null){
-                                    if(!entity.getSenderID().equals(BasicUserInfoEntity.getInstance().getUid())){
+                                    if(!entity.getSenderID().equals(MainActivity.basicUser.getId())){
                                         alMsg.add(entity);
 
                                         msgAdapter.notifyItemChanged(alMsg.size() - 1);

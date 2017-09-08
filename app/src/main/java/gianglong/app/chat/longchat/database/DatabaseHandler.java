@@ -233,7 +233,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                     user.setIntrodution(cursor.getString(cursor.getColumnIndex(KEY_USER_INTRODUCE)));
                     user.setRate(Float.parseFloat(cursor.getString(cursor.getColumnIndex(KEY_USER_RATE))));
                     user.setReviewers(Integer.parseInt(cursor.getString(cursor.getColumnIndex(KEY_USER_REVIEWER))));
-
+                    alUser.add(user);
                 } while (cursor.moveToNext());
             }
         } catch (Exception e) {

@@ -22,12 +22,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.gson.Gson;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import gianglong.app.chat.longchat.R;
 import gianglong.app.chat.longchat.database.DatabaseHandler;
 import gianglong.app.chat.longchat.entity.UserEntity;
+import gianglong.app.chat.longchat.utils.Constants;
 import gianglong.app.chat.longchat.utils.RippleView;
 import gianglong.app.chat.longchat.utils.SessionManager;
 import gianglong.app.chat.longchat.utils.SweetDialog;
@@ -113,7 +115,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    public void signIn(String email, String password) {
+    public void signIn(String email, final String password) {
         mSweetDialog.showProgress("Please wait ...");
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -131,16 +133,23 @@ public class LoginActivity extends AppCompatActivity {
                             finish();
 
 
-                            FirebaseUser fUser = mAuth.getCurrentUser();
+                            FirebaseUser firebaseUser = mAuth.getCurrentUser();
                             UserEntity userEntity = new UserEntity();
-                            userEntity.setId(fUser.getUid());
-                            userEntity.setName(fUser.getDisplayName());
+                            userEntity.setId(firebaseUser.getUid());
+                            userEntity.setEmail(firebaseUser.getEmail());
+                            userEntity.setPassword(password);
 
-                            // Saving basic user entity to database & save id to preference
-                            SharedPreferences pref = getSharedPreferences("user", MODE_PRIVATE);
+
+
+                            // Saving basic user entity to preference
+                            SharedPreferences pref = getSharedPreferences(Constants.KEY_USER, MODE_PRIVATE);
                             SharedPreferences.Editor edit = pref.edit();
-                            edit.putString(DatabaseHandler.KEY_USER_ID, userEntity.getId());
+                            Gson gson = new Gson();
+                            String json = gson.toJson(userEntity);
+                            edit.putString(Constants.KEY_USER_ENTITY, json);
                             edit.commit();
+
+
                         } else {
                             mSweetDialog.dismiss();
                             mSweetDialog.showError("Oops...", "Email or password is incorrect!");

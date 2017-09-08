@@ -25,7 +25,6 @@ public class UserEntity implements Serializable {
 
     public static UserEntity getInstance() {
         if (GlobalVars.getBasicUserInfoEntity() == null) {
-
             GlobalVars.setUserEntity(new UserEntity());
         }
 
@@ -34,7 +33,6 @@ public class UserEntity implements Serializable {
 
     public UserEntity() {
         GlobalVars.setUserEntity(this);
-        //Default for DataSnapshot.getValue(User.class)
     }
 
 
