@@ -31,6 +31,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import gianglong.app.chat.longchat.R;
 import gianglong.app.chat.longchat.adapter.MessageAdapter;
+import gianglong.app.chat.longchat.database.DatabaseHandler;
 import gianglong.app.chat.longchat.entity.MessageItemEntity;
 import gianglong.app.chat.longchat.entity.UserEntity;
 import gianglong.app.chat.longchat.service.MessageService;
@@ -61,6 +62,7 @@ public class ChatActivity extends AppCompatActivity {
     private ArrayList<MessageItemEntity> alMsg;
     private MessageAdapter msgAdapter;
     private Random rd = new Random();
+    private DatabaseHandler databaseHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +70,7 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
         ButterKnife.bind(this);
 
+        databaseHandler = DatabaseHandler.getInstance(this);
         initConfig();
         event();
         initialData();
