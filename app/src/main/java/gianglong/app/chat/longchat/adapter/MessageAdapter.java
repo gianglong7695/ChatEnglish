@@ -62,11 +62,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
         if (entity != null) {
             holder.tvMsg.setText(entity.getMessage());
             holder.tvTime.setText(entity.getTime());
-            if (entity.getAvatarUrl().equals("0")) {
-                holder.civAvatar.setImageResource(R.drawable.avatar_male_default);
-            } else {
-                holder.civAvatar.setImageResource(R.drawable.avatar_female_default);
-            }
+//            if (entity.getAvatarUrl().equals("0")) {
+//                holder.civAvatar.setImageResource(R.drawable.avatar_male_default);
+//            } else {
+//                holder.civAvatar.setImageResource(R.drawable.avatar_female_default);
+//            }
 
 
             if(entity.isHideAvatar()){

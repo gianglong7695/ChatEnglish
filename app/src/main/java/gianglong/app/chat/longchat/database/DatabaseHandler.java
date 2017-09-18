@@ -11,7 +11,9 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
+import gianglong.app.chat.longchat.activity.MainActivity;
 import gianglong.app.chat.longchat.entity.KeyValueEntity;
+import gianglong.app.chat.longchat.entity.MessageItemEntity;
 import gianglong.app.chat.longchat.entity.UserEntity;
 
 import static android.content.ContentValues.TAG;
@@ -48,13 +50,16 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     public static final String KEY_ROOM_VALUE = "value";
 
     // Message Table Columns
-    public static final String KEY_MSG_RECEIVER_ID = "id";
-    public static final String KEY_MSG_CONTENT = "content";
+    public static final String KEY_MSG_ID = "id";
+    public static final String KEY_MSG_CONTENT = "message";
     public static final String KEY_MSG_TIME = "time";
+    public static final String KEY_MSG_STATUS = "status";
+    public static final String KEY_MSG_RECEIVER_ID = "receiver_id";
     public static final String KEY_MSG_SENDER_ID = "sender_id";
 
 
     private static DatabaseHandler instance;
+    private UserEntity userEntity;
 
 
     public static synchronized DatabaseHandler getInstance(Context context) {
@@ -73,6 +78,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
      */
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.userEntity = MainActivity.user;
     }
 
     // Called when the database connection is being configured.
@@ -109,10 +115,12 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
 
         String CREATE_TABLE_MESSAGE = "CREATE TABLE " + TABLE_MSG + "(" +
-                KEY_MSG_RECEIVER_ID + " TEXT PRIMARY KEY," + // Define a primary key
+                KEY_MSG_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + // Define a primary key
                 KEY_MSG_CONTENT + " TEXT," +
                 KEY_MSG_TIME + " TEXT," +
-                KEY_MSG_SENDER_ID + " TEXT" +
+                KEY_MSG_STATUS + " TEXT," +
+                KEY_MSG_SENDER_ID + " TEXT," +
+                KEY_MSG_RECEIVER_ID + " TEXT" +
                 ")";
 
         db.execSQL(CREATE_TABLE_USER);
@@ -409,4 +417,24 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         }
         return alUser;
     }
+
+
+    /* --------------------- MESSAGE ----------------------- */
+    public long addMessage(MessageItemEntity msg) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_MSG_CONTENT, msg.getMessage());
+        values.put(KEY_MSG_TIME, msg.getTime());
+        values.put(KEY_MSG_STATUS, msg.getStatusType());
+        values.put(KEY_MSG_SENDER_ID, msg.getSenderID());
+        values.put(KEY_MSG_RECEIVER_ID, msg.getReceiverID());
+
+
+        long result_code = db.insert(TABLE_MSG, null, values);
+        db.close();
+
+        return result_code;
+    }
+
 }

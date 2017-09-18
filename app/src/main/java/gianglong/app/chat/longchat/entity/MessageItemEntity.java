@@ -5,34 +5,27 @@ package gianglong.app.chat.longchat.entity;
  */
 
 public class MessageItemEntity {
-    private String avatarUrl;
     private String message;
     private String time;
     private int statusType;
     private boolean isHideAvatar;
     private boolean isHideTime;
     private String senderID;
+    private String receiverID;
 
     public MessageItemEntity() {
     }
 
-    public MessageItemEntity(String avatarUrl, String message, String time, int statusType, boolean isHideAvatar, boolean isHideTime, String senderID) {
-        this.avatarUrl = avatarUrl;
+    public MessageItemEntity(String message, String time, int statusType, boolean isHideAvatar, boolean isHideTime, String senderID, String receiverID) {
         this.message = message;
         this.time = time;
         this.statusType = statusType;
         this.isHideAvatar = isHideAvatar;
         this.isHideTime = isHideTime;
         this.senderID = senderID;
+        this.receiverID = receiverID;
     }
 
-    public String getAvatarUrl() {
-        return avatarUrl;
-    }
-
-    public void setAvatarUrl(String avatarUrl) {
-        this.avatarUrl = avatarUrl;
-    }
 
     public String getMessage() {
         return message;
@@ -82,10 +75,17 @@ public class MessageItemEntity {
         this.senderID = senderID;
     }
 
+    public String getReceiverID() {
+        return receiverID;
+    }
+
+    public void setReceiverID(String receiverID) {
+        this.receiverID = receiverID;
+    }
+
     @Override
     public String toString() {
         return "MessageItemEntity{" +
-                "avatarUrl='" + avatarUrl + '\'' +
                 ", message='" + message + '\'' +
                 ", time='" + time + '\'' +
                 ", statusType=" + statusType +

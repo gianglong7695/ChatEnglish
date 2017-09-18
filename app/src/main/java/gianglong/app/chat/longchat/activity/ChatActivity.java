@@ -51,7 +51,7 @@ public class ChatActivity extends AppCompatActivity {
     View activityRootView;
 
     private boolean isScroll = false;
-    private UserEntity entity;
+    private UserEntity entity; // Reciever!
 
     private DatabaseReference database;
     private DatabaseReference ref;
@@ -127,10 +127,15 @@ public class ChatActivity extends AppCompatActivity {
                     Date date = new Date();
                     DateFormat df = new SimpleDateFormat("hh:mm");
                     String hour = df.format(date);
-                    int type = rd.nextInt(2);
 
-                    MessageItemEntity messageItem = new MessageItemEntity(String.valueOf(type), etMessage.getText().toString(), hour, 0 , false , false, MainActivity.basicUser.getId() );
+                    MessageItemEntity messageItem = new MessageItemEntity(etMessage.getText().toString(), hour, 0 , false , false, MainActivity.basicUser.getId(), entity.getId());
                     alMsg.add(messageItem);
+
+                    if(databaseHandler.addMessage(messageItem) != -1){
+                        LogUtil.e("Save msg to database successed!");
+                    }else{
+                        LogUtil.e("Can't saving msg");
+                    }
 
                     if(roomID == null){
                         createRelationship(messageItem, entity.getId());
