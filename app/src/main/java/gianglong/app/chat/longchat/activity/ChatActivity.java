@@ -70,16 +70,15 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
         ButterKnife.bind(this);
 
-        databaseHandler = DatabaseHandler.getInstance(this);
         initConfig();
         event();
-        initialData();
         getRoomID();
     }
 
 
 
     public void initConfig(){
+        databaseHandler = DatabaseHandler.getInstance(this);
         database = FirebaseDatabase.getInstance().getReference();
 //        database.child(Constants.NODE_MASTER).child(Constants.NODE_MESSAGE).child(Constants.NODE_BOX).child(roomID).setValue(1);
         if(getIntent().getExtras() != null){
@@ -91,6 +90,11 @@ public class ChatActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         linearLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
         rvMessage.setLayoutManager(linearLayoutManager);
+
+
+        alMsg = (ArrayList<MessageItemEntity>) databaseHandler.getMessageByID(entity.getId());
+        msgAdapter = new MessageAdapter(getApplicationContext(), alMsg);
+        rvMessage.setAdapter(msgAdapter);
     }
 
 
@@ -211,8 +215,7 @@ public class ChatActivity extends AppCompatActivity {
 
     public void initialData(){
         alMsg = new ArrayList<>();
-        msgAdapter = new MessageAdapter(getApplicationContext(), alMsg);
-        rvMessage.setAdapter(msgAdapter);
+
 
     }
 

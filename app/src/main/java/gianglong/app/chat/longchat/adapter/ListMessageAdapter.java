@@ -2,7 +2,6 @@ package gianglong.app.chat.longchat.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +15,7 @@ import java.util.ArrayList;
 import de.hdodenhof.circleimageview.CircleImageView;
 import gianglong.app.chat.longchat.R;
 import gianglong.app.chat.longchat.activity.ChatActivity;
-import gianglong.app.chat.longchat.entity.MessageEntity;
+import gianglong.app.chat.longchat.entity.MessageItemEntity;
 
 /**
  * Created by VCCORP on 4/28/2017.
@@ -24,11 +23,11 @@ import gianglong.app.chat.longchat.entity.MessageEntity;
 
 public class ListMessageAdapter extends RecyclerView.Adapter<ListMessageAdapter.MyViewHolder> {
     Context context;
-    ArrayList<MessageEntity> alListMessage;
+    ArrayList<MessageItemEntity> alListMessage;
 
 
 
-    public ListMessageAdapter(Context context, ArrayList<MessageEntity> alListMessage) {
+    public ListMessageAdapter(Context context, ArrayList<MessageItemEntity> alListMessage) {
         this.context = context;
         this.alListMessage = alListMessage;
 
@@ -43,49 +42,49 @@ public class ListMessageAdapter extends RecyclerView.Adapter<ListMessageAdapter.
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        MessageEntity obj = alListMessage.get(position);
+        MessageItemEntity obj = alListMessage.get(position);
         if(obj != null){
-            if(obj.getAvatarUrl() != null){
-                if(obj.getAvatarUrl().equals("1")){
-                    holder.civAvatar.setImageResource(R.drawable.avatar_male_default);
-                }else{
-                    holder.civAvatar.setImageResource(R.drawable.avatar_female_default);
-                }
+//            if(obj.getAvatarUrl() != null){
+//                if(obj.getAvatarUrl().equals("1")){
+//                    holder.civAvatar.setImageResource(R.drawable.avatar_male_default);
+//                }else{
+//                    holder.civAvatar.setImageResource(R.drawable.avatar_female_default);
+//                }
+//            }
+
+
+            if(obj.getReceiverName() != null){
+                holder.tvName.setText(obj.getReceiverName());
             }
 
 
-            if(obj.getName() != null){
-                holder.tvName.setText(obj.getName());
-            }
-
-
-            if(obj.getLastMsg() != null){
-                holder.tvMesssage.setText(obj.getLastMsg());
+            if(obj.getMessage() != null){
+                holder.tvMesssage.setText(obj.getMessage());
             }
 
             if(obj.getTime() != null){
                 holder.tvTime.setText(obj.getTime());
             }
 
-            if(obj.isUserActive()){
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    holder.vUserStatus.setBackground(context.getDrawable(R.drawable.bg_status_online));
-                }else{
-                    holder.vUserStatus.setBackgroundResource(R.drawable.bg_status_online);
-                }
-            }else{
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    holder.vUserStatus.setBackground(context.getDrawable(R.drawable.bg_status_offline));
-                }else{
-                    holder.vUserStatus.setBackgroundResource(R.drawable.bg_status_offline);
-                }
-            }
+//            if(obj.isUserActive()){
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                    holder.vUserStatus.setBackground(context.getDrawable(R.drawable.bg_status_online));
+//                }else{
+//                    holder.vUserStatus.setBackgroundResource(R.drawable.bg_status_online);
+//                }
+//            }else{
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                    holder.vUserStatus.setBackground(context.getDrawable(R.drawable.bg_status_offline));
+//                }else{
+//                    holder.vUserStatus.setBackgroundResource(R.drawable.bg_status_offline);
+//                }
+//            }
 
-            if(obj.isMine()){
-                holder.tvSender.setVisibility(View.VISIBLE);
-            }else{
-                holder.tvSender.setVisibility(View.GONE);
-            }
+//            if(obj.isMine()){
+//                holder.tvSender.setVisibility(View.VISIBLE);
+//            }else{
+//                holder.tvSender.setVisibility(View.GONE);
+//            }
 
 
 

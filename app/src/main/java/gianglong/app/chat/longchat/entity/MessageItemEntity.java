@@ -12,6 +12,10 @@ public class MessageItemEntity {
     private boolean isHideTime;
     private String senderID;
     private String receiverID;
+    private String receiverName;
+    private String receiverAvatar;
+
+
 
     public MessageItemEntity() {
     }
@@ -26,6 +30,18 @@ public class MessageItemEntity {
         this.receiverID = receiverID;
     }
 
+
+    public MessageItemEntity(String message, String time, int statusType, boolean isHideAvatar, boolean isHideTime, String senderID, String receiverID, String receiverName, String receiverAvatar) {
+        this.message = message;
+        this.time = time;
+        this.statusType = statusType;
+        this.isHideAvatar = isHideAvatar;
+        this.isHideTime = isHideTime;
+        this.senderID = senderID;
+        this.receiverID = receiverID;
+        this.receiverName = receiverName;
+        this.receiverAvatar = receiverAvatar;
+    }
 
     public String getMessage() {
         return message;
@@ -83,15 +99,35 @@ public class MessageItemEntity {
         this.receiverID = receiverID;
     }
 
+
+    public String getReceiverName() {
+        return receiverName;
+    }
+
+    public void setReceiverName(String receiverName) {
+        this.receiverName = receiverName;
+    }
+
+    public String getReceiverAvatar() {
+        return receiverAvatar;
+    }
+
+    public void setReceiverAvatar(String receiverAvatar) {
+        this.receiverAvatar = receiverAvatar;
+    }
+
     @Override
     public String toString() {
         return "MessageItemEntity{" +
-                ", message='" + message + '\'' +
+                "message='" + message + '\'' +
                 ", time='" + time + '\'' +
                 ", statusType=" + statusType +
-                ", typeView=" + isHideAvatar +
+                ", isHideAvatar=" + isHideAvatar +
                 ", isHideTime=" + isHideTime +
                 ", senderID='" + senderID + '\'' +
+                ", receiverID='" + receiverID + '\'' +
+                ", receiverName='" + receiverName + '\'' +
+                ", receiverAvatar='" + receiverAvatar + '\'' +
                 '}';
     }
 }

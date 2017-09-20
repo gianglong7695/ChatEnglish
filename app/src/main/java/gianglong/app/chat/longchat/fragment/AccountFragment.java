@@ -24,12 +24,12 @@ import gianglong.app.chat.longchat.database.DatabaseHandler;
 import gianglong.app.chat.longchat.entity.UserEntity;
 import gianglong.app.chat.longchat.utils.ProgressWheel;
 import gianglong.app.chat.longchat.utils.RippleViewLinear;
+import gianglong.app.chat.longchat.utils.SweetDialog;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class AccountFragment extends Fragment {
-    View v;
     @BindView(R.id.rippleViewLinear1)
     RippleViewLinear rippleViewLinear1;
     @BindView(R.id.rippleViewLinear2)
@@ -47,7 +47,9 @@ public class AccountFragment extends Fragment {
     @BindView(R.id.progressWheel)
     ProgressWheel progressWheel;
 
+    private View v;
     private SweetAlertDialog mSweetAlertDialog;
+    private SweetDialog mSweetDialog;
     private UserEntity user;
     private DatabaseHandler databaseHandler;
 
@@ -91,6 +93,7 @@ public class AccountFragment extends Fragment {
     }
 
     public void initUI() {
+        mSweetDialog = new SweetDialog(getActivity());
         // progress wheel config
         progressWheel.setProgress(0.5f);
         progressWheel.setBarWidth(7);
@@ -121,6 +124,8 @@ public class AccountFragment extends Fragment {
         layout_signout.setOnRippleCompleteListener(new RippleViewLinear.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleViewLinear rippleView) {
+//                mSweetDialog.showError("Confirm logout", "You will not be able to receive the message. Are you sure ?");
+
                 mSweetAlertDialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE);
                 mSweetAlertDialog.setTitleText("Confirm logout");
                 mSweetAlertDialog.setContentText("You will not be able to receive the message. Are you sure ?");

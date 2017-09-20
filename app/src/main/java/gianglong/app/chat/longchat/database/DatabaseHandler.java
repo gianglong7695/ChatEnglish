@@ -10,6 +10,7 @@ import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import gianglong.app.chat.longchat.activity.MainActivity;
 import gianglong.app.chat.longchat.entity.KeyValueEntity;
@@ -435,6 +436,119 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         db.close();
 
         return result_code;
+    }
+
+
+    public List<MessageItemEntity> getAllMsg() {
+        SQLiteDatabase db = getReadableDatabase();
+
+        List<MessageItemEntity> alMsg = new ArrayList<>();
+        String SELECT_QUERY ="SELECT * FROM " + TABLE_MSG;
+
+        Cursor cursor = db.rawQuery(SELECT_QUERY, null);
+        try {
+            if (cursor.moveToFirst()) {
+                do {
+                    MessageItemEntity msgEntity = new MessageItemEntity();
+                    msgEntity.setMessage(cursor.getString(1));
+                    msgEntity.setTime(cursor.getString(2));
+                    msgEntity.setStatusType(Integer.parseInt(cursor.getString(3)));
+                    msgEntity.setSenderID(cursor.getString(4));
+                    msgEntity.setReceiverID(cursor.getString(5));
+
+                    alMsg.add(msgEntity);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "Error while trying to get posts from database");
+        } finally {
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+        }
+        return alMsg;
+    }
+
+
+
+    public List<MessageItemEntity> getAllLastMsg() {
+        SQLiteDatabase db = getReadableDatabase();
+        String id;
+
+        List<MessageItemEntity> alMsg = new ArrayList<>();
+        String SELECT_QUERY ="SELECT * FROM " + TABLE_MSG;
+
+        Cursor cursor = db.rawQuery(SELECT_QUERY, null);
+        try {
+            if (cursor.moveToFirst()) {
+                id = cursor.getString(5);
+
+                MessageItemEntity msgEntity = new MessageItemEntity();
+                msgEntity.setMessage(cursor.getString(1));
+                msgEntity.setTime(cursor.getString(2));
+                msgEntity.setStatusType(Integer.parseInt(cursor.getString(3)));
+                msgEntity.setSenderID(cursor.getString(4));
+                msgEntity.setReceiverID(cursor.getString(5));
+                cursor.moveToNext();
+
+
+                do {
+                    if(!id.equals(cursor.getString(5))){
+                        MessageItemEntity msg = new MessageItemEntity();
+                        msg.setMessage(cursor.getString(1));
+                        msg.setTime(cursor.getString(2));
+                        msg.setStatusType(Integer.parseInt(cursor.getString(3)));
+                        msg.setSenderID(cursor.getString(4));
+                        msg.setReceiverID(cursor.getString(5));
+
+                        alMsg.add(msgEntity);
+
+                        id = cursor.getString(5);
+                    }
+
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "Error while trying to get posts from database");
+        } finally {
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+        }
+        return alMsg;
+    }
+
+
+    public List<MessageItemEntity> getMessageByID (String id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<MessageItemEntity> listMsg = new ArrayList<>();
+
+
+        String SELECT_QUERY ="SELECT * FROM " + TABLE_MSG + " WHERE " + KEY_MSG_RECEIVER_ID + " = '" + id + "'";
+
+        Cursor c = db.rawQuery(SELECT_QUERY, null);
+
+        if (c != null){
+            c.moveToFirst();
+
+            while (!c.isAfterLast()){
+                MessageItemEntity msgEntity = new MessageItemEntity();
+                msgEntity.setMessage(c.getString(1));
+                msgEntity.setTime(c.getString(2));
+                msgEntity.setStatusType(Integer.parseInt(c.getString(3)));
+                msgEntity.setSenderID(c.getString(4));
+                msgEntity.setReceiverID(c.getString(5));
+                listMsg.add(msgEntity);
+
+                c.moveToNext();
+            }
+
+
+            // return user entity if exist
+            return listMsg;
+        }
+
+        return null;
     }
 
 }

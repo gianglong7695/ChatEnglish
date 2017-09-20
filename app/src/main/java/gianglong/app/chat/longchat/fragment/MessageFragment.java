@@ -13,10 +13,14 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import gianglong.app.chat.longchat.R;
 import gianglong.app.chat.longchat.adapter.ListMessageAdapter;
+import gianglong.app.chat.longchat.database.DatabaseHandler;
 import gianglong.app.chat.longchat.entity.KeyValueEntity;
 import gianglong.app.chat.longchat.entity.MessageEntity;
+import gianglong.app.chat.longchat.entity.MessageItemEntity;
 import gianglong.app.chat.longchat.service.MessageService;
 import gianglong.app.chat.longchat.utils.DataNotify;
 import gianglong.app.chat.longchat.utils.LogUtil;
@@ -26,15 +30,23 @@ import gianglong.app.chat.longchat.utils.ProgressWheel;
  * A simple {@link Fragment} subclass.
  */
 public class MessageFragment extends Fragment {
-    View v;
+    @BindView(R.id.rvListMessage)
     RecyclerView rvListMessage;
-    ArrayList<MessageEntity> alListMessage;
-    ListMessageAdapter messageAdapter;
+    @BindView(R.id.progressWheel)
     ProgressWheel progressWheel;
-    ArrayList<KeyValueEntity> listRoom;
+
+
+    private View v;
+    private ArrayList<MessageEntity> alListMessage;
+    private ListMessageAdapter messageAdapter;
+    private ArrayList<KeyValueEntity> listRoom;
+    private ArrayList<MessageItemEntity> alMsg;
+    private DatabaseHandler databaseHandler;
+
 
     public MessageFragment() {
         // Required empty public constructor
+        databaseHandler = DatabaseHandler.getInstance(getContext());
     }
 
 
@@ -43,31 +55,31 @@ public class MessageFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_message, container, false);
-        initUI();
+        ButterKnife.bind(this, v);
+
         initConfig();
+        alMsg = (ArrayList<MessageItemEntity>) databaseHandler.getAllLastMsg();
 
-        alListMessage = new ArrayList<>();
-        alListMessage.add(new MessageEntity("0", "Giang Long", "12:34", "Hello. We can talk together ???", true, 1, true));
-        alListMessage.add(new MessageEntity("1", "Giang Long", "12:34", "Hello. We can talk together ???", false, 0, true));
-        alListMessage.add(new MessageEntity("0", "Giang Long", "12:34", "Hello. We can talk together ???", true, 1, false));
-        alListMessage.add(new MessageEntity("1", "Giang Long", "12:34", "Hello. We can talk together ???", false, 0, true));
-        alListMessage.add(new MessageEntity("1", "Giang Long", "12:34", "Hello. We can talk together ???", false, 1, false));
-        alListMessage.add(new MessageEntity("0", "Giang Long", "12:34", "Hello. We can talk together ???", true, 1, true));
+//        alListMessage = new ArrayList<>();
+//        alListMessage.add(new MessageEntity("0", "Giang Long", "12:34", "Hello. We can talk together ???", true, 1, true));
+//        alListMessage.add(new MessageEntity("1", "Giang Long", "12:34", "Hello. We can talk together ???", false, 0, true));
+//        alListMessage.add(new MessageEntity("0", "Giang Long", "12:34", "Hello. We can talk together ???", true, 1, false));
+//        alListMessage.add(new MessageEntity("1", "Giang Long", "12:34", "Hello. We can talk together ???", false, 0, true));
+//        alListMessage.add(new MessageEntity("1", "Giang Long", "12:34", "Hello. We can talk together ???", false, 1, false));
+//        alListMessage.add(new MessageEntity("0", "Giang Long", "12:34", "Hello. We can talk together ???", true, 1, true));
 
 
-        messageAdapter = new ListMessageAdapter(getActivity(), alListMessage);
+        messageAdapter = new ListMessageAdapter(getActivity(), alMsg);
         rvListMessage.setAdapter(messageAdapter);
 
 
 //        getMessageHistory();
 
+
+
+
+
         return v;
-    }
-
-
-    public void initUI(){
-        rvListMessage = (RecyclerView) v.findViewById(R.id.rvListMessage);
-        progressWheel = (ProgressWheel) v.findViewById(R.id.progressWheel);
     }
 
 
@@ -118,6 +130,11 @@ public class MessageFragment extends Fragment {
         };
 
         new MessageService(getActivity()).getMessageHistory(handler);
+    }
+
+
+    public void getAllMsg(){
+
     }
 
 }

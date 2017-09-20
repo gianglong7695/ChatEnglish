@@ -53,6 +53,7 @@ public class SweetDialog {
     }
 
 
+
     public void show() {
         if(mSweetAlertDialog != null){
             mSweetAlertDialog.show();
