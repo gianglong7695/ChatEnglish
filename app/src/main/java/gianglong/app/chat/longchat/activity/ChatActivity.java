@@ -63,6 +63,7 @@ public class ChatActivity extends AppCompatActivity {
     private MessageAdapter msgAdapter;
     private Random rd = new Random();
     private DatabaseHandler databaseHandler;
+    private boolean isLastMsgFirebase = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +74,8 @@ public class ChatActivity extends AppCompatActivity {
         initConfig();
         event();
         getRoomID();
+
+
     }
 
 
@@ -92,7 +95,26 @@ public class ChatActivity extends AppCompatActivity {
         rvMessage.setLayoutManager(linearLayoutManager);
 
 
-        alMsg = (ArrayList<MessageItemEntity>) databaseHandler.getMessageByID(entity.getId());
+//        CountDownTimer timer = new CountDownTimer(5000, 100) {
+//            @Override
+//            public void onTick(long millisUntilFinished) {
+//                if(roomID == null){
+//
+//                }else{
+//                    cancel();
+//                }
+//            }
+//
+//            @Override
+//            public void onFinish() {
+//
+//            }
+//        };
+//
+//        timer.start();
+
+
+        alMsg = (ArrayList<MessageItemEntity>) databaseHandler.getMessageByBoxID("20170814024017475");
         msgAdapter = new MessageAdapter(getApplicationContext(), alMsg);
         rvMessage.setAdapter(msgAdapter);
     }
@@ -132,11 +154,12 @@ public class ChatActivity extends AppCompatActivity {
                     DateFormat df = new SimpleDateFormat("hh:mm");
                     String hour = df.format(date);
 
-                    MessageItemEntity messageItem = new MessageItemEntity(etMessage.getText().toString(), hour, 0 , false , false, MainActivity.basicUser.getId(), entity.getId());
+                    MessageItemEntity messageItem = new MessageItemEntity(etMessage.getText().toString(), hour, 0 , false , false, MainActivity.basicUser.getId(), entity.getId(), roomID);
                     alMsg.add(messageItem);
 
                     if(databaseHandler.addMessage(messageItem) != -1){
-                        LogUtil.e("Save msg to database successed!");
+                        LogUtil.e("Saved ! " +  messageItem.toString());
+
                     }else{
                         LogUtil.e("Can't saving msg");
                     }
@@ -213,14 +236,6 @@ public class ChatActivity extends AppCompatActivity {
     }
 
 
-    public void initialData(){
-        alMsg = new ArrayList<>();
-
-
-    }
-
-
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -283,6 +298,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
 
+    // Listener
     public void getRoomID(){
         Handler handler = new Handler() {
             @Override
@@ -292,6 +308,9 @@ public class ChatActivity extends AppCompatActivity {
 
                 if (msg.what == DataNotify.DATA_SUCCESS) {
                     roomID = (String) msg.obj;
+
+
+
                     try {
                         ref = database.child(Constants.NODE_MASTER).child(Constants.NODE_MESSAGE).child(Constants.NODE_BOX).child(roomID);
 
@@ -302,6 +321,11 @@ public class ChatActivity extends AppCompatActivity {
                                 if(entity != null){
                                     if(!entity.getSenderID().equals(MainActivity.basicUser.getId())){
                                         alMsg.add(entity);
+                                        if(databaseHandler.addMessage(entity) != -1){
+                                            LogUtil.e("Save msg to database successed!");
+                                        }else{
+                                            LogUtil.e("Can't saving msg");
+                                        }
 
                                         msgAdapter.notifyItemChanged(alMsg.size() - 1);
                                         rvMessage.scrollToPosition(alMsg.size() - 1);

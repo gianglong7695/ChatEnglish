@@ -60,23 +60,8 @@ public class MessageFragment extends Fragment {
         initConfig();
         alMsg = (ArrayList<MessageItemEntity>) databaseHandler.getAllLastMsg();
 
-//        alListMessage = new ArrayList<>();
-//        alListMessage.add(new MessageEntity("0", "Giang Long", "12:34", "Hello. We can talk together ???", true, 1, true));
-//        alListMessage.add(new MessageEntity("1", "Giang Long", "12:34", "Hello. We can talk together ???", false, 0, true));
-//        alListMessage.add(new MessageEntity("0", "Giang Long", "12:34", "Hello. We can talk together ???", true, 1, false));
-//        alListMessage.add(new MessageEntity("1", "Giang Long", "12:34", "Hello. We can talk together ???", false, 0, true));
-//        alListMessage.add(new MessageEntity("1", "Giang Long", "12:34", "Hello. We can talk together ???", false, 1, false));
-//        alListMessage.add(new MessageEntity("0", "Giang Long", "12:34", "Hello. We can talk together ???", true, 1, true));
-
-
         messageAdapter = new ListMessageAdapter(getActivity(), alMsg);
         rvListMessage.setAdapter(messageAdapter);
-
-
-//        getMessageHistory();
-
-
-
 
 
         return v;
@@ -130,11 +115,6 @@ public class MessageFragment extends Fragment {
         };
 
         new MessageService(getActivity()).getMessageHistory(handler);
-    }
-
-
-    public void getAllMsg(){
-
     }
 
 }

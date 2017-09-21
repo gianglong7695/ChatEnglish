@@ -14,13 +14,14 @@ public class MessageItemEntity {
     private String receiverID;
     private String receiverName;
     private String receiverAvatar;
+    private String roomID;
 
 
 
     public MessageItemEntity() {
     }
 
-    public MessageItemEntity(String message, String time, int statusType, boolean isHideAvatar, boolean isHideTime, String senderID, String receiverID) {
+    public MessageItemEntity(String message, String time, int statusType, boolean isHideAvatar, boolean isHideTime, String senderID, String receiverID, String roomID) {
         this.message = message;
         this.time = time;
         this.statusType = statusType;
@@ -28,10 +29,11 @@ public class MessageItemEntity {
         this.isHideTime = isHideTime;
         this.senderID = senderID;
         this.receiverID = receiverID;
+        this.roomID = roomID;
     }
 
 
-    public MessageItemEntity(String message, String time, int statusType, boolean isHideAvatar, boolean isHideTime, String senderID, String receiverID, String receiverName, String receiverAvatar) {
+    public MessageItemEntity(String message, String time, int statusType, boolean isHideAvatar, boolean isHideTime, String senderID, String receiverID, String receiverName, String receiverAvatar, String boxID) {
         this.message = message;
         this.time = time;
         this.statusType = statusType;
@@ -41,6 +43,7 @@ public class MessageItemEntity {
         this.receiverID = receiverID;
         this.receiverName = receiverName;
         this.receiverAvatar = receiverAvatar;
+        this.roomID = boxID;
     }
 
     public String getMessage() {
@@ -116,6 +119,15 @@ public class MessageItemEntity {
         this.receiverAvatar = receiverAvatar;
     }
 
+
+    public String getRoomID() {
+        return roomID;
+    }
+
+    public void setRoomID(String roomID) {
+        this.roomID = roomID;
+    }
+
     @Override
     public String toString() {
         return "MessageItemEntity{" +
@@ -128,6 +140,7 @@ public class MessageItemEntity {
                 ", receiverID='" + receiverID + '\'' +
                 ", receiverName='" + receiverName + '\'' +
                 ", receiverAvatar='" + receiverAvatar + '\'' +
+                ", boxID='" + roomID + '\'' +
                 '}';
     }
 }

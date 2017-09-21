@@ -57,6 +57,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     public static final String KEY_MSG_STATUS = "status";
     public static final String KEY_MSG_RECEIVER_ID = "receiver_id";
     public static final String KEY_MSG_SENDER_ID = "sender_id";
+    public static final String KEY_MSG_ROOM_ID = "room_id";
 
 
     private static DatabaseHandler instance;
@@ -121,7 +122,8 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 KEY_MSG_TIME + " TEXT," +
                 KEY_MSG_STATUS + " TEXT," +
                 KEY_MSG_SENDER_ID + " TEXT," +
-                KEY_MSG_RECEIVER_ID + " TEXT" +
+                KEY_MSG_RECEIVER_ID + " TEXT," +
+                KEY_MSG_ROOM_ID + " TEXT" +
                 ")";
 
         db.execSQL(CREATE_TABLE_USER);
@@ -430,6 +432,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         values.put(KEY_MSG_STATUS, msg.getStatusType());
         values.put(KEY_MSG_SENDER_ID, msg.getSenderID());
         values.put(KEY_MSG_RECEIVER_ID, msg.getReceiverID());
+        values.put(KEY_MSG_ROOM_ID, msg.getRoomID());
 
 
         long result_code = db.insert(TABLE_MSG, null, values);
@@ -455,6 +458,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                     msgEntity.setStatusType(Integer.parseInt(cursor.getString(3)));
                     msgEntity.setSenderID(cursor.getString(4));
                     msgEntity.setReceiverID(cursor.getString(5));
+                    msgEntity.setRoomID(cursor.getString(6));
 
                     alMsg.add(msgEntity);
                 } while (cursor.moveToNext());
@@ -500,6 +504,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                         msg.setStatusType(Integer.parseInt(cursor.getString(3)));
                         msg.setSenderID(cursor.getString(4));
                         msg.setReceiverID(cursor.getString(5));
+                        msg.setRoomID(cursor.getString(6));
 
                         alMsg.add(msgEntity);
 
@@ -519,12 +524,12 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     }
 
 
-    public List<MessageItemEntity> getMessageByID (String id) {
+    public List<MessageItemEntity> getMessageByBoxID (String box_id) {
         SQLiteDatabase db = this.getReadableDatabase();
         List<MessageItemEntity> listMsg = new ArrayList<>();
 
 
-        String SELECT_QUERY ="SELECT * FROM " + TABLE_MSG + " WHERE " + KEY_MSG_RECEIVER_ID + " = '" + id + "'";
+        String SELECT_QUERY ="SELECT * FROM " + TABLE_MSG + " WHERE " + KEY_MSG_ROOM_ID + " = '" + box_id + "'";
 
         Cursor c = db.rawQuery(SELECT_QUERY, null);
 
@@ -538,6 +543,8 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 msgEntity.setStatusType(Integer.parseInt(c.getString(3)));
                 msgEntity.setSenderID(c.getString(4));
                 msgEntity.setReceiverID(c.getString(5));
+                msgEntity.setRoomID(c.getString(6));
+
                 listMsg.add(msgEntity);
 
                 c.moveToNext();
