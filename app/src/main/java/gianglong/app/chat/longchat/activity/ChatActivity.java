@@ -25,7 +25,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,6 +37,7 @@ import gianglong.app.chat.longchat.service.MessageService;
 import gianglong.app.chat.longchat.utils.Constants;
 import gianglong.app.chat.longchat.utils.DataNotify;
 import gianglong.app.chat.longchat.utils.LogUtil;
+import gianglong.app.chat.longchat.utils.ProgressWheel;
 import gianglong.app.chat.longchat.utils.Utils;
 
 public class ChatActivity extends AppCompatActivity {
@@ -49,6 +49,8 @@ public class ChatActivity extends AppCompatActivity {
     EditText etMessage;
     @BindView(R.id.activity_chat)
     View activityRootView;
+    @BindView(R.id.progressWheel)
+    ProgressWheel progressWheel;
 
     private boolean isScroll = false;
     private UserEntity entity; // Reciever!
@@ -59,9 +61,8 @@ public class ChatActivity extends AppCompatActivity {
 
     private LinearLayoutManager linearLayoutManager;
     private boolean isSend = false;
-    private ArrayList<MessageItemEntity> alMsg;
+    private ArrayList<MessageItemEntity> alMsg = new ArrayList<>();
     private MessageAdapter msgAdapter;
-    private Random rd = new Random();
     private DatabaseHandler databaseHandler;
     private boolean isLastMsgFirebase = true;
 
@@ -81,6 +82,7 @@ public class ChatActivity extends AppCompatActivity {
 
 
     public void initConfig(){
+        progressWheel.setDefaultStyle();
         databaseHandler = DatabaseHandler.getInstance(this);
         database = FirebaseDatabase.getInstance().getReference();
 //        database.child(Constants.NODE_MASTER).child(Constants.NODE_MESSAGE).child(Constants.NODE_BOX).child(roomID).setValue(1);
@@ -95,28 +97,7 @@ public class ChatActivity extends AppCompatActivity {
         rvMessage.setLayoutManager(linearLayoutManager);
 
 
-//        CountDownTimer timer = new CountDownTimer(5000, 100) {
-//            @Override
-//            public void onTick(long millisUntilFinished) {
-//                if(roomID == null){
-//
-//                }else{
-//                    cancel();
-//                }
-//            }
-//
-//            @Override
-//            public void onFinish() {
-//
-//            }
-//        };
-//
-//        timer.start();
 
-
-        alMsg = (ArrayList<MessageItemEntity>) databaseHandler.getMessageByBoxID("20170814024017475");
-        msgAdapter = new MessageAdapter(getApplicationContext(), alMsg);
-        rvMessage.setAdapter(msgAdapter);
     }
 
 
@@ -206,7 +187,12 @@ public class ChatActivity extends AppCompatActivity {
                 int heightDiff = activityRootView.getRootView().getHeight() - activityRootView.getHeight();
                 if (heightDiff > Utils.dpToPx(getApplicationContext(), 200)) { // if more than 200 dp, it's probably a keyboard...
                     if(!isScroll){
-                        rvMessage.scrollToPosition(alMsg.size() - 1);
+                        if(rvMessage != null && alMsg != null){
+                            if(alMsg.size() >= 1){
+                                rvMessage.scrollToPosition(alMsg.size() - 1);
+
+                            }
+                        }
                         isScroll = true;
                     }else{
                         isScroll = false;
@@ -309,6 +295,11 @@ public class ChatActivity extends AppCompatActivity {
                 if (msg.what == DataNotify.DATA_SUCCESS) {
                     roomID = (String) msg.obj;
 
+                    alMsg = (ArrayList<MessageItemEntity>) databaseHandler.getMessageByBoxID(roomID);
+                    msgAdapter = new MessageAdapter(getApplicationContext(), alMsg);
+                    rvMessage.setAdapter(msgAdapter);
+                    rvMessage.scrollToPosition(alMsg.size() - 1);
+                    progressWheel.setVisibility(View.GONE);
 
 
                     try {
@@ -349,8 +340,7 @@ public class ChatActivity extends AppCompatActivity {
                             }
                         });
                     }catch (Exception e){
-//                        database.child(Constants.NODE_MASTER).child(Constants.NODE_MESSAGE).child(Constants.NODE_BOX).child(roomID).setValue(1);
-                        getRoomID();
+                        LogUtil.e(e.toString());
                     }
 
 

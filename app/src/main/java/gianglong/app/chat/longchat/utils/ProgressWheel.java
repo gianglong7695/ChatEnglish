@@ -28,7 +28,6 @@ import gianglong.app.chat.longchat.R;
  *         http://www.apache.org/licenses/LICENSE-2.0
  */
 public class ProgressWheel extends View {
-    private static final String TAG = ProgressWheel.class.getSimpleName();
 
     /**
      * *********
@@ -747,6 +746,23 @@ public class ProgressWheel extends View {
          *
          * @param progress a double value between 0.00 and 1.00 both included
          */
-        public void onProgressUpdate(float progress);
+        void onProgressUpdate(float progress);
+    }
+
+
+    public void setDefaultStyle(){
+        setProgress(0.5f);
+        setBarWidth(7);
+        setBarColor(getResources().getColor(R.color.purple));
+        setCallback(new ProgressWheel.ProgressCallback() {
+            @Override
+            public void onProgressUpdate(float progress) {
+                if (progress == 0) {
+                    setProgress(1.0f);
+                } else if (progress == 1.0f) {
+                    setProgress(0.0f);
+                }
+            }
+        });
     }
 }

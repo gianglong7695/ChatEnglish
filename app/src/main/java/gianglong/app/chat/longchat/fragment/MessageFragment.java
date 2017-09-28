@@ -71,19 +71,7 @@ public class MessageFragment extends Fragment {
     public void initConfig(){
         rvListMessage.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         // progress wheel config
-        progressWheel.setProgress(0.5f);
-        progressWheel.setBarWidth(7);
-        progressWheel.setBarColor(getResources().getColor(R.color.purple));
-        progressWheel.setCallback(new ProgressWheel.ProgressCallback() {
-            @Override
-            public void onProgressUpdate(float progress) {
-                if (progress == 0) {
-                    progressWheel.setProgress(1.0f);
-                } else if (progress == 1.0f) {
-                    progressWheel.setProgress(0.0f);
-                }
-            }
-        });
+        progressWheel.setDefaultStyle();
     }
 
 
