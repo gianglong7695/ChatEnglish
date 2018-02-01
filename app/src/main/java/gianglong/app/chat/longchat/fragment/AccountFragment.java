@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -30,16 +31,16 @@ import gianglong.app.chat.longchat.utils.SweetDialog;
  * A simple {@link Fragment} subclass.
  */
 public class AccountFragment extends Fragment {
-    @BindView(R.id.rippleViewLinear1)
-    RippleViewLinear rippleViewLinear1;
-    @BindView(R.id.rippleViewLinear2)
-    RippleViewLinear rippleViewLinear2;
-    @BindView(R.id.rippleViewLinear3)
-    RippleViewLinear rippleViewLinear3;
-    @BindView(R.id.rippleViewLinear4)
-    RippleViewLinear rippleViewLinear4;
+    @BindView(R.id.row_item1)
+    LinearLayout row_item1;
+    @BindView(R.id.row_item2)
+    LinearLayout row_item2;
+    @BindView(R.id.row_item3)
+    LinearLayout row_item3;
+    @BindView(R.id.row_item4)
+    LinearLayout row_item4;
     @BindView(R.id.layout_signout)
-    RippleViewLinear layout_signout;
+    LinearLayout layout_signout;
     @BindView(R.id.tvName)
     TextView tvName;
     @BindView(R.id.tvIntroduce)
@@ -100,18 +101,18 @@ public class AccountFragment extends Fragment {
 
 
     public void eventHandle() {
-        rippleViewLinear1.setOnRippleCompleteListener(new RippleViewLinear.OnRippleCompleteListener() {
+        row_item1.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onComplete(RippleViewLinear rippleView) {
+            public void onClick(View view) {
                 Intent it = new Intent(getActivity(), ProfileActivity.class);
                 startActivity(it);
             }
         });
 
-        layout_signout.setOnRippleCompleteListener(new RippleViewLinear.OnRippleCompleteListener() {
+        layout_signout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onComplete(RippleViewLinear rippleView) {
-//                mSweetDialog.showError("Confirm logout", "You will not be able to receive the message. Are you sure ?");
+            public void onClick(View view) {
+                //                mSweetDialog.showError("Confirm logout", "You will not be able to receive the message. Are you sure ?");
 
                 mSweetAlertDialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE);
                 mSweetAlertDialog.setTitleText("Confirm logout");

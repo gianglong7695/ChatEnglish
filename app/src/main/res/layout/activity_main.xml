@@ -28,13 +28,11 @@
         android:background="@color/white"
         android:orientation="horizontal">
 
-        <gianglong.app.chat.longchat.utils.RippleView
+        <RelativeLayout
             android:id="@+id/layout_chat"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            ripple:rv_rippleDuration="100"
-            ripple:rv_zoom="true">
+            android:layout_weight="1">
 
 
             <TextView
@@ -88,15 +86,13 @@
                     android:textSize="11dp"
                     android:textStyle="bold" />
             </RelativeLayout>
-        </gianglong.app.chat.longchat.utils.RippleView>
+        </RelativeLayout>
 
-        <gianglong.app.chat.longchat.utils.RippleView
+        <RelativeLayout
             android:id="@+id/layout_friend"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            ripple:rv_rippleDuration="100"
-            ripple:rv_zoom="true">
+            android:layout_weight="1">
 
             <TextView
                 android:id="@+id/tv_friend"
@@ -121,15 +117,13 @@
                 android:layout_centerHorizontal="true"
                 android:padding="6dp"
                 android:src="@drawable/ic_friends" />
-        </gianglong.app.chat.longchat.utils.RippleView>
+        </RelativeLayout>
 
-        <gianglong.app.chat.longchat.utils.RippleView
+        <RelativeLayout
             android:id="@+id/layout_people"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            ripple:rv_rippleDuration="100"
-            ripple:rv_zoom="true">
+            android:layout_weight="1">
 
             <TextView
                 android:id="@+id/tv_people"
@@ -153,15 +147,13 @@
                 android:layout_centerHorizontal="true"
                 android:padding="6dp"
                 android:src="@drawable/ic_people" />
-        </gianglong.app.chat.longchat.utils.RippleView>
+        </RelativeLayout>
 
-        <gianglong.app.chat.longchat.utils.RippleView
+        <RelativeLayout
             android:id="@+id/layout_account"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            ripple:rv_rippleDuration="100"
-            ripple:rv_zoom="true">
+            android:layout_weight="1">
 
             <TextView
                 android:id="@+id/tv_account"
@@ -185,7 +177,7 @@
                 android:layout_centerHorizontal="true"
                 android:padding="6dp"
                 android:src="@drawable/ic_account" />
-        </gianglong.app.chat.longchat.utils.RippleView>
+        </RelativeLayout>
 
     </LinearLayout>
 </LinearLayout>

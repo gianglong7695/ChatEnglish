@@ -171,12 +171,6 @@
                             android:textColor="#e81d1d"
                             android:textSize="15sp" />
 
-                        <gianglong.app.chat.longchat.utils.RippleViewLinear
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:id="@+id/rippleViewLinear1">
-
-                        </gianglong.app.chat.longchat.utils.RippleViewLinear>
                     </RelativeLayout>
 
                     <View
@@ -236,12 +230,6 @@
                             android:layout_marginRight="10dp"
                             android:src="@drawable/ic_more_50px_gray" />
 
-                        <gianglong.app.chat.longchat.utils.RippleViewLinear
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:id="@+id/rippleViewLinear2">
-
-                        </gianglong.app.chat.longchat.utils.RippleViewLinear>
 
                     </RelativeLayout>
 
@@ -302,13 +290,6 @@
                             android:layout_marginRight="10dp"
                             android:src="@drawable/ic_more_50px_gray" />
 
-
-                        <gianglong.app.chat.longchat.utils.RippleViewLinear
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:id="@+id/rippleViewLinear3">
-
-                        </gianglong.app.chat.longchat.utils.RippleViewLinear>
                     </RelativeLayout>
 
                     <View
@@ -368,13 +349,6 @@
                             android:layout_marginRight="10dp"
                             android:src="@drawable/ic_more_50px_gray" />
 
-                        <gianglong.app.chat.longchat.utils.RippleViewLinear
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:id="@+id/rippleViewLinear4">
-
-                        </gianglong.app.chat.longchat.utils.RippleViewLinear>
-
                     </RelativeLayout>
 
                     <View
@@ -385,7 +359,7 @@
 
                 </LinearLayout>
 
-               <gianglong.app.chat.longchat.utils.RippleViewLinear
+               <LinearLayout
                    android:id="@+id/layout_signout"
                    android:layout_marginTop="50dp"
                    android:layout_width="match_parent"
@@ -411,7 +385,7 @@
                        android:layout_width="match_parent"
                        android:layout_height="0.75dp"
                        android:background="#cccccc" />
-               </gianglong.app.chat.longchat.utils.RippleViewLinear>
+               </LinearLayout>
 
             </LinearLayout>
         </LinearLayout>

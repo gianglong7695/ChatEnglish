@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -47,13 +48,13 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
     @BindView(R.id.vp_main)
     ViewPager viewPager;
     @BindView(R.id.layout_chat)
-    RippleView layout_chat;
+    RelativeLayout layout_chat;
     @BindView(R.id.layout_friend)
-    RippleView layout_friend;
+    RelativeLayout layout_friend;
     @BindView(R.id.layout_people)
-    RippleView layout_people;
+    RelativeLayout layout_people;
     @BindView(R.id.layout_account)
-    RippleView layout_account;
+    RelativeLayout layout_account;
 
     @BindView(R.id.img_chat)
     ImageView img_chat;

@@ -36,10 +36,10 @@ public class SweetDialog {
     }
 
     public void showProgress(String msg){
-        mSweetAlertDialog = new SweetAlertDialog(mContext, SweetAlertDialog.PROGRESS_TYPE);
-        mSweetAlertDialog.getProgressHelper().setBarColor(mContext.getResources().getColor(R.color.purple));
-        mSweetAlertDialog.setTitleText(msg);
-        mSweetAlertDialog.setCancelable(false);
+//        mSweetAlertDialog = new SweetAlertDialog(mContext, SweetAlertDialog.PROGRESS_TYPE);
+//        mSweetAlertDialog.getProgressHelper().setBarColor(mContext.getResources().getColor(R.color.purple));
+//        mSweetAlertDialog.setTitleText(msg);
+//        mSweetAlertDialog.setCancelable(false);
         show();
     }
 

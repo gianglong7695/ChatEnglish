@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -83,9 +84,9 @@ public class ListPeopleAdapter extends RecyclerView.Adapter<ListPeopleAdapter.My
 
 
 
-            holder.layout_item.setOnRippleCompleteListener(new RippleViewLinear.OnRippleCompleteListener() {
+            holder.layout_item.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onComplete(RippleViewLinear rippleView) {
+                public void onClick(View view) {
                     Intent it = new Intent(context, ChatActivity.class);
                     it.putExtra(Constants.KEY_USER, obj);
                     context.startActivity(it);
@@ -112,7 +113,7 @@ public class ListPeopleAdapter extends RecyclerView.Adapter<ListPeopleAdapter.My
         View vUserStatus;
         TextView tvName, tvIntroduce;
         ImageView ivFlag;
-        RippleViewLinear layout_item;
+        LinearLayout layout_item;
 
         public MyViewHolder(View v) {
             super(v);
@@ -122,7 +123,7 @@ public class ListPeopleAdapter extends RecyclerView.Adapter<ListPeopleAdapter.My
             tvName = (TextView) v.findViewById(R.id.tvName);
             tvIntroduce = (TextView) v.findViewById(R.id.tvIntroduce);
             ivFlag = (ImageView) v.findViewById(R.id.ivFlag);
-            layout_item = (RippleViewLinear) v.findViewById(R.id.layout_item);
+            layout_item = (LinearLayout) v.findViewById(R.id.layout_item);
 
         }
     }

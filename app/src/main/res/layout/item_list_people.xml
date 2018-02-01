@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <gianglong.app.chat.longchat.utils.RippleViewLinear
+    <LinearLayout
         android:id="@+id/layout_item"
         android:layout_width="match_parent"
         android:layout_height="80dp"
@@ -39,8 +39,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:layout_margin="10dp">
+            android:layout_margin="10dp"
+            android:gravity="center_vertical">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -59,9 +59,9 @@
                     android:id="@+id/tvIntroduce"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:layout_marginTop="5dp"
                     android:text="Introduce"
                     android:textColor="@color/text_color_pale" />
 
@@ -77,6 +77,6 @@
 
 
         </LinearLayout>
-    </gianglong.app.chat.longchat.utils.RippleViewLinear>
+    </LinearLayout>
 
 </LinearLayout>

@@ -53,8 +53,6 @@ public class LoginActivity extends AppCompatActivity {
     ImageView ivGoogle;
     @BindView(R.id.layout_bottom)
     LinearLayout layout_bottom;
-    @BindView(R.id.rippleBtnSignin)
-    RippleView rippleBtnSignin;
 
     private FirebaseAuth mAuth;
     private SessionManager mSessionManager;
@@ -88,9 +86,9 @@ public class LoginActivity extends AppCompatActivity {
         // Set font default
         etPass.setTypeface(Typeface.DEFAULT);
 
-        rippleBtnSignin.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+        btLogin.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onComplete(RippleView rippleView) {
+            public void onClick(View view) {
                 signIn(etUser.getText().toString().trim(), etPass.getText().toString().trim());
             }
         });
