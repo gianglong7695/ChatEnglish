@@ -32,7 +32,7 @@ public class SessionManager {
 		// commit changes
 		editor.commit();
 
-		LogUtil.d("User login session modified!");
+		Logs.d("User login session modified!");
 	}
 	
 	public boolean isLoggedIn(){

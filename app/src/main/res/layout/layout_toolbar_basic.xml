@@ -14,7 +14,7 @@
         android:textColor="#363636"
         android:textSize="18dp" />
 
-    <gianglong.app.chat.longchat.utils.RippleViewLinear
+    <LinearLayout
         android:id="@+id/layoutBack"
         android:layout_width="85dp"
         android:layout_height="match_parent">
@@ -35,7 +35,7 @@
                 android:textColor="@color/purple"
                 android:textSize="18dp" />
         </LinearLayout>
-    </gianglong.app.chat.longchat.utils.RippleViewLinear>
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"

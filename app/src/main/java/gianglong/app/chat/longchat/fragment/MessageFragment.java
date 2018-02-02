@@ -1,15 +1,12 @@
 package gianglong.app.chat.longchat.fragment;
 
 
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
@@ -23,13 +20,13 @@ import gianglong.app.chat.longchat.entity.MessageEntity;
 import gianglong.app.chat.longchat.entity.MessageItemEntity;
 import gianglong.app.chat.longchat.service.MessageService;
 import gianglong.app.chat.longchat.utils.DataNotify;
-import gianglong.app.chat.longchat.utils.LogUtil;
+import gianglong.app.chat.longchat.utils.Logs;
 import gianglong.app.chat.longchat.utils.ProgressWheel;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MessageFragment extends Fragment {
+public class MessageFragment extends BaseFragment {
     @BindView(R.id.rvListMessage)
     RecyclerView rvListMessage;
     @BindView(R.id.progressWheel)
@@ -51,20 +48,23 @@ public class MessageFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        v = inflater.inflate(R.layout.fragment_message, container, false);
-        ButterKnife.bind(this, v);
+    protected int getLayoutRes() {
+        return R.layout.fragment_message;
+    }
+
+    @Override
+    protected void initView(View view) {
+        ButterKnife.bind(this, view);
+
+
+
+
 
         initConfig();
         alMsg = (ArrayList<MessageItemEntity>) databaseHandler.getAllLastMsg();
 
         messageAdapter = new ListMessageAdapter(getActivity(), alMsg);
         rvListMessage.setAdapter(messageAdapter);
-
-
-        return v;
     }
 
 
@@ -93,11 +93,11 @@ public class MessageFragment extends Fragment {
 //                    rvListMessage.setAdapter(messageAdapter);
 
                     listRoom = (ArrayList<KeyValueEntity>) msg.obj;
-                    LogUtil.e(listRoom.size() + "");
+                    Logs.e(listRoom.size() + "");
 
 
                 } else if (msg.what == DataNotify.DATA_UNSUCCESS) {
-                    LogUtil.e("getUserInfo error!");
+                    Logs.e("getUserInfo error!");
                 }
             }
         };

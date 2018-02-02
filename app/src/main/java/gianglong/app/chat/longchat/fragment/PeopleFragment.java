@@ -1,15 +1,12 @@
 package gianglong.app.chat.longchat.fragment;
 
 
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
@@ -20,13 +17,13 @@ import gianglong.app.chat.longchat.adapter.ListPeopleAdapter;
 import gianglong.app.chat.longchat.entity.UserEntity;
 import gianglong.app.chat.longchat.service.UserService;
 import gianglong.app.chat.longchat.utils.DataNotify;
-import gianglong.app.chat.longchat.utils.LogUtil;
+import gianglong.app.chat.longchat.utils.Logs;
 import gianglong.app.chat.longchat.utils.ProgressWheel;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PeopleFragment extends Fragment {
+public class PeopleFragment extends BaseFragment {
     @BindView(R.id.rvListPeople)
     RecyclerView rvListPeople;
     @BindView(R.id.progressWheel)
@@ -42,16 +39,19 @@ public class PeopleFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        v = inflater.inflate(R.layout.fragment_people, container, false);
+    protected int getLayoutRes() {
+        return R.layout.fragment_people;
+    }
+
+    @Override
+    protected void initView(View view) {
+        v = view;
         ButterKnife.bind(this, v);
+
+
+
         initUI();
-
         getPeople();
-
-        return v;
     }
 
 
@@ -81,7 +81,7 @@ public class PeopleFragment extends Fragment {
 
 
                 } else if (msg.what == DataNotify.DATA_UNSUCCESS) {
-                    LogUtil.e("getUserInfo error!");
+                    Logs.e("getUserInfo error!");
                 }
             }
         };

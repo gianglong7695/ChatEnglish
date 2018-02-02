@@ -31,7 +31,7 @@ import butterknife.ButterKnife;
 import gianglong.app.chat.longchat.R;
 import gianglong.app.chat.longchat.database.DatabaseHandler;
 import gianglong.app.chat.longchat.entity.UserEntity;
-import gianglong.app.chat.longchat.utils.LogUtil;
+import gianglong.app.chat.longchat.utils.Logs;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener{
     @BindView(R.id.tv_name)
@@ -255,7 +255,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 ivAvatar.setImageDrawable(drawable);
 
             }catch (Exception e){
-                LogUtil.e(e.toString());
+                Logs.e(e.toString());
             }
         }
     }

@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -46,8 +47,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import gianglong.app.chat.longchat.R;
 import gianglong.app.chat.longchat.entity.UserEntity;
 import gianglong.app.chat.longchat.utils.Constants;
-import gianglong.app.chat.longchat.utils.LogUtil;
-import gianglong.app.chat.longchat.utils.RippleView;
+import gianglong.app.chat.longchat.utils.Logs;
 import gianglong.app.chat.longchat.utils.SweetDialog;
 
 import static gianglong.app.chat.longchat.utils.Constants.STORAGE_URL;
@@ -61,10 +61,10 @@ public class TakeInfoDetailActivity extends AppCompatActivity {
     Spinner spGender;
     @BindView(R.id.layout_avatar)
     LinearLayout layout_avatar;
-    @BindView(R.id.rippleBtnSignin)
-    RippleView rippleBtnSignin;
     @BindView(R.id.ivAvatar)
     CircleImageView ivAvatar;
+    @BindView(R.id.btComplete)
+    Button btComplete;
 
 
     private String[] arrGender;
@@ -208,13 +208,14 @@ public class TakeInfoDetailActivity extends AppCompatActivity {
         // Firebase
         mAuth = FirebaseAuth.getInstance();
 
-        rippleBtnSignin.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
-                updateUserInfo();
 
+        btComplete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateUserInfo();
             }
         });
+
     }
 
 
@@ -318,7 +319,7 @@ public class TakeInfoDetailActivity extends AppCompatActivity {
 
 
             } catch (Exception e) {
-                LogUtil.e(e.toString());
+                Logs.e(e.toString());
             }
         }
 

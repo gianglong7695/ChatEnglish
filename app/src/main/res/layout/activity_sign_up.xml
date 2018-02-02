@@ -7,7 +7,7 @@
     android:id="@+id/activity_sign_up"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_signup"
+    android:background="@drawable/bg_login"
     android:orientation="vertical"
     android:padding="15dp"
     tools:context=".activity.SignUpActivity">
@@ -77,25 +77,15 @@
         app:met_singleLineEllipsis="true"
         app:met_textColor="@color/white" />
 
-    <gianglong.app.chat.longchat.utils.RippleView
-        android:id="@+id/rippleBtnSignin"
+    <Button
+        android:id="@+id/btSignUp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="20dp"
-        ripple:rv_zoom="true">
-
-        <Button
-            android:id="@+id/btSignUp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/custom_border_button_transparent"
-            android:text="Next"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="19sp" />
-    </gianglong.app.chat.longchat.utils.RippleView>
+        android:background="@drawable/custom_border_button_transparent"
+        android:text="Next"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="19sp" />
 
 
 </LinearLayout>

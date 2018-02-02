@@ -5,7 +5,9 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -15,12 +17,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.hanks.htextview.HTextView;
 import com.hanks.htextview.HTextViewType;
+import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.pedant.SweetAlert.SweetAlertDialog;
 import gianglong.app.chat.longchat.R;
-import gianglong.app.chat.longchat.utils.RippleView;
 import gianglong.app.chat.longchat.utils.SessionManager;
 import gianglong.app.chat.longchat.utils.SweetDialog;
 
@@ -32,10 +33,10 @@ public class SignUpActivity extends AppCompatActivity {
     EditText etPass;
     @BindView(R.id.etRePass)
     EditText etRePass;
-    @BindView(R.id.rippleBtnSignin)
-    RippleView rippleBtnSignin;
     @BindView(R.id.textLogo)
     HTextView hTextView;
+    @BindView(R.id.btSignUp)
+    Button btSignUp;
 
     private SweetDialog mSweetDialog;
     private FirebaseAuth mAuth;
@@ -69,9 +70,9 @@ public class SignUpActivity extends AppCompatActivity {
         mSessionManager = new SessionManager(getApplicationContext());
 
 
-        rippleBtnSignin.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+        btSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onComplete(RippleView rippleView) {
+            public void onClick(View v) {
                 String user = etUser.getText().toString();
                 String pass = etPass.getText().toString();
                 String repass = etRePass.getText().toString();

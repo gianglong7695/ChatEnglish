@@ -17,7 +17,6 @@ import gianglong.app.chat.longchat.R;
 import gianglong.app.chat.longchat.activity.ChatActivity;
 import gianglong.app.chat.longchat.entity.UserEntity;
 import gianglong.app.chat.longchat.utils.Constants;
-import gianglong.app.chat.longchat.utils.RippleViewLinear;
 
 /**
  * Created by VCCORP on 4/28/2017.

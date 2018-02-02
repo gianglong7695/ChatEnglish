@@ -16,7 +16,7 @@ import gianglong.app.chat.longchat.activity.MainActivity;
 import gianglong.app.chat.longchat.entity.MessageItemEntity;
 import gianglong.app.chat.longchat.utils.Constants;
 import gianglong.app.chat.longchat.utils.DataNotify;
-import gianglong.app.chat.longchat.utils.LogUtil;
+import gianglong.app.chat.longchat.utils.Logs;
 
 /**
  * Created by VCCORP on 4/28/2017.
@@ -49,7 +49,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
 
     @Override
     public int getItemViewType(int position) {
-        LogUtil.e(alMsg.get(position).getSenderID());
+        Logs.e(alMsg.get(position).getSenderID());
         if (alMsg.get(position).getSenderID().equals(MainActivity.basicUser.getId())) {
             return Constants.TYPE_MINE;
         } else {

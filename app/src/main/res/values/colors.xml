@@ -14,6 +14,7 @@
     <color name="black">#000000</color>
     <color name="gray">#717171</color>
     <color name="purple">#9C27B0</color>
+    <color name="purple_pale">#a13cb3</color>
 
     <!-- other colors -->
     <color name="white_border_button">#dfd4d4</color>
@@ -28,6 +29,7 @@
     <color name="text_color_pale">#cacaca</color>
     <color name="bg_color_message_item_left">#eaeaea</color>
     <color name="bg_color_message_item_right">#86aec1</color>
+    <color name="color_ripple">#829aa4</color>
 
 
 </resources>

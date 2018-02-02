@@ -6,7 +6,7 @@ import android.util.Log;
  * Created by VCCORP on 6/23/2017.
  */
 
-public class LogUtil {
+public class Logs {
     public static boolean IS_DEBUG = true;
 
     public static void d(String message) {

@@ -15,6 +15,9 @@
         android:supportsRtl="true"
         tools:replace="android:icon"
         android:theme="@style/AppTheme">
+
+        <service android:name=".service.FirebaseService" />
+
         <activity
             android:name=".activity.MainActivity"
             android:screenOrientation="portrait"

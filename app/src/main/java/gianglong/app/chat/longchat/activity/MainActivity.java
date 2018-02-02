@@ -17,12 +17,12 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
+import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
 import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.pedant.SweetAlert.SweetAlertDialog;
 import gianglong.app.chat.longchat.R;
 import gianglong.app.chat.longchat.database.DatabaseHandler;
 import gianglong.app.chat.longchat.entity.UserEntity;
@@ -30,11 +30,11 @@ import gianglong.app.chat.longchat.fragment.AccountFragment;
 import gianglong.app.chat.longchat.fragment.FriendFragment;
 import gianglong.app.chat.longchat.fragment.MessageFragment;
 import gianglong.app.chat.longchat.fragment.PeopleFragment;
+import gianglong.app.chat.longchat.service.FirebaseService;
 import gianglong.app.chat.longchat.service.UserService;
 import gianglong.app.chat.longchat.utils.Constants;
 import gianglong.app.chat.longchat.utils.DataNotify;
-import gianglong.app.chat.longchat.utils.LogUtil;
-import gianglong.app.chat.longchat.utils.RippleView;
+import gianglong.app.chat.longchat.utils.Logs;
 import gianglong.app.chat.longchat.utils.SessionManager;
 
 public class MainActivity extends RuntimePermissionsActivity implements View.OnClickListener {
@@ -91,11 +91,14 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
     private SweetAlertDialog mSweetAlertDialog;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        //Start service
+        startService();
 //        EventBus.getDefault().register(this);
         databaseHandler = DatabaseHandler.getInstance(this);
         init();
@@ -155,6 +158,28 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
         viewPager.setOnPageChangeListener(onPageChangeListener);
         viewPager.setOffscreenPageLimit(tabDrawableOff.length);
     }
+
+
+
+
+
+    //method start service
+    public void startService() {
+        startService(new Intent(getBaseContext(), FirebaseService.class));
+    }
+
+
+    //method destroy service
+    public void stopService() {
+        stopService(new Intent(getBaseContext(), FirebaseService.class));
+    }
+
+
+
+
+
+
+
 
     ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
@@ -298,7 +323,7 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
                     startActivity(new Intent(getApplicationContext(), TakeInfoDetailActivity.class));
 
                 } else if (msg.what == DataNotify.DATA_UNSUCCESS) {
-                    LogUtil.e("getUserInfo error!");
+                    Logs.e("getUserInfo error!");
                 }
             }
         };

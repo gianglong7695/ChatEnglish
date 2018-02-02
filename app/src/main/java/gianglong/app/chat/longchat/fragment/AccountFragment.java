@@ -2,13 +2,12 @@ package gianglong.app.chat.longchat.fragment;
 
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -16,7 +15,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.pedant.SweetAlert.SweetAlertDialog;
 import gianglong.app.chat.longchat.R;
 import gianglong.app.chat.longchat.activity.LoginActivity;
 import gianglong.app.chat.longchat.activity.MainActivity;
@@ -24,13 +22,12 @@ import gianglong.app.chat.longchat.activity.ProfileActivity;
 import gianglong.app.chat.longchat.database.DatabaseHandler;
 import gianglong.app.chat.longchat.entity.UserEntity;
 import gianglong.app.chat.longchat.utils.ProgressWheel;
-import gianglong.app.chat.longchat.utils.RippleViewLinear;
 import gianglong.app.chat.longchat.utils.SweetDialog;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AccountFragment extends Fragment {
+public class AccountFragment extends BaseFragment {
     @BindView(R.id.row_item1)
     LinearLayout row_item1;
     @BindView(R.id.row_item2)
@@ -60,17 +57,17 @@ public class AccountFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        v = inflater.inflate(R.layout.fragment_account, container, false);
+    protected int getLayoutRes() {
+        return R.layout.fragment_account;
+    }
+
+    @Override
+    protected void initView(View view) {
+        v = view;
         ButterKnife.bind(this, v);
 
         initUI();
         eventHandle();
-
-
-        return v;
     }
 
 

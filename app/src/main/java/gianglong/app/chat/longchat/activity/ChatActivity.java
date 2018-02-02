@@ -36,7 +36,7 @@ import gianglong.app.chat.longchat.entity.UserEntity;
 import gianglong.app.chat.longchat.service.MessageService;
 import gianglong.app.chat.longchat.utils.Constants;
 import gianglong.app.chat.longchat.utils.DataNotify;
-import gianglong.app.chat.longchat.utils.LogUtil;
+import gianglong.app.chat.longchat.utils.Logs;
 import gianglong.app.chat.longchat.utils.ProgressWheel;
 import gianglong.app.chat.longchat.utils.Utils;
 
@@ -139,10 +139,10 @@ public class ChatActivity extends AppCompatActivity {
                     alMsg.add(messageItem);
 
                     if(databaseHandler.addMessage(messageItem) != -1){
-                        LogUtil.e("Saved ! " +  messageItem.toString());
+                        Logs.e("Saved ! " +  messageItem.toString());
 
                     }else{
-                        LogUtil.e("Can't saving msg");
+                        Logs.e("Can't saving msg");
                     }
 
                     if(roomID == null){
@@ -248,7 +248,7 @@ public class ChatActivity extends AppCompatActivity {
 //                    msgAdapter.notifyItemChanged(position);
                     Toast.makeText(ChatActivity.this, "Success!", Toast.LENGTH_SHORT).show();
                 } else if (msg.what == DataNotify.DATA_UNSUCCESS) {
-                    LogUtil.e("getUserInfo error!");
+                    Logs.e("getUserInfo error!");
 //                    messageItem.setStatusType(DataNotify.DATA_UNSUCCESS);
 //                    msgAdapter.notifyItemChanged(position);
                 }
@@ -275,7 +275,7 @@ public class ChatActivity extends AppCompatActivity {
 
                     pushMessage(messageItem, alMsg.size());
                 } else if (msg.what == DataNotify.DATA_UNSUCCESS) {
-                    LogUtil.e("getUserInfo error!");
+                    Logs.e("getUserInfo error!");
                 }
             }
         };
@@ -313,9 +313,9 @@ public class ChatActivity extends AppCompatActivity {
                                     if(!entity.getSenderID().equals(MainActivity.basicUser.getId())){
                                         alMsg.add(entity);
                                         if(databaseHandler.addMessage(entity) != -1){
-                                            LogUtil.e("Save msg to database successed!");
+                                            Logs.e("Save msg to database successed!");
                                         }else{
-                                            LogUtil.e("Can't saving msg");
+                                            Logs.e("Can't saving msg");
                                         }
 
                                         msgAdapter.notifyItemChanged(alMsg.size() - 1);
@@ -340,13 +340,13 @@ public class ChatActivity extends AppCompatActivity {
                             }
                         });
                     }catch (Exception e){
-                        LogUtil.e(e.toString());
+                        Logs.e(e.toString());
                     }
 
 
 
                 } else if (msg.what == DataNotify.DATA_UNSUCCESS) {
-                    LogUtil.e("getUserInfo error!");
+                    Logs.e("getUserInfo error!");
                 }
             }
         };
