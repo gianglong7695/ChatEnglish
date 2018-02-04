@@ -21,7 +21,7 @@ import gianglong.app.chat.longchat.entity.MessageItemEntity;
 import gianglong.app.chat.longchat.service.MessageService;
 import gianglong.app.chat.longchat.utils.DataNotify;
 import gianglong.app.chat.longchat.utils.Logs;
-import gianglong.app.chat.longchat.utils.ProgressWheel;
+import gianglong.app.chat.longchat.custom.ProgressWheel;
 
 /**
  * A simple {@link Fragment} subclass.

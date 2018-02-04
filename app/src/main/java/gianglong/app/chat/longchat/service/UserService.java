@@ -27,10 +27,9 @@ import gianglong.app.chat.longchat.utils.DataNotify;
  */
 
 public class UserService {
-    String TAG = getClass().getSimpleName();
-    Context context;
-    FirebaseUser user;
-    DatabaseReference database;
+    private Context context;
+    private FirebaseUser user;
+    private DatabaseReference database;
 
 
     public UserService(Context context) {

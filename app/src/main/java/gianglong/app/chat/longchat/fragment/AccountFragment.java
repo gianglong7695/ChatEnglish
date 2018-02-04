@@ -21,8 +21,8 @@ import gianglong.app.chat.longchat.activity.MainActivity;
 import gianglong.app.chat.longchat.activity.ProfileActivity;
 import gianglong.app.chat.longchat.database.DatabaseHandler;
 import gianglong.app.chat.longchat.entity.UserEntity;
-import gianglong.app.chat.longchat.utils.ProgressWheel;
-import gianglong.app.chat.longchat.utils.SweetDialog;
+import gianglong.app.chat.longchat.custom.ProgressWheel;
+import gianglong.app.chat.longchat.custom.SweetDialog;
 
 /**
  * A simple {@link Fragment} subclass.

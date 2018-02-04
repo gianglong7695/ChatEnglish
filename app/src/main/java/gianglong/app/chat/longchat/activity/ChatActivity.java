@@ -37,7 +37,7 @@ import gianglong.app.chat.longchat.service.MessageService;
 import gianglong.app.chat.longchat.utils.Constants;
 import gianglong.app.chat.longchat.utils.DataNotify;
 import gianglong.app.chat.longchat.utils.Logs;
-import gianglong.app.chat.longchat.utils.ProgressWheel;
+import gianglong.app.chat.longchat.custom.ProgressWheel;
 import gianglong.app.chat.longchat.utils.Utils;
 
 public class ChatActivity extends AppCompatActivity {

@@ -5,20 +5,33 @@ package gianglong.app.chat.longchat.entity;
  */
 
 public class MessageEvent {
-    private String mMessage;
+    private String message;
+    private UserEntity userEntity;
 
-    public MessageEvent(String message) {
-        mMessage = message;
+
+    public MessageEvent(String message, UserEntity userEntity) {
+        this.message = message;
+        this.userEntity = userEntity;
+    }
+
+
+    public MessageEvent(String mMessage) {
+        this.message = mMessage;
     }
 
     public String getMessage() {
-        return mMessage;
+        return message;
     }
 
-    @Override
-    public String toString() {
-        return "MessageEvent{" +
-                "mMessage='" + mMessage + '\'' +
-                '}';
+    public void setMessage(String mMessage) {
+        this.message = mMessage;
+    }
+
+    public UserEntity getUserEntity() {
+        return userEntity;
+    }
+
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 }

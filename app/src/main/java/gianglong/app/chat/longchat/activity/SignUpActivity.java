@@ -23,7 +23,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import gianglong.app.chat.longchat.R;
 import gianglong.app.chat.longchat.utils.SessionManager;
-import gianglong.app.chat.longchat.utils.SweetDialog;
+import gianglong.app.chat.longchat.custom.SweetDialog;
 
 public class SignUpActivity extends AppCompatActivity {
 

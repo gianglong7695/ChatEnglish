@@ -31,7 +31,7 @@ import gianglong.app.chat.longchat.database.DatabaseHandler;
 import gianglong.app.chat.longchat.entity.UserEntity;
 import gianglong.app.chat.longchat.utils.Constants;
 import gianglong.app.chat.longchat.utils.SessionManager;
-import gianglong.app.chat.longchat.utils.SweetDialog;
+import gianglong.app.chat.longchat.custom.SweetDialog;
 
 public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.btLogin)
