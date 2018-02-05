@@ -2,6 +2,7 @@ package gianglong.app.chat.longchat.fragment;
 
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -12,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +38,7 @@ import gianglong.app.chat.longchat.utils.MyUtils;
  * A simple {@link Fragment} subclass.
  */
 @SuppressLint("ValidFragment")
-public class ProfileFragment extends Fragment implements View.OnClickListener{
+public class ProfileFragment extends Fragment implements View.OnClickListener {
     @BindView(R.id.tv_name)
     TextView tvName;
     @BindView(R.id.etName)
@@ -62,8 +64,12 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     Spinner spGender;
     @BindView(R.id.spCountry)
     Spinner spCountry;
-
-
+    @BindView(R.id.ivBack)
+    ImageView ivBack;
+    @BindView(R.id.tvTitle)
+    TextView tvTitle;
+    @BindView(R.id.ivMore)
+    ImageView ivMore;
 
 
     private View view;
@@ -93,14 +99,15 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         eventHandle();
 
 
-
         return view;
     }
 
 
+    public void init() {
+        tvTitle.setText("Update profile");
+        ivMore.setVisibility(View.VISIBLE);
 
 
-    public void init(){
         ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.arrGender, R.layout.simple_spinner_item);
         genderAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
         spGender.setAdapter(genderAdapter);
@@ -119,8 +126,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     }
 
 
-
-    public void eventHandle(){
+    public void eventHandle() {
 
 
         etName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -158,7 +164,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         });
 
 
-
         spCountry.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -171,7 +176,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
 
             }
         });
-
 
 
         spGender.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -191,11 +195,13 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         etPass.setOnClickListener(this);
         etEmail.setOnClickListener(this);
         ivAvatar.setOnClickListener(this);
+        ivBack.setOnClickListener(this);
+        ivMore.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-        switch (view.getId()) {
+        switch (v.getId()) {
             case R.id.etName:
                 etName.setFocusable(true);
                 etName.requestFocus();
@@ -206,58 +212,62 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
             case R.id.etEmail:
 
                 break;
+            case R.id.ivBack:
+                getActivity().onBackPressed();
+                break;
             case R.id.ivAvatar:
-                Toast.makeText(getActivity(), "Click", Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
+                builderSingle.setTitle("Change avatar");
 
+                final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.item_single_dialog);
+                arrayAdapter.add("Camera");
+                arrayAdapter.add("library");
+                builderSingle.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
 
+                builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case 0:
+                                takePicFromCamera();
+                                break;
+                            case 1:
+                                takePicFromGallery();
+                                break;
+                        }
 
-//                AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
-//                builderSingle.setTitle("Change avatar");
-//
-//                final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.item_single_dialog);
-//                arrayAdapter.add("Camera");
-//                arrayAdapter.add("library");
-//                builderSingle.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        dialog.dismiss();
-//                    }
-//                });
-//
-//                builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        switch (which){
-//                            case 0:
-//                                takePicFromCamera();
-//                                break;
-//                            case 1:
-//                                takePicFromGallery();
-//                                break;
-//                        }
-//
-//                    }
-//                });
-//                builderSingle.show();
+                    }
+                });
+                builderSingle.show();
 
 
                 break;
+            case R.id.ivMore:
+                Toast.makeText(getActivity(), "Complete", Toast.LENGTH_SHORT).show();
+                break;
+
+
+            default:
+                Toast.makeText(getActivity(), "Fail", Toast.LENGTH_SHORT).show();
         }
     }
 
 
-
-    public void takePicFromCamera(){
+    public void takePicFromCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent,CAM_REQUEST);
+        startActivityForResult(intent, CAM_REQUEST);
     }
 
 
-    public void takePicFromGallery(){
+    public void takePicFromGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, SELECTED_PICTURE_REQUEST);
     }
-
 
 
     @Override
@@ -265,12 +275,12 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         super.onActivityResult(requestCode, resultCode, data);
 
 
-        if(requestCode == CAM_REQUEST && resultCode != 0 ){
+        if (requestCode == CAM_REQUEST && resultCode != 0) {
             Bitmap bitmap = (Bitmap) data.getExtras().get("data");
             ivAvatar.setImageBitmap(bitmap);
         }
 
-        if(requestCode == SELECTED_PICTURE_REQUEST){
+        if (requestCode == SELECTED_PICTURE_REQUEST) {
             try {
                 Uri uri = data.getData();
                 String[] projection = {MediaStore.Images.Media.DATA};
@@ -287,40 +297,39 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
                 Drawable drawable = new BitmapDrawable(bitmap);
                 ivAvatar.setImageDrawable(drawable);
 
-            }catch (Exception e){
+            } catch (Exception e) {
                 Logs.e(e.toString());
             }
         }
     }
 
 
-
-    public void setData(){
-        if(userEntity.getName() != null){
+    public void setData() {
+        if (userEntity.getName() != null) {
             etName.setText(userEntity.getName());
             tvName.setText(userEntity.getName());
         }
 
-        if(userEntity.getEmail() != null){
+        if (userEntity.getEmail() != null) {
             etEmail.setText(userEntity.getEmail());
         }
 
 
-        if(userEntity.getPassword() != null){
+        if (userEntity.getPassword() != null) {
             etPass.setText(userEntity.getPassword());
         }
 
 
-        if(userEntity.getGender() != null){
-            if(userEntity.getGender().equals("Male")){
+        if (userEntity.getGender() != null) {
+            if (userEntity.getGender().equals("Male")) {
                 spGender.setSelection(0);
-            }else{
+            } else {
                 spGender.setSelection(1);
             }
         }
 
         for (int i = 0; i < arrCountry.length; i++) {
-            if(userEntity.getCountry().equals(arrCountry[i])){
+            if (userEntity.getCountry().equals(arrCountry[i])) {
                 countryPos = i;
                 spCountry.setSelection(countryPos);
             }

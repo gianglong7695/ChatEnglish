@@ -1,13 +1,19 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="gianglong.app.chat.longchat.fragment.ProfileFragment">
 
+
+    <include
+        android:id="@+id/layout_toobar"
+        layout="@layout/layout_toolbar_message" />
+
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@id/layout_toobar">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -464,4 +470,4 @@
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
-</FrameLayout>
+</RelativeLayout>

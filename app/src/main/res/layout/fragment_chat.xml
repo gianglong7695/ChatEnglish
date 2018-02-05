@@ -1,13 +1,19 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="gianglong.app.chat.longchat.fragment.SingleChatFragment">
 
+
+    <include
+        android:id="@+id/layout_toobar"
+        layout="@layout/layout_toolbar_message" />
+
     <RelativeLayout
         android:id="@+id/activity_chat"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/layout_toobar"
         android:background="@color/bg_color_white_item"
         tools:context="gianglong.app.chat.longchat.activity.ChatActivity">
 
@@ -85,4 +91,4 @@
     </RelativeLayout>
 
 
-</FrameLayout>
+</RelativeLayout>

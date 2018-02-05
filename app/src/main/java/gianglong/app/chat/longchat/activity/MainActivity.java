@@ -116,6 +116,13 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
         initFragment();
     }
 
+    public UserEntity getUserEntity() {
+        return userEntity;
+    }
+
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
+    }
 
     @Override
     public void onStop() {

@@ -4,6 +4,7 @@ package gianglong.app.chat.longchat.fragment;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -46,6 +47,7 @@ public class AccountFragment extends BaseFragment {
     TextView tvIntroduce;
     @BindView(R.id.progressWheel)
     ProgressWheel progressWheel;
+
 
     private View v;
     private SweetAlertDialog mSweetAlertDialog;
@@ -121,6 +123,9 @@ public class AccountFragment extends BaseFragment {
                 iCallBack.onAddFragment(new ProfileFragment(user));
             }
         });
+
+
+
 
         layout_signout.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -60,7 +60,7 @@ public class FirebaseService extends Service{
         super.onCreate();
 
 
-        database = FirebaseDatabase.getInstance().getReference().child(NODE_MASTER).child(NODE_MESSAGE).child(NODE_BOX);
+        database = FirebaseDatabase.getInstance().getReference().child(NODE_MASTER).child(NODE_MESSAGE);
         databaseUser = FirebaseDatabase.getInstance().getReference().child(NODE_MASTER).child(NODE_USER);
 
         listUser = new ArrayList<>();

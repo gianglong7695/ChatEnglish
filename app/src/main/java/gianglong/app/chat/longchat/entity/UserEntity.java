@@ -47,6 +47,8 @@ public class UserEntity implements Serializable {
         this.introdution = introdution;
         this.rate = rate;
         this.reviewers = reviewers;
+
+        GlobalVars.setUserEntity(this);
     }
 
     public String getId() {

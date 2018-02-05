@@ -14,6 +14,7 @@ public class Constants {
     public static final String NODE_MESSAGE = "message";
     public static final String NODE_ROOM = "room_temp";
     public static final String NODE_BOX = "box_msg";
+    public static final String NODE_ROOM_ID = "room_id";
     public static final String USER_NAME = "user_name";
     public static final String PASSWORD = "password";
 
