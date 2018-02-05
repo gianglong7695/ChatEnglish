@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/ChatEnglish.iml" filepath="$PROJECT_DIR$/ChatEnglish.iml" />
+      <module fileurl="file://E:\Project\Android\EnglishChat\ChatEnglish.iml" filepath="E:\Project\Android\EnglishChat\ChatEnglish.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EnglishChat.iml" filepath="$PROJECT_DIR$/EnglishChat.iml" />
       <module fileurl="file://F:\Android\Projects\ChatEnglish\EnglishChat.iml" filepath="F:\Android\Projects\ChatEnglish\EnglishChat.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>

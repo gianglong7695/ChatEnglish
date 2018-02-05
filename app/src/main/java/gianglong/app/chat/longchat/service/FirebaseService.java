@@ -11,7 +11,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
@@ -19,7 +18,6 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.ArrayList;
 import java.util.List;
 
-import gianglong.app.chat.longchat.activity.MainActivity;
 import gianglong.app.chat.longchat.entity.MessageEvent;
 import gianglong.app.chat.longchat.entity.UserEntity;
 import gianglong.app.chat.longchat.utils.Constants;
@@ -107,34 +105,36 @@ public class FirebaseService extends Service{
 
 
 
-//        database.addChildEventListener(new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                Logs.e(dataSnapshot.getValue().toString());
-//            }
-//
-//            @Override
-//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//                Logs.e(dataSnapshot.getValue().toString());
-//            }
-//
-//            @Override
-//            public void onChildRemoved(DataSnapshot dataSnapshot) {
-//                Logs.e(dataSnapshot.getValue().toString());
-//            }
-//
-//            @Override
-//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-//                Logs.e(dataSnapshot.getValue().toString());
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
 
+        database.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Logs.e("onChildAdded " + dataSnapshot.toString() + " - " + s);
+            }
 
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Logs.e("onChildChanged " + dataSnapshot.toString() + " - " + s);
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Logs.e("onChildRemoved " + dataSnapshot.toString());
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                Logs.e("onChildMoved " + dataSnapshot.toString() + " - " + s);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Logs.e("onChildAdded " + databaseError.toString());
+            }
+        });
 
 
 
@@ -143,21 +143,26 @@ public class FirebaseService extends Service{
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 UserEntity entity = dataSnapshot.getValue(UserEntity.class);
                 if(!entity.getId().equals(basicUser.getId())){
-//                    listUser.add(entity);
-                    EventBus.getDefault().post(new MessageEvent("update_list_people", entity));
+                    EventBus.getDefault().post(new MessageEvent("add_list_people", entity));
                 }
-
 
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                UserEntity entity = dataSnapshot.getValue(UserEntity.class);
+                if(!entity.getId().equals(basicUser.getId())){
+                    EventBus.getDefault().post(new MessageEvent("update_list_people", entity));
+                }else{
+                    EventBus.getDefault().post(new MessageEvent("update_profile", entity));
+                }
 
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-
+                UserEntity entity = dataSnapshot.getValue(UserEntity.class);
+                EventBus.getDefault().post(new MessageEvent("remove_list_people", entity));
             }
 
             @Override

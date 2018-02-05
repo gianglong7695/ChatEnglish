@@ -1,7 +1,6 @@
 package gianglong.app.chat.longchat.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,22 +13,24 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import gianglong.app.chat.longchat.R;
-import gianglong.app.chat.longchat.activity.ChatActivity;
 import gianglong.app.chat.longchat.entity.UserEntity;
-import gianglong.app.chat.longchat.utils.Constants;
+import gianglong.app.chat.longchat.fragment.SingleChatFragment;
+import gianglong.app.chat.longchat.service.listener.ICallBack;
 
 /**
  * Created by VCCORP on 4/28/2017.
  */
 
 public class ListPeopleAdapter extends RecyclerView.Adapter<ListPeopleAdapter.MyViewHolder> {
-    Context context;
-    ArrayList<UserEntity> alListPeople;
+    private Context context;
+    private ArrayList<UserEntity> alListPeople;
+    private ICallBack iCallBack;
 
 
     public ListPeopleAdapter(Context context, ArrayList<UserEntity> people) {
         this.context = context;
         this.alListPeople = people;
+        if (context instanceof ICallBack) iCallBack = (ICallBack) context;
     }
 
 
@@ -86,9 +87,10 @@ public class ListPeopleAdapter extends RecyclerView.Adapter<ListPeopleAdapter.My
             holder.layout_item.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent it = new Intent(context, ChatActivity.class);
-                    it.putExtra(Constants.KEY_USER, obj);
-                    context.startActivity(it);
+//                    Intent it = new Intent(context, ChatActivity.class);
+//                    it.putExtra(Constants.KEY_USER, obj);
+//                    context.startActivity(it);
+                    iCallBack.onAddFragment(new SingleChatFragment(obj));
                 }
             });
 

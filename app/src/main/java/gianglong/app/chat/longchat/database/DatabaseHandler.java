@@ -80,7 +80,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
      */
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        this.userEntity = MainActivity.user;
+        this.userEntity = MainActivity.basicUser;
     }
 
     // Called when the database connection is being configured.

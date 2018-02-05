@@ -8,7 +8,7 @@
         android:id="@+id/layout_item"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:background="@color/bg_color_white_item"
+        android:background="@drawable/color_ripple_white"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:padding="5dp">

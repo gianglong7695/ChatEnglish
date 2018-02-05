@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -25,20 +23,22 @@ import org.greenrobot.eventbus.EventBus;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import gianglong.app.chat.longchat.R;
+import gianglong.app.chat.longchat.custom.TransactionHelperFragment;
 import gianglong.app.chat.longchat.database.DatabaseHandler;
+import gianglong.app.chat.longchat.entity.MessageEvent;
 import gianglong.app.chat.longchat.entity.UserEntity;
 import gianglong.app.chat.longchat.fragment.AccountFragment;
 import gianglong.app.chat.longchat.fragment.FriendFragment;
 import gianglong.app.chat.longchat.fragment.MessageFragment;
 import gianglong.app.chat.longchat.fragment.PeopleFragment;
 import gianglong.app.chat.longchat.service.FirebaseService;
-import gianglong.app.chat.longchat.service.UserService;
+import gianglong.app.chat.longchat.service.listener.ICallBack;
 import gianglong.app.chat.longchat.utils.Constants;
 import gianglong.app.chat.longchat.utils.DataNotify;
 import gianglong.app.chat.longchat.utils.Logs;
 import gianglong.app.chat.longchat.utils.SessionManager;
 
-public class MainActivity extends RuntimePermissionsActivity implements View.OnClickListener {
+public class MainActivity extends RuntimePermissionsActivity implements View.OnClickListener, ICallBack {
     private static final int REQUEST_PERMISSIONS = 20;
 
     private int[] tabDrawableOn = {R.drawable.ic_chat_selected, R.drawable.ic_friends_selected,
@@ -89,9 +89,11 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
     public static SessionManager mSessionManager;
     private DatabaseHandler databaseHandler;
     private SharedPreferences pref;
-    public static UserEntity user;
+    private UserEntity userEntity;
     public static UserEntity basicUser;
     private SweetAlertDialog mSweetAlertDialog;
+    private TransactionHelperFragment transHelperFragment;
+    private int entryCount;
 
 
     @Override
@@ -107,10 +109,9 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
         ButterKnife.bind(this);
 
 
-
         //Start service
         startService();
-        databaseHandler = DatabaseHandler.getInstance(this);
+
         init();
         initFragment();
     }
@@ -132,7 +133,9 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
 //    }
 
     public void init() {
+        databaseHandler = DatabaseHandler.getInstance(this);
         mSessionManager = new SessionManager(getApplicationContext());
+
 
         layout_chat.setOnClickListener(this);
         layout_friend.setOnClickListener(this);
@@ -143,17 +146,25 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
         Gson gson = new Gson();
         String json = pref.getString(Constants.KEY_USER_ENTITY, DataNotify.NO_DATA);
         basicUser = gson.fromJson(json, UserEntity.class);
+        userEntity = gson.fromJson(json, UserEntity.class);
 
 
-        if (basicUser.getId() != null) {
-            if (databaseHandler.isCheckExist(DatabaseHandler.TABLE_USER, DatabaseHandler.KEY_USER_ID, basicUser.getId())) {
-                user = databaseHandler.getUserByID(basicUser.getId());
+//        if (basicUser.getId() != null) {
+//            if (databaseHandler.isCheckExist(DatabaseHandler.TABLE_USER, DatabaseHandler.KEY_USER_ID, basicUser.getId())) {
+//                userEntity = databaseHandler.getUserByID(basicUser.getId());
+//
+//                EventBus.getDefault().post(userEntity);
+//            }
+//        }
 
-                EventBus.getDefault().postSticky(user);
-            } else {
-                getUserInfo(basicUser.getId());
-            }
+
+        if (userEntity != null) {
+            EventBus.getDefault().postSticky(new MessageEvent("update_profile", userEntity));
         }
+
+
+        transHelperFragment = new TransactionHelperFragment(this, R.id.frame_layout);
+        checkEntryCount();
     }
 
 
@@ -280,6 +291,15 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
         }
     }
 
+    @Override
+    public void onAddFragment(Fragment fragment, int... styleAnimation) {
+        if (styleAnimation.length == 0) {
+            transHelperFragment.addFragment(fragment, true, 1);
+        } else {
+            transHelperFragment.addFragment(fragment, true, styleAnimation[0]);
+        }
+    }
+
     class MyViewPagerAdapter extends FragmentPagerAdapter {
         public MyViewPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -307,46 +327,35 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
     }
 
 
-    public void getUserInfo(String id) {
-        Handler handler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                if (msg.what == DataNotify.DATA_SUCCESS) {
-                    user = (UserEntity) msg.obj;
-                    databaseHandler.addOrUpdateUser(user);
-
-                    // Send user enity to onEvent method of Account fragment
-                    EventBus.getDefault().post(user);
-
-
-                } else if (msg.what == DataNotify.DATA_SUCCESS_WITH_NO_DATA) {
-                    // If haven't user info, need redirect to takeInfoDetailActivity activity class
-                    startActivity(new Intent(getApplicationContext(), TakeInfoDetailActivity.class));
-
-                } else if (msg.what == DataNotify.DATA_UNSUCCESS) {
-                    Logs.e("getUserInfo error!");
+    @Override
+    public void onBackPressed() {
+        if (entryCount > 0) {
+            transHelperFragment.popTopFragment();
+        } else {
+            mSweetAlertDialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE);
+            mSweetAlertDialog.setTitleText("Confirm exit");
+            mSweetAlertDialog.setContentText("Close this application. Are you sure ?");
+            mSweetAlertDialog.setCancelText("No");
+            mSweetAlertDialog.setConfirmText("Yes");
+            mSweetAlertDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                @Override
+                public void onClick(SweetAlertDialog sDialog) {
+                    finish();
                 }
-            }
-        };
+            });
+            mSweetAlertDialog.show();
+        }
 
-        new UserService(this).getUserInfo(handler, id);
+
     }
 
 
-    @Override
-    public void onBackPressed() {
-        mSweetAlertDialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE);
-        mSweetAlertDialog.setTitleText("Confirm exit");
-        mSweetAlertDialog.setContentText("Close this application. Are you sure ?");
-        mSweetAlertDialog.setCancelText("No");
-        mSweetAlertDialog.setConfirmText("Yes");
-        mSweetAlertDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+    private void checkEntryCount() {
+        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             @Override
-            public void onClick(SweetAlertDialog sDialog) {
-                finish();
+            public void onBackStackChanged() {
+                entryCount = transHelperFragment.getBackStackEntryCount();
             }
         });
-        mSweetAlertDialog.show();
     }
 }
