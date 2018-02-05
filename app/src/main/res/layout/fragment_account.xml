@@ -47,7 +47,7 @@
                             android:src="@drawable/avatar_male_default" />
 
 
-                        <gianglong.app.chat.longchat.utils.ProgressWheel
+                        <gianglong.app.chat.longchat.custom.ProgressWheel
                             android:id="@+id/progressWheel"
                             android:layout_width="25dp"
                             android:layout_height="25dp"

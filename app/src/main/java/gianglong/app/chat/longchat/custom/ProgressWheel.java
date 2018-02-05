@@ -1,4 +1,4 @@
-package gianglong.app.chat.longchat.utils;
+package gianglong.app.chat.longchat.custom;
 
 import android.content.Context;
 import android.content.res.TypedArray;

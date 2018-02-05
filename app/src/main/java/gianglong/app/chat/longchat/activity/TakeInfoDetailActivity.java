@@ -48,7 +48,7 @@ import gianglong.app.chat.longchat.R;
 import gianglong.app.chat.longchat.entity.UserEntity;
 import gianglong.app.chat.longchat.utils.Constants;
 import gianglong.app.chat.longchat.utils.Logs;
-import gianglong.app.chat.longchat.utils.SweetDialog;
+import gianglong.app.chat.longchat.custom.SweetDialog;
 
 import static gianglong.app.chat.longchat.utils.Constants.STORAGE_URL;
 

@@ -13,7 +13,7 @@
     </android.support.v7.widget.RecyclerView>
 
 
-    <gianglong.app.chat.longchat.utils.ProgressWheel
+    <gianglong.app.chat.longchat.custom.ProgressWheel
         android:id="@+id/progressWheel"
         android:layout_width="40dp"
         android:layout_height="40dp"

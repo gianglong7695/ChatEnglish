@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -73,6 +74,8 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
     TextView tv_people;
     @BindView(R.id.tv_account)
     TextView tv_account;
+    @BindView(R.id.frame_layout)
+    FrameLayout frame_layout;
 
 
     private MessageFragment messageFragment;
@@ -91,15 +94,22 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
     private SweetAlertDialog mSweetAlertDialog;
 
 
+    @Override
+    public void onStart() {
+        super.onStart();
+//        EventBus.getDefault().register(this);
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+
+
         //Start service
         startService();
-//        EventBus.getDefault().register(this);
         databaseHandler = DatabaseHandler.getInstance(this);
         init();
         initFragment();
@@ -107,7 +117,7 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
 
 
     @Override
-    protected void onStop() {
+    public void onStop() {
         super.onStop();
 //        EventBus.getDefault().unregister(this);
     }
@@ -160,9 +170,6 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
     }
 
 
-
-
-
     //method start service
     public void startService() {
         startService(new Intent(getBaseContext(), FirebaseService.class));
@@ -173,12 +180,6 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
     public void stopService() {
         stopService(new Intent(getBaseContext(), FirebaseService.class));
     }
-
-
-
-
-
-
 
 
     ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() {
@@ -199,6 +200,7 @@ public class MainActivity extends RuntimePermissionsActivity implements View.OnC
     };
 
     public void changeTab(int position) {
+        Logs.i("Tab selected : " + (position + 1));
         if (position == 0) {
             img_chat.setImageResource(tabDrawableOn[0]);
             tv_chat.setTypeface(null, Typeface.BOLD);
