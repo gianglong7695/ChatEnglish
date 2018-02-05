@@ -143,21 +143,26 @@ public class FirebaseService extends Service{
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 UserEntity entity = dataSnapshot.getValue(UserEntity.class);
                 if(!entity.getId().equals(basicUser.getId())){
-//                    listUser.add(entity);
-                    EventBus.getDefault().post(new MessageEvent("update_list_people", entity));
+                    EventBus.getDefault().post(new MessageEvent("add_list_people", entity));
                 }
-
 
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                UserEntity entity = dataSnapshot.getValue(UserEntity.class);
+                if(!entity.getId().equals(basicUser.getId())){
+                    EventBus.getDefault().post(new MessageEvent("update_list_people", entity));
+                }else{
+                    EventBus.getDefault().post(new MessageEvent("update_profile", entity));
+                }
 
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-
+                UserEntity entity = dataSnapshot.getValue(UserEntity.class);
+                EventBus.getDefault().post(new MessageEvent("remove_list_people", entity));
             }
 
             @Override

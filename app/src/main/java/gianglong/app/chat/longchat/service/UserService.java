@@ -77,7 +77,7 @@ public class UserService {
         DatabaseReference ref = database.child(Constants.NODE_MASTER).child(Constants.NODE_USER).child(id);
 
 
-        ref.addValueEventListener(new ValueEventListener() {
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 UserEntity entity = dataSnapshot.getValue(UserEntity.class);
@@ -102,8 +102,6 @@ public class UserService {
                 handler.sendMessage(msg);
             }
         });
-
-
     }
 
 

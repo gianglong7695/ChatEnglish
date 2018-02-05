@@ -18,11 +18,13 @@ import butterknife.ButterKnife;
 import gianglong.app.chat.longchat.R;
 import gianglong.app.chat.longchat.activity.LoginActivity;
 import gianglong.app.chat.longchat.activity.MainActivity;
-import gianglong.app.chat.longchat.activity.ProfileActivity;
-import gianglong.app.chat.longchat.database.DatabaseHandler;
-import gianglong.app.chat.longchat.entity.UserEntity;
 import gianglong.app.chat.longchat.custom.ProgressWheel;
 import gianglong.app.chat.longchat.custom.SweetDialog;
+import gianglong.app.chat.longchat.database.DatabaseHandler;
+import gianglong.app.chat.longchat.entity.MessageEvent;
+import gianglong.app.chat.longchat.entity.UserEntity;
+import gianglong.app.chat.longchat.service.listener.ICallBack;
+import gianglong.app.chat.longchat.utils.PreferenceUtil;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -50,6 +52,8 @@ public class AccountFragment extends BaseFragment {
     private SweetDialog mSweetDialog;
     private UserEntity user;
     private DatabaseHandler databaseHandler;
+    private PreferenceUtil preferenceUtil;
+    private ICallBack iCallBack;
 
 
     public AccountFragment() {
@@ -65,6 +69,9 @@ public class AccountFragment extends BaseFragment {
     protected void initView(View view) {
         v = view;
         ButterKnife.bind(this, v);
+        if (getContext() instanceof ICallBack) iCallBack = (ICallBack) getContext();
+
+
 
         initUI();
         eventHandle();
@@ -84,16 +91,26 @@ public class AccountFragment extends BaseFragment {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    public void onGetUserEntity(UserEntity userEntity) {
-        user = userEntity;
-        tvName.setText(user.getName());
-        tvIntroduce.setText(user.getIntrodution());
+    public void onEvent(MessageEvent event) {
+        if (event.getMessage().equals("update_profile")) {
+            user = event.getUserEntity();
+            preferenceUtil.saveUser(user);
+            updateUser(user);
+        }
+
+    }
+
+
+    public void updateUser(UserEntity userEntity) {
+        tvName.setText(userEntity.getName());
+        tvIntroduce.setText(userEntity.getIntrodution());
     }
 
     public void initUI() {
         mSweetDialog = new SweetDialog(getActivity());
         // progress wheel config
         progressWheel.setDefaultStyle();
+        preferenceUtil = new PreferenceUtil(getActivity());
     }
 
 
@@ -101,16 +118,13 @@ public class AccountFragment extends BaseFragment {
         row_item1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent it = new Intent(getActivity(), ProfileActivity.class);
-                startActivity(it);
+                iCallBack.onAddFragment(new ProfileFragment(user));
             }
         });
 
         layout_signout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //                mSweetDialog.showError("Confirm logout", "You will not be able to receive the message. Are you sure ?");
-
                 mSweetAlertDialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE);
                 mSweetAlertDialog.setTitleText("Confirm logout");
                 mSweetAlertDialog.setContentText("You will not be able to receive the message. Are you sure ?");
@@ -121,7 +135,6 @@ public class AccountFragment extends BaseFragment {
                     public void onClick(SweetAlertDialog sDialog) {
                         sDialog.dismissWithAnimation();
                         databaseHandler.deleteAllTable();
-//                        EventBus.getDefault().postSticky(new Boolean(false));
                         MainActivity.mSessionManager.setLogin(false);
                         Intent it = new Intent(getActivity(), LoginActivity.class);
                         startActivity(it);

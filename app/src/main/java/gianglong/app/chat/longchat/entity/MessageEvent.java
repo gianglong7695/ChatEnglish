@@ -34,4 +34,13 @@ public class MessageEvent {
     public void setUserEntity(UserEntity userEntity) {
         this.userEntity = userEntity;
     }
+
+
+    @Override
+    public String toString() {
+        return "MessageEvent{" +
+                "message='" + message + '\'' +
+                ", userEntity=" + userEntity +
+                '}';
+    }
 }

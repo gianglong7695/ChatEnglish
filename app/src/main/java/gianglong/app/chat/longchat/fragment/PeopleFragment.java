@@ -7,12 +7,10 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -27,9 +25,9 @@ import gianglong.app.chat.longchat.adapter.ListPeopleAdapter;
 import gianglong.app.chat.longchat.entity.MessageEvent;
 import gianglong.app.chat.longchat.entity.UserEntity;
 import gianglong.app.chat.longchat.service.UserService;
+import gianglong.app.chat.longchat.service.listener.ICallBack;
 import gianglong.app.chat.longchat.utils.DataNotify;
 import gianglong.app.chat.longchat.utils.Logs;
-import gianglong.app.chat.longchat.custom.ProgressWheel;
 import gianglong.app.chat.longchat.utils.MyUtils;
 
 /**
@@ -38,15 +36,15 @@ import gianglong.app.chat.longchat.utils.MyUtils;
 public class PeopleFragment extends BaseFragment {
     @BindView(R.id.rvListPeople)
     RecyclerView rvListPeople;
-    @BindView(R.id.progressWheel)
-    ProgressWheel progressWheel;
 
     private View v;
-    private ArrayList<UserEntity> alPeople;
+    private ArrayList<UserEntity> alPeople = new ArrayList<>();
     private ListPeopleAdapter peopleAdapter;
+    private ICallBack iCallBack;
 
     public PeopleFragment() {
         // Required empty public constructor
+        if (getContext() instanceof ICallBack) iCallBack = (ICallBack) getContext();
     }
 
     @Override
@@ -63,8 +61,8 @@ public class PeopleFragment extends BaseFragment {
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    public void onDestroy() {
+        super.onDestroy();
         EventBus.getDefault().register(this);
     }
 
@@ -82,35 +80,52 @@ public class PeopleFragment extends BaseFragment {
         initUI();
 //        getPeople();
     }
-    
+
 
     public void initUI() {
         rvListPeople.setLayoutManager(MyUtils.getLinearLayoutManager(getContext(), 1));
-        // progress wheel config
-        progressWheel.setDefaultStyle();
+        rvListPeople.setVisibility(View.VISIBLE);
+
     }
 
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onEvent(MessageEvent messageEvent) {
-//        if(messageEvent.getMessage().equals("update_list_people")){
-//            alPeople.add(messageEvent.getUserEntity());
-//            Logs.e(alPeople.size());
-//        }
-        alPeople.add(messageEvent.getUserEntity());
-        Logs.e(alPeople.size());
-
+        if(messageEvent.getMessage().equals("add_list_people")){
+            alPeople.add(messageEvent.getUserEntity());
+            if (peopleAdapter == null) {
+                peopleAdapter = new ListPeopleAdapter(getActivity(), alPeople);
+                rvListPeople.setAdapter(peopleAdapter);
+            } else {
+                peopleAdapter.notifyItemChanged(alPeople.size() - 1);
+            }
+        }else if(messageEvent.getMessage().equals("update_list_people")){
+            for (int i = 0; i < alPeople.size(); i++){
+                if(alPeople.get(i).getId().equals(messageEvent.getUserEntity().getId())){
+                    alPeople.set(i, messageEvent.getUserEntity());
+                    peopleAdapter.notifyItemChanged(i);
+                    return;
+                }
+            }
+        }else if(messageEvent.getMessage().equals("remove_list_people")){
+            for (int i = 0; i < alPeople.size(); i++){
+                if(alPeople.get(i).getId().equals(messageEvent.getUserEntity().getId())) {
+                    alPeople.remove(i);
+                    peopleAdapter.notifyItemChanged(i);
+                    return;
+                }
+            }
+        }
     }
 
 
     public void getPeople() {
-        progressWheel.setVisibility(View.VISIBLE);
+
         rvListPeople.setVisibility(View.GONE);
         Handler handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
-                progressWheel.setVisibility(View.GONE);
                 rvListPeople.setVisibility(View.VISIBLE);
 
                 if (msg.what == DataNotify.DATA_SUCCESS) {
