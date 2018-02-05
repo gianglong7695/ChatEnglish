@@ -82,7 +82,7 @@ public class PeopleFragment extends BaseFragment {
         initUI();
 //        getPeople();
     }
-    
+
 
     public void initUI() {
         rvListPeople.setLayoutManager(MyUtils.getLinearLayoutManager(getContext(), 1));
