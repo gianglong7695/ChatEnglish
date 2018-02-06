@@ -1,7 +1,6 @@
 package gianglong.app.chat.longchat.fragment;
 
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -22,6 +21,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import gianglong.app.chat.longchat.R;
 import gianglong.app.chat.longchat.adapter.ListPeopleAdapter;
+import gianglong.app.chat.longchat.custom.ProgressWheel;
 import gianglong.app.chat.longchat.entity.MessageEvent;
 import gianglong.app.chat.longchat.entity.UserEntity;
 import gianglong.app.chat.longchat.service.UserService;
@@ -36,6 +36,8 @@ import gianglong.app.chat.longchat.utils.MyUtils;
 public class PeopleFragment extends BaseFragment {
     @BindView(R.id.rvListPeople)
     RecyclerView rvListPeople;
+    @BindView(R.id.progressWheel)
+    ProgressWheel progressWheel;
 
     private View v;
     private ArrayList<UserEntity> alPeople = new ArrayList<>();
@@ -47,11 +49,6 @@ public class PeopleFragment extends BaseFragment {
         if (getContext() instanceof ICallBack) iCallBack = (ICallBack) getContext();
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-    }
 
     @Nullable
     @Override
@@ -63,7 +60,7 @@ public class PeopleFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().register(this);
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -85,12 +82,17 @@ public class PeopleFragment extends BaseFragment {
     public void initUI() {
         rvListPeople.setLayoutManager(MyUtils.getLinearLayoutManager(getContext(), 1));
         rvListPeople.setVisibility(View.VISIBLE);
-
+        progressWheel.setDefaultStyle();
     }
 
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onEvent(MessageEvent messageEvent) {
+        if(alPeople.size() > 0){
+            MyUtils.hideShowAnimation(progressWheel, -1, 100);
+        }
+
+
         if(messageEvent.getMessage().equals("add_list_people")){
             alPeople.add(messageEvent.getUserEntity());
             if (peopleAdapter == null) {

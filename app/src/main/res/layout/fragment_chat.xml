@@ -26,22 +26,23 @@
             android:background="@color/white"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:padding="10dp">
+            android:padding="7.5dp">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/iv_sender_avatar"
+                android:id="@+id/iv_emoji"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/avatar_male_default" />
+                android:padding="7.5dp"
+                android:src="@drawable/ic_emoji_black" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
                 android:background="@drawable/border_et_send_message"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="1dp">
+                android:padding="1dp"
+                android:paddingLeft="5dp">
 
                 <EditText
                     android:id="@+id/etMessage"

@@ -52,7 +52,7 @@ public class MessageService {
     public void pushMessage(final Handler handler, MessageItemEntity messageItem, String roomID) {
         final Message msg = new Message();
 
-        DatabaseReference ref = database.child(Constants.NODE_MASTER).child(Constants.NODE_MESSAGE).child(Constants.NODE_BOX).child(roomID);
+        DatabaseReference ref = database.child(Constants.NODE_MASTER).child(Constants.NODE_MESSAGE).child(Constants.NODE_ROOM_ID).child(roomID);
 
 
         ref.setValue(messageItem, new DatabaseReference.CompletionListener() {
@@ -116,7 +116,6 @@ public class MessageService {
                 }
 
 
-
             }
 
             @Override
@@ -172,7 +171,7 @@ public class MessageService {
     }
 
 
-    public void getMessageHistory(final Handler handler){
+    public void getMessageHistory(final Handler handler) {
         final Message msg = new Message();
         final DatabaseReference ref1 = database.child(Constants.NODE_MASTER).child(Constants.NODE_MESSAGE).child(Constants.NODE_ROOM);
         final ArrayList<KeyValueEntity> listSave = new ArrayList<>();
@@ -180,7 +179,7 @@ public class MessageService {
         ref1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.hasChild(MainActivity.basicUser.getId())){
+                if (dataSnapshot.hasChild(MainActivity.basicUser.getId())) {
                     ref1.child(MainActivity.basicUser.getId()).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -189,13 +188,13 @@ public class MessageService {
                             int pos = 0;
 
 
-                            while(pos < length) {
+                            while (pos < length) {
                                 DataSnapshot currentPosData = iterator.next();
                                 listSave.add(new KeyValueEntity(currentPosData.getKey(), currentPosData.getValue().toString()));
                                 pos++;
                             }
 
-                            if(pos == length){
+                            if (pos == length) {
                                 msg.what = DataNotify.DATA_SUCCESS;
                                 msg.obj = listSave;
                                 handler.sendMessage(msg);

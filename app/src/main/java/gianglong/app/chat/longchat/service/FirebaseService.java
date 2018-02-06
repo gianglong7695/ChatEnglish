@@ -24,7 +24,6 @@ import gianglong.app.chat.longchat.utils.Constants;
 import gianglong.app.chat.longchat.utils.DataNotify;
 import gianglong.app.chat.longchat.utils.Logs;
 
-import static gianglong.app.chat.longchat.utils.Constants.NODE_BOX;
 import static gianglong.app.chat.longchat.utils.Constants.NODE_MASTER;
 import static gianglong.app.chat.longchat.utils.Constants.NODE_MESSAGE;
 import static gianglong.app.chat.longchat.utils.Constants.NODE_USER;
@@ -33,13 +32,12 @@ import static gianglong.app.chat.longchat.utils.Constants.NODE_USER;
  * Created by VCCORP on 2/2/2018.
  */
 
-public class FirebaseService extends Service{
+public class FirebaseService extends Service {
     private DatabaseReference database;
     private DatabaseReference databaseUser;
     private List<UserEntity> listUser;
     public UserEntity basicUser;
     private SharedPreferences pref;
-
 
 
     private static FirebaseService instance;
@@ -51,8 +49,6 @@ public class FirebaseService extends Service{
         }
         return instance;
     }
-
-
 
 
     @Override
@@ -104,12 +100,38 @@ public class FirebaseService extends Service{
 //        });
 
 
-
-
         database.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Logs.e("onChildAdded " + dataSnapshot.toString() + " - " + s);
+//                Logs.e("onChildAdded " + dataSnapshot.toString() + " - " + s);
+
+
+//                NotificationCompat.Builder mBuilder =
+//                        new NotificationCompat.Builder(getApplicationContext())
+//                                .setSmallIcon(R.drawable.vn)
+//                                .setContentTitle("My notification")
+//                                .setContentText("Hello World!");
+//
+//
+//                // Creates an explicit intent for an Activity in your app
+//                Intent resultIntent = new Intent(getA, MainActivity.class);
+//
+//
+//                TaskStackBuilder stackBuilder = TaskStackBuilder.create(getApplicationContext());
+//// Adds the back stack for the Intent (but not the Intent itself)
+//                stackBuilder.addParentStack(ResultActivity.class);
+//// Adds the Intent that starts the Activity to the top of the stack
+//                stackBuilder.addNextIntent(resultIntent);
+//                PendingIntent resultPendingIntent =
+//                        stackBuilder.getPendingIntent(
+//                                0,
+//                                PendingIntent.FLAG_UPDATE_CURRENT
+//                        );
+//                mBuilder.setContentIntent(resultPendingIntent);
+//                NotificationManager mNotificationManager =
+//                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//// mId allows you to update the notification later on.
+//                mNotificationManager.notify(mId, mBuilder.build());
             }
 
             @Override
@@ -137,12 +159,11 @@ public class FirebaseService extends Service{
         });
 
 
-
         databaseUser.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 UserEntity entity = dataSnapshot.getValue(UserEntity.class);
-                if(!entity.getId().equals(basicUser.getId())){
+                if (!entity.getId().equals(basicUser.getId())) {
                     EventBus.getDefault().post(new MessageEvent("add_list_people", entity));
                 }
 
@@ -151,9 +172,9 @@ public class FirebaseService extends Service{
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 UserEntity entity = dataSnapshot.getValue(UserEntity.class);
-                if(!entity.getId().equals(basicUser.getId())){
+                if (!entity.getId().equals(basicUser.getId())) {
                     EventBus.getDefault().post(new MessageEvent("update_list_people", entity));
-                }else{
+                } else {
                     EventBus.getDefault().post(new MessageEvent("update_profile", entity));
                 }
 
@@ -175,12 +196,6 @@ public class FirebaseService extends Service{
 
             }
         });
-
-
-
-
-
-
 
 
         return START_STICKY;

@@ -87,10 +87,7 @@ public class ListPeopleAdapter extends RecyclerView.Adapter<ListPeopleAdapter.My
             holder.layout_item.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    Intent it = new Intent(context, ChatActivity.class);
-//                    it.putExtra(Constants.KEY_USER, obj);
-//                    context.startActivity(it);
-                    iCallBack.onAddFragment(new SingleChatFragment(obj));
+                    iCallBack.onAddFragment(new SingleChatFragment(obj), 2);
                 }
             });
 
