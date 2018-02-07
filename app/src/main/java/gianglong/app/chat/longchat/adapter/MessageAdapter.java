@@ -14,6 +14,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import gianglong.app.chat.longchat.R;
 import gianglong.app.chat.longchat.activity.MainActivity;
 import gianglong.app.chat.longchat.entity.MessageItemEntity;
+import gianglong.app.chat.longchat.entity.UserEntity;
 import gianglong.app.chat.longchat.utils.Constants;
 import gianglong.app.chat.longchat.utils.DataNotify;
 import gianglong.app.chat.longchat.utils.Logs;
@@ -23,9 +24,9 @@ import gianglong.app.chat.longchat.utils.Logs;
  */
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHolder> {
-    Context context;
-    ArrayList<MessageItemEntity> alMsg;
-
+    private Context context;
+    private ArrayList<MessageItemEntity> alMsg;
+    private UserEntity userEntity;
 
 
 
@@ -45,6 +46,15 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
         }
 
         return new MyViewHolder(v);
+    }
+
+
+    public UserEntity getUserEntity() {
+        return userEntity;
+    }
+
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 
     @Override

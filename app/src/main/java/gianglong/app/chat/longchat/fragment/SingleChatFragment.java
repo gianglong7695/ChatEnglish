@@ -84,7 +84,6 @@ public class SingleChatFragment extends Fragment implements View.OnClickListener
     private boolean isListener;
 
 
-
     @SuppressLint("ValidFragment")
     public SingleChatFragment(UserEntity id_guest) {
         this.user_guest = id_guest;
@@ -152,7 +151,9 @@ public class SingleChatFragment extends Fragment implements View.OnClickListener
 
         rvMessage.setLayoutManager(MyUtils.getLinearLayoutManager(getContext(), 1));
         msgAdapter = new MessageAdapter(getActivity(), alMsg);
+        msgAdapter.setUserEntity(userEntity);
         rvMessage.setAdapter(msgAdapter);
+
 
     }
 
@@ -161,25 +162,33 @@ public class SingleChatFragment extends Fragment implements View.OnClickListener
         databaseReference.child(Constants.NODE_ROOM_ID).child(room_id).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(isListener){
+                if (isListener) {
 
                     MessageItemEntity entity = dataSnapshot.getValue(MessageItemEntity.class);
-                    if(entity != null){
-                        if(!entity.getSenderID().equals(MainActivity.basicUser.getId())){
-                            alMsg.add(entity);
+                    if (entity != null) {
+                        alMsg.add(entity);
 //                            if(databaseHandler.addMessage(entity) != -1){
 //                                Logs.e("Save msg to database successed!");
 //                            }else{
 //                                Logs.e("Can't saving msg");
 //                            }
 
-                            msgAdapter.notifyItemChanged(alMsg.size() - 1);
-                            rvMessage.scrollToPosition(alMsg.size() - 1);
+                        msgAdapter.notifyItemChanged(alMsg.size() - 1);
+                        rvMessage.scrollToPosition(alMsg.size() - 1);
 
 
-                            if(alMsg.size() > 1){
-                                if(entity.getSenderID() == alMsg.get(alMsg.size() - 2).getSenderID()){
+                        if (alMsg.size() > 1) {
+//                            if(entity.getSenderID() == alMsg.get(alMsg.size() - 2).getSenderID()){
+//                                alMsg.get(alMsg.size() - 2).setHideTime(true);
+//                                alMsg.get(alMsg.size() - 2).setHideAvatar(true);
+//                                msgAdapter.notifyItemChanged(alMsg.size() - 2);
+//                            }
+
+
+                            if (entity.getSenderID().equals(user_guest.getId())) {
+                                if (entity.getSenderID().equals(alMsg.get(alMsg.size() - 2).getSenderID())) {
                                     alMsg.get(alMsg.size() - 2).setHideTime(true);
+                                    alMsg.get(alMsg.size() - 2).setHideAvatar(true);
                                     msgAdapter.notifyItemChanged(alMsg.size() - 2);
                                 }
                             }
@@ -188,7 +197,7 @@ public class SingleChatFragment extends Fragment implements View.OnClickListener
                     }
 
 
-                }else{
+                } else {
                     isListener = true;
                 }
             }
@@ -251,12 +260,10 @@ public class SingleChatFragment extends Fragment implements View.OnClickListener
             messageItem.setMessage(etMessage.getText().toString());
             messageItem.setTime(hour);
             messageItem.setStatusType(0);
-            messageItem.setHideAvatar(false);
-            messageItem.setHideTime(false);
+            messageItem.setHideAvatar(true);
+            messageItem.setHideTime(true);
             messageItem.setSenderID(userEntity.getId());
             messageItem.setReceiverID(user_guest.getId());
-
-            alMsg.add(messageItem);
 
 //            if(databaseHandler.addMessage(messageItem) != -1){
 //                Logs.e("Saved ! " +  messageItem.toString());
@@ -265,40 +272,16 @@ public class SingleChatFragment extends Fragment implements View.OnClickListener
 //                Logs.e("Can't saving msg");
 //            }
 
-            if(room_id != null){
-                pushMessage(messageItem, alMsg.size() - 1);
+            if (room_id != null) {
+                pushMessage(messageItem);
             }
-
-
-
-
-
-            if(alMsg.size() > 1){
-                if(messageItem.getSenderID() == alMsg.get(alMsg.size() - 2).getSenderID()){
-                    alMsg.get(alMsg.size() - 2).setHideTime(true);
-
-                    if(messageItem.getSenderID() != alMsg.get(alMsg.size() - 2).getSenderID()){
-                        alMsg.get(alMsg.size() - 2).setHideAvatar(true);
-                    }
-                    msgAdapter.notifyItemChanged(alMsg.size() - 2);
-                }
-            }
-//
-//
-//
-//
-//
-//
-//
-//            msgAdapter.notifyItemChanged(alMsg.size() - 1);
-//            rvMessage.scrollToPosition(alMsg.size() - 1);
             etMessage.setText("");
         }
 
     }
 
 
-    public void pushMessage(final MessageItemEntity messageItem, final int position){
+    public void pushMessage(final MessageItemEntity messageItem) {
         Handler handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -310,9 +293,9 @@ public class SingleChatFragment extends Fragment implements View.OnClickListener
                 }
             }
         };
-        if(room_id != null){
+        if (room_id != null) {
             new MessageService(getActivity()).pushMessage(handler, messageItem, room_id);
-        }else{
+        } else {
             Toast.makeText(getActivity(), "RoomID = null", Toast.LENGTH_SHORT).show();
         }
 

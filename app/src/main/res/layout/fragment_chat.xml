@@ -28,11 +28,12 @@
             android:orientation="horizontal"
             android:padding="7.5dp">
 
-            <de.hdodenhof.circleimageview.CircleImageView
+            <ImageView
                 android:id="@+id/iv_emoji"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:padding="7.5dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@drawable/color_ripple_white_circle"
+                android:padding="5dp"
                 android:src="@drawable/ic_emoji_black" />
 
             <LinearLayout
@@ -42,7 +43,7 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:padding="1dp"
-                android:paddingLeft="5dp">
+                android:layout_marginLeft="5dp">
 
                 <EditText
                     android:id="@+id/etMessage"

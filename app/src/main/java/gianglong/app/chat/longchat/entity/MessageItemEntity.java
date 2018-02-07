@@ -15,6 +15,7 @@ public class MessageItemEntity {
     private String receiverName;
     private String receiverAvatar;
     private String roomID;
+    private boolean isMine;
 
 
 
@@ -44,6 +45,15 @@ public class MessageItemEntity {
         this.receiverName = receiverName;
         this.receiverAvatar = receiverAvatar;
         this.roomID = boxID;
+    }
+
+
+    public boolean isMine() {
+        return isMine;
+    }
+
+    public void setMine(boolean mine) {
+        isMine = mine;
     }
 
     public String getMessage() {

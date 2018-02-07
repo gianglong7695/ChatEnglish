@@ -31,6 +31,7 @@
     <color name="bg_color_message_item_right">#86aec1</color>
     <color name="color_ripple">#829aa4</color>
     <color name="color_white_2">#efefef</color>
+    <color name="color_white_3">#cccccc</color>
 
 
 </resources>
